@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<IRoomService, RoomLayoutService>();
 
-builder.Services.AddHttpClient("ApiClient", client =>
+builder.Services.AddHttpClient("ApiClient_User", client =>
 {
     client.BaseAddress = new Uri("https://localhost:7281/");
 });

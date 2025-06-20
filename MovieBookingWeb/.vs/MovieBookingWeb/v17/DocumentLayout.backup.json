@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\controllers\\employeecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:controllers\\employeecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -13,6 +13,55 @@
     {
       "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E98E250F-559E-4FD7-B5F2-93626642BFE0}|..\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviemanagementweb_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\data\\mockfilmdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:data\\mockfilmdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\views\\account\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:views\\account\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\views\\admin\\viewmovie.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:views\\admin\\viewmovie.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\views\\admin\\viewaccounts.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:views\\admin\\viewaccounts.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\controllers\\bookingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:controllers\\bookingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\controllers\\employeecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:controllers\\employeecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E98E250F-559E-4FD7-B5F2-93626642BFE0}|..\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviemanagementweb_api\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E98E250F-559E-4FD7-B5F2-93626642BFE0}|..\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviemanagementweb_api\\repositories\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -39,33 +88,6 @@
       "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:models\\homeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\views\\account\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:views\\account\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\views\\admin\\viewmovie.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:views\\admin\\viewmovie.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E98E250F-559E-4FD7-B5F2-93626642BFE0}|..\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviemanagementweb_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\controllers\\bookingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:controllers\\bookingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\views\\employee\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:views\\employee\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -82,10 +104,6 @@
     },
     {
       "AbsoluteMoniker": "D:0:0:{E98E250F-559E-4FD7-B5F2-93626642BFE0}|..\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviemanagementweb_api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E98E250F-559E-4FD7-B5F2-93626642BFE0}|..\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviemanagementweb_api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
@@ -106,24 +124,12 @@
       "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:views\\shared\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\models\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:models\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\data\\mockfilmdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:data\\mockfilmdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\helper\\filmhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:helper\\filmhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|d:\\a_document\\sum25\\ojt\\git_clone\\movietheater_ojt\\moviebookingweb\\views\\admin\\viewaccounts.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4A6C6C98-E406-0572-0767-91D73238FA24}|MovieBookingWeb.csproj|solutionrelative:views\\admin\\viewaccounts.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieManagementWeb_API\\Controllers\\AuthController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
@@ -145,7 +151,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 35,
+          "SelectedChildIndex": 36,
           "Children": [
             {
               "$type": "Bookmark",
@@ -158,6 +164,32 @@
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\Repositories\\UserRepository.cs",
+              "RelativeDocumentMoniker": "..\\MovieManagementWeb_API\\Repositories\\UserRepository.cs",
+              "ToolTip": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\Repositories\\UserRepository.cs",
+              "RelativeToolTip": "..\\MovieManagementWeb_API\\Repositories\\UserRepository.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-20T07:11:00.239Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "IUserRepository.cs",
+              "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\Repositories\\IUserRepository.cs",
+              "RelativeDocumentMoniker": "..\\MovieManagementWeb_API\\Repositories\\IUserRepository.cs",
+              "ToolTip": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\Repositories\\IUserRepository.cs",
+              "RelativeToolTip": "..\\MovieManagementWeb_API\\Repositories\\IUserRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-20T07:10:59.141Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -180,14 +212,14 @@
               "RelativeDocumentMoniker": "Views\\Admin\\ViewMovie.cshtml",
               "ToolTip": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Views\\Admin\\ViewMovie.cshtml",
               "RelativeToolTip": "Views\\Admin\\ViewMovie.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABAAAAAAAAAAA==",
+              "ViewState": "AgIAACgAAAAAAAAAAAAtwAkAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-06-20T06:09:19.702Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 22,
               "Title": "Dashboard.cshtml",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Views\\Employee\\Dashboard.cshtml",
               "RelativeDocumentMoniker": "Views\\Employee\\Dashboard.cshtml",
@@ -199,7 +231,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 23,
               "Title": "AddMovie.cshtml",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Views\\Admin\\AddMovie.cshtml",
               "RelativeDocumentMoniker": "Views\\Admin\\AddMovie.cshtml",
@@ -211,7 +243,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 24,
               "Title": "Seat.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Models\\Seat.cs",
               "RelativeDocumentMoniker": "Models\\Seat.cs",
@@ -223,7 +255,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 25,
               "Title": "UserController.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\Controllers\\UserController.cs",
               "RelativeDocumentMoniker": "..\\MovieManagementWeb_API\\Controllers\\UserController.cs",
@@ -235,7 +267,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 26,
               "Title": "AuthController.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "..\\MovieManagementWeb_API\\Controllers\\AuthController.cs",
@@ -247,7 +279,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 29,
               "Title": "RoomLayoutService.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Services\\RoomLayoutService.cs",
               "RelativeDocumentMoniker": "Services\\RoomLayoutService.cs",
@@ -259,20 +291,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 5,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\Program.cs",
               "RelativeDocumentMoniker": "..\\MovieManagementWeb_API\\Program.cs",
               "ToolTip": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\Program.cs",
               "RelativeToolTip": "..\\MovieManagementWeb_API\\Program.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADoAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-20T04:15:44.658Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 27,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\appsettings.json",
               "RelativeDocumentMoniker": "..\\MovieManagementWeb_API\\appsettings.json",
@@ -284,7 +316,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 30,
               "Title": "MovieBookingWeb.csproj",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\MovieBookingWeb.csproj",
               "RelativeDocumentMoniker": "MovieBookingWeb.csproj",
@@ -296,7 +328,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 19,
               "Title": "RegisterViewModel.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Models\\RegisterViewModel.cs",
               "RelativeDocumentMoniker": "Models\\RegisterViewModel.cs",
@@ -304,12 +336,11 @@
               "RelativeToolTip": "Models\\RegisterViewModel.cs",
               "ViewState": "AgIAABcAAAAAAAAAAAA9wB4AAABgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-20T04:00:47.301Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-20T04:00:47.301Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 20,
               "Title": "LoginViewModel.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Models\\LoginViewModel.cs",
               "RelativeDocumentMoniker": "Models\\LoginViewModel.cs",
@@ -317,12 +348,11 @@
               "RelativeToolTip": "Models\\LoginViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-20T04:00:46.565Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-20T04:00:46.565Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 7,
               "Title": "Login.cshtml",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Views\\Account\\Login.cshtml",
               "RelativeDocumentMoniker": "Views\\Account\\Login.cshtml",
@@ -335,7 +365,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 31,
               "Title": "_ValidationScriptsPartial.cshtml",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
               "RelativeDocumentMoniker": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
@@ -347,19 +377,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 8,
               "Title": "Register.cshtml",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Views\\Account\\Register.cshtml",
               "RelativeDocumentMoniker": "Views\\Account\\Register.cshtml",
               "ToolTip": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Views\\Account\\Register.cshtml",
               "RelativeToolTip": "Views\\Account\\Register.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGIAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAGIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-20T03:55:00.742Z"
+              "WhenOpened": "2025-06-20T03:55:00.742Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 28,
               "Title": "SeedData.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\SeedData.cs",
               "RelativeDocumentMoniker": "..\\MovieManagementWeb_API\\SeedData.cs",
@@ -371,7 +402,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 34,
               "Title": "AuthController.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieManagementWeb_API\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\Task\\Movie_Fix\\MovieManagementWeb_API\\Controllers\\AuthController.cs",
@@ -383,7 +414,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 35,
               "Title": "UserController.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieManagementWeb_API\\Controllers\\UserController.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\Task\\Movie_Fix\\MovieManagementWeb_API\\Controllers\\UserController.cs",
@@ -395,7 +426,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 36,
               "Title": "UserService.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieManagementWeb_API\\Services\\UserService.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\Task\\Movie_Fix\\MovieManagementWeb_API\\Services\\UserService.cs",
@@ -407,7 +438,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 37,
               "Title": "LoginDto.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieManagementWeb_API\\Models\\DTOs\\LoginDto.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\Task\\Movie_Fix\\MovieManagementWeb_API\\Models\\DTOs\\LoginDto.cs",
@@ -419,7 +450,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 4,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
@@ -427,24 +458,25 @@
               "RelativeToolTip": "appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-06-19T19:23:22.94Z"
+              "WhenOpened": "2025-06-19T19:23:22.94Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAwwBgAAAAHAAAAAAAAAA==",
+              "ToolTip": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Program.cs*",
+              "RelativeToolTip": "Program.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-19T19:22:19.831Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 16,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
@@ -452,12 +484,11 @@
               "RelativeToolTip": "Data\\ApplicationDbContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-19T19:19:37.662Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-19T19:19:37.662Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 32,
               "Title": "UserDto.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Models\\UserDto.cs",
               "RelativeDocumentMoniker": "Models\\UserDto.cs",
@@ -469,7 +500,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 11,
               "Title": "ViewAccounts.cshtml",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Views\\Admin\\ViewAccounts.cshtml",
               "RelativeDocumentMoniker": "Views\\Admin\\ViewAccounts.cshtml",
@@ -477,11 +508,12 @@
               "RelativeToolTip": "Views\\Admin\\ViewAccounts.cshtml",
               "ViewState": "AgIAAEkAAAAAAAAAAAAswGAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-19T19:11:04.699Z"
+              "WhenOpened": "2025-06-19T19:11:04.699Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 21,
               "Title": "HomeViewModel.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Models\\HomeViewModel.cs",
               "RelativeDocumentMoniker": "Models\\HomeViewModel.cs",
@@ -489,12 +521,11 @@
               "RelativeToolTip": "Models\\HomeViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-19T19:06:30.143Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-19T19:06:30.143Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 17,
               "Title": "Film.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Models\\Film.cs",
               "RelativeDocumentMoniker": "Models\\Film.cs",
@@ -502,12 +533,11 @@
               "RelativeToolTip": "Models\\Film.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAA7wB0AAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-19T19:06:30.363Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-19T19:06:30.363Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 18,
               "Title": "BookingViewModel.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Models\\BookingViewModel.cs",
               "RelativeDocumentMoniker": "Models\\BookingViewModel.cs",
@@ -515,12 +545,11 @@
               "RelativeToolTip": "Models\\BookingViewModel.cs",
               "ViewState": "AgIAABEAAAAAAAAAAAAmwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-19T19:06:26.517Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-19T19:06:26.517Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 33,
               "Title": "FilmHelper.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Helper\\FilmHelper.cs",
               "RelativeDocumentMoniker": "Helper\\FilmHelper.cs",
@@ -532,19 +561,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 6,
               "Title": "MockFilmData.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Data\\MockFilmData.cs",
               "RelativeDocumentMoniker": "Data\\MockFilmData.cs",
               "ToolTip": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Data\\MockFilmData.cs",
               "RelativeToolTip": "Data\\MockFilmData.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAAHoAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADMAAAAAAAAAAAAowAsAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-19T19:05:59.56Z"
+              "WhenOpened": "2025-06-19T19:05:59.56Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 0,
               "Title": "HomeController.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
@@ -552,11 +582,12 @@
               "RelativeToolTip": "Controllers\\HomeController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-19T19:05:55.573Z"
+              "WhenOpened": "2025-06-19T19:05:55.573Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 13,
               "Title": "EmployeeController.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Controllers\\EmployeeController.cs",
               "RelativeDocumentMoniker": "Controllers\\EmployeeController.cs",
@@ -569,15 +600,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 12,
               "Title": "BookingController.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Controllers\\BookingController.cs",
               "RelativeDocumentMoniker": "Controllers\\BookingController.cs",
               "ToolTip": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Controllers\\BookingController.cs",
               "RelativeToolTip": "Controllers\\BookingController.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAuwDgAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAACcAAAAAAAAAAAAYwDgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-19T19:05:28Z"
+              "WhenOpened": "2025-06-19T19:05:28Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -585,9 +617,9 @@
               "Title": "AccountController.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Controllers\\AccountController.cs",
               "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
-              "ToolTip": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "Controllers\\AccountController.cs",
-              "ViewState": "AgIAACYAAAAAAAAAAAAgwDMAAAAuAAAAAAAAAA==",
+              "ToolTip": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Controllers\\AccountController.cs*",
+              "RelativeToolTip": "Controllers\\AccountController.cs*",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAcwGYAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-19T19:05:25.741Z",
               "EditorCaption": ""
@@ -598,9 +630,9 @@
               "Title": "AdminController.cs",
               "DocumentMoniker": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Controllers\\AdminController.cs",
               "RelativeDocumentMoniker": "Controllers\\AdminController.cs",
-              "ToolTip": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Controllers\\AdminController.cs",
-              "RelativeToolTip": "Controllers\\AdminController.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA4BAAABAAAAAAAAAA==",
+              "ToolTip": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\Controllers\\AdminController.cs*",
+              "RelativeToolTip": "Controllers\\AdminController.cs*",
+              "ViewState": "AgIAABwAAAAAAAAAAAAcwCcAAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-19T06:08:28.176Z",
               "EditorCaption": ""

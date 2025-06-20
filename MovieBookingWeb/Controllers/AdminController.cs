@@ -37,7 +37,7 @@ namespace MovieBookingWeb.Controllers
 
         private async Task<UserDto?> GetCurrentUserAsync()
         {
-            var client = _httpClientFactory.CreateClient("ApiClient");
+            var client = _httpClientFactory.CreateClient("ApiClient_User");
             var cookie = _contextAccessor.HttpContext?.Request.Headers["Cookie"].ToString();
             if (!string.IsNullOrEmpty(cookie))
                 client.DefaultRequestHeaders.Add("Cookie", cookie);
@@ -227,7 +227,7 @@ namespace MovieBookingWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewAccounts(int page = 1)
         {
-            var client = _httpClientFactory.CreateClient("ApiClient");
+            var client = _httpClientFactory.CreateClient("ApiClient_User");
             var response = await client.GetAsync($"api/user?role=User&page={page}");
 
             if (!response.IsSuccessStatusCode)
@@ -247,7 +247,7 @@ namespace MovieBookingWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteAccount(int id)
         {
-            var client = _httpClientFactory.CreateClient("ApiClient");
+            var client = _httpClientFactory.CreateClient("ApiClient_User");
             var response = await client.DeleteAsync($"api/user/{id}");
 
             TempData["Success"] = response.IsSuccessStatusCode
@@ -259,7 +259,7 @@ namespace MovieBookingWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> ToggleLockAccount(int id)
         {
-            var client = _httpClientFactory.CreateClient("ApiClient");
+            var client = _httpClientFactory.CreateClient("ApiClient_User");
             var response = await client.PutAsync($"api/user/toggle-lock/{id}", null);
 
             TempData["Success"] = response.IsSuccessStatusCode

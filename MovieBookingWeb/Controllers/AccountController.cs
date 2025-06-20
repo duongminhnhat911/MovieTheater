@@ -24,7 +24,7 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid) return View(model);
 
-        var client = _httpClientFactory.CreateClient("ApiClient");
+        var client = _httpClientFactory.CreateClient("ApiClient_User");
         var response = await client.PostAsJsonAsync("api/auth/login", model);
 
         if (!response.IsSuccessStatusCode)
@@ -62,7 +62,7 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid) return View(model);
 
-        var client = _httpClientFactory.CreateClient("ApiClient");
+        var client = _httpClientFactory.CreateClient("ApiClient_User");
         var response = await client.PostAsJsonAsync("api/auth/register", model);
 
         if (!response.IsSuccessStatusCode)
@@ -79,7 +79,7 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> Profile()
     {
-        var client = _httpClientFactory.CreateClient("ApiClient");
+        var client = _httpClientFactory.CreateClient("ApiClient_User");
 
         // Đính kèm cookie từ MVC sang Web API
         var cookie = _contextAccessor.HttpContext?.Request.Headers["Cookie"].ToString();
@@ -100,7 +100,7 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid) return View("Profile", model);
 
-        var client = _httpClientFactory.CreateClient("ApiClient");
+        var client = _httpClientFactory.CreateClient("ApiClient_User");
         var cookie = _contextAccessor.HttpContext?.Request.Headers["Cookie"].ToString();
         if (!string.IsNullOrEmpty(cookie))
             client.DefaultRequestHeaders.Add("Cookie", cookie);
