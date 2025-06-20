@@ -17,77 +17,77 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = MovieBookingWeb
 build_property.RootNamespace = MovieBookingWeb
-build_property.ProjectDir = D:\A_Document\SUM25\OJT\Task\Movie_Fix\MovieBookingWeb\
+build_property.ProjectDir = D:\A_Document\SUM25\OJT\Git_Clone\movietheater_ojt\MovieBookingWeb\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\A_Document\SUM25\OJT\Task\Movie_Fix\MovieBookingWeb
+build_property.MSBuildProjectDirectory = D:\A_Document\SUM25\OJT\Git_Clone\movietheater_ojt\MovieBookingWeb
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/Account/AccessDenied.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/Account/AccessDenied.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxBY2Nlc3NEZW5pZWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/Account/Login.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/Account/Profile.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/Account/Profile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxQcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/Account/Register.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/Admin/AddMovie.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/Admin/AddMovie.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWRkTW92aWUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/Admin/EditMovie.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/Admin/EditMovie.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdE1vdmllLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/Admin/ViewAccounts.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/Admin/ViewAccounts.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVmlld0FjY291bnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/Admin/ViewMovie.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/Admin/ViewMovie.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVmlld01vdmllLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/Booking/ConfirmBooking.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/Booking/ConfirmBooking.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ1xDb25maXJtQm9va2luZy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/Booking/Index.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/Booking/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/Employee/Dashboard.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/Employee/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVcRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/Home/Index.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/Shared/_ValidationScriptsPartial.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/_ViewImports.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/_ViewStart.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/A_Document/SUM25/OJT/Task/Movie_Fix/MovieBookingWeb/Views/Shared/_Layout.cshtml]
+[D:/A_Document/SUM25/OJT/Git_Clone/movietheater_ojt/MovieBookingWeb/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-t1mfs5rr0w

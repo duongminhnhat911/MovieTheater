@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Lu3olVaPRyE=",
+  "dgSpecHash": "CqllyJAcnSI=",
   "success": true,
-  "projectFilePath": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\MovieBookingWeb.csproj",
+  "projectFilePath": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieBookingWeb\\MovieBookingWeb.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Nhat\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Nhat\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

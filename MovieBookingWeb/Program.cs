@@ -4,8 +4,6 @@ using MovieBookingWeb.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-// options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddSingleton<IRoomService, RoomLayoutService>();
 
@@ -13,6 +11,7 @@ builder.Services.AddHttpClient("ApiClient", client =>
 {
     client.BaseAddress = new Uri("https://localhost:7281/");
 });
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllersWithViews();

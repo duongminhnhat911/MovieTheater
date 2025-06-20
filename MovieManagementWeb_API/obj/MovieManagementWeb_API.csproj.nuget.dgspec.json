@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj": {}
+    "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj": {}
   },
   "projects": {
-    "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj": {
+    "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj",
+        "projectUniqueName": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj",
         "projectName": "MovieManagementWeb_API",
-        "projectPath": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj",
+        "projectPath": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj",
         "packagesPath": "C:\\Users\\Nhat\\.nuget\\packages\\",
-        "outputPath": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieManagementWeb_API\\obj\\",
+        "outputPath": "D:\\A_Document\\SUM25\\OJT\\Git_Clone\\movietheater_ojt\\MovieManagementWeb_API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

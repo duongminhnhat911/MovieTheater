@@ -1,8 +1,9 @@
 @model MovieBookingWeb.Models.LoginViewModel
+
 @{
     ViewBag.Title = "Đăng nhập";
 }
-    
+
 <div class="container" style="max-width: 600px; margin-top: 2rem;">
     <h2 class="text-center fw-bold mb-3">Đăng nhập</h2>
     <div class="text-center mb-3">
@@ -13,10 +14,10 @@
     @if (!ViewData.ModelState.IsValid)
     {
         <div id="alertDanger" class="alert alert-danger text-center custom-alert mb-3"
-            style="width: 380px; margin: 0 auto; padding: 0.5rem 1rem; font-size: 0.9rem;">
-            <i class="fa-solid fa-xmark" style="color: red;"></i> @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values
-                .SelectMany(v => v.Errors)
-                .Select(e => e.ErrorMessage)))
+             style="width: 380px; margin: 0 auto; padding: 0.5rem 1rem; font-size: 0.9rem;">
+            ❌ @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values
+                   .SelectMany(v => v.Errors)
+                   .Select(e => e.ErrorMessage)))
         </div>
     }
 
@@ -24,17 +25,18 @@
         <div class="mb-3">
             <label class="form-label fw-bold">E-mail/Tên tài khoản</label>
             <input asp-for="UsernameOrEmail" class="form-control" placeholder="Nhập email hoặc tên tài khoản" />
+            <span class="text-danger" asp-validation-for="UsernameOrEmail"></span>
         </div>
         <div class="mb-3">
             <label class="form-label fw-bold">Mật khẩu</label>
             <input asp-for="Password" type="password" class="form-control" placeholder="Nhập mật khẩu" />
-        </div>       
+            <span class="text-danger" asp-validation-for="Password"></span>
+        </div>
         <div class="mt-4 d-grid">
             <button type="submit" class="btn btn-dark btn-lg">Đăng nhập</button>
         </div>
     </form>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script src="~/js/alerts.js"></script>
-}
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }

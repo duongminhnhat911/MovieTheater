@@ -49,7 +49,7 @@ public class AccountController : Controller
 
         return user.Role switch
         {
-            "Admin" => RedirectToAction("Dashboard", "Admin"),
+            "Admin" => RedirectToAction("ViewMovie", "Admin"),
             "Employee" => RedirectToAction("Dashboard", "Employee"),
             _ => RedirectToAction("Profile", "Account")
         };
