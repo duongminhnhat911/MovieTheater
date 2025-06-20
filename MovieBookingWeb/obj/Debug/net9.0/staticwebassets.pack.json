@@ -1,0 +1,373 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\MovieBookingWeb.bundle.scp.css",
+      "PackagePath": "staticwebassets\\MovieBookingWeb.vavowwua63.bundle.scp.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\css\\booking.css",
+      "PackagePath": "staticwebassets\\css\\booking.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\css\\homepage.css",
+      "PackagePath": "staticwebassets\\css\\homepage.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\css\\label.css",
+      "PackagePath": "staticwebassets\\css\\label.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\images\\Logo.png",
+      "PackagePath": "staticwebassets\\images\\Logo.png"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\images\\carousel-io2.jpg",
+      "PackagePath": "staticwebassets\\images\\carousel-io2.jpg"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\images\\default-avatar.jpg",
+      "PackagePath": "staticwebassets\\images\\default-avatar.jpg"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\images\\dune-carousel.jpg",
+      "PackagePath": "staticwebassets\\images\\dune-carousel.jpg"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\images\\dune.jpg",
+      "PackagePath": "staticwebassets\\images\\dune.jpg"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\images\\godzilla-vs-kong.jpg",
+      "PackagePath": "staticwebassets\\images\\godzilla-vs-kong.jpg"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\images\\godzillavskong-carousel.jpg",
+      "PackagePath": "staticwebassets\\images\\godzillavskong-carousel.jpg"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\images\\insideout2.jpg",
+      "PackagePath": "staticwebassets\\images\\insideout2.jpg"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\images\\screen.png",
+      "PackagePath": "staticwebassets\\images\\screen.png"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\js\\alerts.js",
+      "PackagePath": "staticwebassets\\js\\alerts.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\js\\booking.js",
+      "PackagePath": "staticwebassets\\js\\booking.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\js\\movie.shared.js",
+      "PackagePath": "staticwebassets\\js\\movie.shared.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\js\\preview.js",
+      "PackagePath": "staticwebassets\\js\\preview.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\js\\swiper.js",
+      "PackagePath": "staticwebassets\\js\\swiper.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "PackagePath": "staticwebassets\\lib\\bootstrap"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery-validation-unobtrusive\\dist\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\dist\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery-validation-unobtrusive\\dist\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\dist\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery\\dist\\jquery.slim.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.slim.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery\\dist\\jquery.slim.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.slim.min.js"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\lib\\jquery\\dist\\jquery.slim.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.slim.min.map"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\uploads\\1302e380-8ae6-4889-b231-83d194f3da6e.jpg",
+      "PackagePath": "staticwebassets\\uploads\\1302e380-8ae6-4889-b231-83d194f3da6e.jpg"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\uploads\\1c69a874-0196-4c21-ac51-2a0ba1b91a77.jpg",
+      "PackagePath": "staticwebassets\\uploads\\1c69a874-0196-4c21-ac51-2a0ba1b91a77.jpg"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\uploads\\8a44bf43-7f5c-4c41-8296-40d2a66e178b.jpg",
+      "PackagePath": "staticwebassets\\uploads\\8a44bf43-7f5c-4c41-8296-40d2a66e178b.jpg"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\uploads\\b1ee7c86-2ccb-48c3-921c-f20b38ffe20c.jpg",
+      "PackagePath": "staticwebassets\\uploads\\b1ee7c86-2ccb-48c3-921c-f20b38ffe20c.jpg"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\uploads\\b2df459a-9590-497a-8013-349e1c2cacaf.jpg",
+      "PackagePath": "staticwebassets\\uploads\\b2df459a-9590-497a-8013-349e1c2cacaf.jpg"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\uploads\\e20b7006-52fd-468c-a57e-427e13903d5a.jpg",
+      "PackagePath": "staticwebassets\\uploads\\e20b7006-52fd-468c-a57e-427e13903d5a.jpg"
+    },
+    {
+      "Id": "D:\\A_Document\\SUM25\\OJT\\Task\\Movie_Fix\\MovieBookingWeb\\wwwroot\\uploads\\f8eac07f-d4b1-4a1a-a7e4-dfaef14059f4.jpg",
+      "PackagePath": "staticwebassets\\uploads\\f8eac07f-d4b1-4a1a-a7e4-dfaef14059f4.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.MovieBookingWeb.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.MovieBookingWeb.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.build.MovieBookingWeb.props",
+      "PackagePath": "build\\MovieBookingWeb.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildMultiTargeting.MovieBookingWeb.props",
+      "PackagePath": "buildMultiTargeting\\MovieBookingWeb.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildTransitive.MovieBookingWeb.props",
+      "PackagePath": "buildTransitive\\MovieBookingWeb.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
