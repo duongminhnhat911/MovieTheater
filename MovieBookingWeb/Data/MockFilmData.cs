@@ -9,7 +9,7 @@ public static class MockFilmData
         {
             new Film {
                 Id = 1,
-                Title = "Dune: Hành tinh cát",
+                Title = "Dume: Hành tinh cát",
                 Tagline = "Sử thi khoa học viễn tưởng của năm",
                 ReleaseDate = new DateTime(2021, 10, 21),
                 Image = "/images/dune.jpg",
@@ -85,7 +85,7 @@ public static class MockFilmData
             },
             new Film {
                 Id = 2,
-                Title = "Godzilla x Kong",
+                Title = "Godzilla xxx Kong",
                 Tagline = "Cuộc đối đầu thế kỷ",
                 ReleaseDate = new DateTime(2024, 3, 29),
                 Image = "/images/godzilla-vs-kong.jpg",
