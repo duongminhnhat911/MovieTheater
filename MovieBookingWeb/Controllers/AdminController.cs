@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using MovieBookingWeb.Models;
 using MovieBookingWeb.Services;
 using MovieBookingWeb.Helper;
-using System.Text.Json;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace MovieBookingWeb.Controllers
 {
@@ -11,20 +12,43 @@ namespace MovieBookingWeb.Controllers
     public class AdminController : Controller
     {
         private readonly IWebHostEnvironment _environment;
-        private readonly ApplicationDbContext _context;
         private readonly IRoomService _roomService;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IHttpContextAccessor _contextAccessor;
         private const int PageSize = 10;
         private static List<Film> films;
+
         static AdminController()
         {
             films = MockFilmData.Films;
         }
-        public AdminController(IWebHostEnvironment environment, ApplicationDbContext context, IRoomService roomService)
+
+        public AdminController(
+            IWebHostEnvironment environment,
+            IRoomService roomService,
+            IHttpClientFactory httpClientFactory,
+            IHttpContextAccessor contextAccessor)
         {
             _environment = environment;
-            _context = context;
             _roomService = roomService;
+            _httpClientFactory = httpClientFactory;
+            _contextAccessor = contextAccessor;
         }
+
+        private async Task<UserDto?> GetCurrentUserAsync()
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var cookie = _contextAccessor.HttpContext?.Request.Headers["Cookie"].ToString();
+            if (!string.IsNullOrEmpty(cookie))
+                client.DefaultRequestHeaders.Add("Cookie", cookie);
+
+            var response = await client.GetAsync("api/user/profile");
+            if (!response.IsSuccessStatusCode) return null;
+
+            var userJson = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<UserDto>(userJson);
+        }
+
         public IActionResult ViewMovie(int page = 1)
         {
             int totalFilms = films.Count;
@@ -38,6 +62,7 @@ namespace MovieBookingWeb.Controllers
                 .Skip((page - 1) * PageSize)
                 .Take(PageSize)
                 .ToList();
+
             return View(pagedFilms);
         }
 
@@ -47,10 +72,11 @@ namespace MovieBookingWeb.Controllers
             var allRooms = _roomService.GetAllRoomLayouts().Keys.ToList();
             if (!allRooms.Any()) ModelState.AddModelError("", "Chưa có phòng chiếu nào trong hệ thống.");
             ViewBag.AllRooms = allRooms;
+
             var newFilm = new Film
             {
                 Showtimes = new List<Showtime>(),
-                ShowtimesJson = "[]",
+                ShowtimesJson = "[]"
             };
 
             return View(newFilm);
@@ -70,7 +96,7 @@ namespace MovieBookingWeb.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.AllRooms = _roomService.GetAllRoomLayouts().Keys.ToList();
-                film.ShowtimesJson = JsonSerializer.Serialize(film.Showtimes);
+                film.ShowtimesJson = JsonConvert.SerializeObject(film.Showtimes);
                 return View(film);
             }
 
@@ -80,7 +106,7 @@ namespace MovieBookingWeb.Controllers
                 film.Rating = fullRating;
             }
 
-            var user = _context.Users.FirstOrDefault(u => u.Username == User.Identity!.Name);
+            var user = await GetCurrentUserAsync();
             if (user != null)
             {
                 film.CreatedByUsername = user.Username;
@@ -129,14 +155,14 @@ namespace MovieBookingWeb.Controllers
             if (!ModelState.IsValid)
             {
                 model.Showtimes = film.Showtimes;
-                model.ShowtimesJson = JsonSerializer.Serialize(film.Showtimes);
+                model.ShowtimesJson = JsonConvert.SerializeObject(film.Showtimes);
                 ViewBag.AllRooms = _roomService.GetAllRoomLayouts().Keys.ToList();
                 return View(model);
             }
 
-            var user = _context.Users.FirstOrDefault(u => u.Username == User.Identity!.Name);
+            var user = await GetCurrentUserAsync();
             if (user != null) film.EditedByUsername = user.Username;
- 
+
             film.Title = model.Title;
             film.TrailerLink = model.TrailerLink;
             film.Description = model.Description;
@@ -145,14 +171,10 @@ namespace MovieBookingWeb.Controllers
             film.Format = model.Format;
             film.ProductionCompany = model.ProductionCompany;
             film.RatingCode = model.RatingCode;
+
             if (!string.IsNullOrEmpty(film.RatingCode))
-            {
-                var fullRating = FilmHelper.RatingHelper.GetFullRating(film.RatingCode);
-                if (!string.IsNullOrEmpty(fullRating))
-                {
-                    film.Rating = fullRating;
-                }
-            }       
+                film.Rating = FilmHelper.RatingHelper.GetFullRating(film.RatingCode);
+
             film.ReleaseDate = model.ReleaseDate;
             film.Director = model.Director;
             film.Cast = model.Cast;
@@ -160,7 +182,7 @@ namespace MovieBookingWeb.Controllers
 
             string uploadPath = Path.Combine(_environment.WebRootPath, "uploads");
             await FilmHelper.SaveImagesAsync(model, uploadPath, useGuidName: true);
-            
+
             if (model.ImageFile != null && model.ImageFile.Length > 0)
                 film.Image = model.Image;
 
@@ -203,49 +225,46 @@ namespace MovieBookingWeb.Controllers
         }
 
         [HttpGet]
-        public IActionResult ViewAccounts(int page = 1)
+        public async Task<IActionResult> ViewAccounts(int page = 1)
         {
-            var query = _context.Users.Where(u => u.Role == "User").OrderBy(u => u.Id);
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var response = await client.GetAsync($"api/user?role=User&page={page}");
 
-            int totalUsers = query.Count();
-            int totalPages = (int)Math.Ceiling((double)totalUsers / PageSize);
-            var pagedUsers = query.Skip((page - 1) * PageSize).Take(PageSize).ToList();
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["Error"] = "Lỗi khi tải danh sách người dùng.";
+                return RedirectToAction("ViewMovie");
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var users = JsonConvert.DeserializeObject<List<UserDto>>(json);
+
             ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-            return View(pagedUsers);
+            ViewBag.TotalPages = 1; // Giả định nếu API không trả về tổng
+            return View(users);
         }
 
         [HttpPost]
-        public IActionResult DeleteAccount(int id)
+        public async Task<IActionResult> DeleteAccount(int id)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == id);
-            if (user == null)
-            {
-                TempData["Error"] = "Không tìm thấy người dùng cần xóa.";
-                return RedirectToAction("ViewAccounts");
-            }
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var response = await client.DeleteAsync($"api/user/{id}");
 
-            _context.Users.Remove(user);
-            _context.SaveChanges();
-
-            TempData["Success"] = "Đã xóa người dùng thành công.";
+            TempData["Success"] = response.IsSuccessStatusCode
+                ? "Đã xoá người dùng thành công."
+                : "Không xoá được người dùng.";
             return RedirectToAction("ViewAccounts");
         }
 
         [HttpPost]
-        public IActionResult ToggleLockAccount(int id)
+        public async Task<IActionResult> ToggleLockAccount(int id)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == id);
-            if (user == null)
-            {
-                TempData["Error"] = "Không tìm thấy người dùng.";
-                return RedirectToAction("ViewAccounts");
-            }
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var response = await client.PutAsync($"api/user/toggle-lock/{id}", null);
 
-            user.IsLocked = !user.IsLocked;
-            _context.SaveChanges();
-
-            TempData["Success"] = user.IsLocked ? "Tài khoản đã bị khóa." : "Tài khoản đã được mở khóa.";
+            TempData["Success"] = response.IsSuccessStatusCode
+                ? "Đã đổi trạng thái khoá tài khoản."
+                : "Không cập nhật được tài khoản.";
             return RedirectToAction("ViewAccounts");
         }
     }

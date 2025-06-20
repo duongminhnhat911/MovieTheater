@@ -25,21 +25,7 @@ namespace MovieManagementWeb_API
                     Address = "Admin Street",
                     Role = "Admin",
                     IsLocked = false
-                },
-                new User
-                {
-                    Username = "employee",
-                    Password = "emp123",
-                    FullName = "Employee User",
-                    BirthDate = new DateTime(1995, 5, 5),
-                    Gender = "Female",
-                    Email = "employee@example.com",
-                    IdCard = "9876543210",
-                    PhoneNumber = "0909876543",
-                    Address = "Employee Street",
-                    Role = "Employee",
-                    IsLocked = false
-                },
+                },               
                 new User
                 {
                     Username = "user1",
