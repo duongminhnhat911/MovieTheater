@@ -1,0 +1,31 @@
+/* ==========Login, Register, Profile========== */
+.form-label, .form-check-label {
+    font-weight: bold;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.nav-link.active {
+    background-color: #c48383;
+    color: white !important;
+    border-radius: 8px;
+}
+
+.hover-effect {
+    transition: all 0.3s ease;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
+}
+
+.hover-effect:hover {
+    background-color: #ddbdbd;
+    text-decoration: none;
+}
+
+.custom-alert {
+    transition: opacity 0.5s ease;
+}
+

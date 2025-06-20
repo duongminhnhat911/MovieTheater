@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "MovieBookingWeb.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\MovieManagementWeb_API\\MovieManagementWeb_API.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

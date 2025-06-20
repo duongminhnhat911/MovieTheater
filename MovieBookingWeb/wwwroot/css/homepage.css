@@ -1,0 +1,217 @@
+.section-divider {
+    border: none;
+    height: 2px;
+    background-color: #ccc;
+    margin: 20px auto; 
+    width: 100%; 
+}
+
+.arrow-btn, .swiper-btn, .coming-soon-btn {
+    position: absolute;
+    transform: translateY(-50%);
+    top: 48.5%;
+    z-index: 10;
+    font-size: 2rem;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+    position: relative;
+}
+
+.carousel-wrapper {
+    position: relative;
+    margin-top: 30px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.swiper-container {
+    position: relative;
+    aspect-ratio: 1.78 / 1;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+
+.swiper-slide {
+    background-size: cover; 
+    background-position: center;
+    position: relative;
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 40px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-watch {
+    display: inline-block;       
+    padding: 6px 12px;
+    background: #2c78c4;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;        
+    font-size: 14px;
+    transition: background 0.3s;
+    max-width: max-content;  
+}
+
+.btn-watch:hover {
+    background: #2a3e8c;
+}
+
+.btn-booking {
+    margin-left: 5px;
+    display: inline-block;       
+    padding: 6px 12px;
+    background: #e50914;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;        
+    font-size: 14px;
+    transition: background 0.3s;
+    max-width: max-content; 
+}
+
+.btn-booking:hover {
+    background-color: #b00610;
+}
+
+.arrow-btn:hover, .swiper-btn:hover {
+    background-color: #f26b38;
+    color: #fff;
+}
+
+.carousel-wrapper:hover .arrow-btn { 
+    opacity: 1; 
+}
+
+.prev { 
+    left: -7px;
+}
+
+.next { 
+    right: -7px;
+}
+
+.overlay h2, .overlay p, .overlay a {
+    margin: 0;
+}
+
+.web-movie-slide, .coming-soon-slide {   
+    position: relative;             
+}
+
+.web-movie-slide.desktop, .coming-soon-slide.desktop {
+    margin-top: 30px;
+    padding: 0;
+}
+
+.web-movie-slide.desktop .container, .coming-soon-slide.desktop .container {
+    max-width: 1200px;
+    padding: 0 15px;
+}
+
+.section-heading h2 {
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    border-left: 5px solid #e50914;
+    padding-left: 10px;
+    color: #333;
+}
+
+.movie-swiper, .coming-soon-swiper {
+    position: relative;
+    width: 100%;
+}
+
+.movie-swiper .swiper-slide, .coming-soon-swiper .swiper-slide{
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.swiper-wrapper-container, .coming-soon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.swiper-btn-prev, .coming-soon-btn-prev {
+    left: -22px;
+}
+
+.swiper-btn-next, .coming-soon-btn-next {
+    right: -22px;
+}
+
+.movie-swiper:hover .swiper-btn, .coming-soon-swiper:hover .coming-soon-btn {
+    opacity: 1;
+}
+
+.movie-card {
+    background: #353638;
+    border-radius: 0.4rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    margin: 0;
+    padding: 0;
+}
+
+.movie-thumb {
+    aspect-ratio: 27 / 40; 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    border-radius: 0.4rem;
+}
+
+.movie-info {
+    padding: 12px;
+}
+
+.movie-info h3 {
+    color: #fff;
+    font-size: 18px;
+    margin: 0 0 8px 0;
+}
+
+.movie-info p {
+    font-size: 14px;
+    color: #d4cdcd;
+    margin-bottom: 10px;
+}
+

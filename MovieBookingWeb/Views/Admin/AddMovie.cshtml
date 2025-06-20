@@ -1,0 +1,202 @@
+@model MovieBookingWeb.Models.Film
+@using MovieBookingWeb.Helper
+@using System.Text.Json
+
+@{
+    ViewBag.Title = "Thêm phim mới";
+    var allGenres = new List<string> { "Hành động", "Hài", "Hoạt hình", "Tâm lý", 
+        "Khoa học viễn tưởng", "Phiêu lưu", "Kinh dị", "Tình cảm", "Chiến tranh" };
+    var allFormats = new List<string> { "2D", "3D" };
+    var selectedGenres = Model?.Genres ?? new List<string>();
+    var selectedFormats = Model?.Format ?? new List<string>();
+    var totalItems = allGenres.Count;
+    var columnCount = 2;
+    var itemsPerColumn = 5;
+    var formatColumnCount = 2;
+    var formatItemsPerColumn = (int)Math.Ceiling((double)allFormats.Count / formatColumnCount);
+    var columns = new List<List<string>>();
+    var formatColumns = new List<List<string>>();
+
+    for (int i = 0; i < columnCount; i++)
+    {
+        columns.Add(allGenres.Skip(i * itemsPerColumn).Take(itemsPerColumn).ToList());
+    }
+    for (int i = 0; i < formatColumnCount; i++)
+    {
+        formatColumns.Add(allFormats.Skip(i * formatItemsPerColumn).Take(formatItemsPerColumn).ToList());
+    }
+}
+
+<div class="container" style="max-width: 700px; margin-top: 2rem;">
+    <h2 class="text-center fw-bold mb-2">Thêm phim mới</h2>
+    <div class="text-center">
+        <p class="fw-bold text-muted mb-3">Vui lòng nhập đầy đủ thông tin phim để thêm vào hệ thống</p>
+    </div>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div id="alertDanger" class="alert alert-danger text-center custom-alert mb-3"
+            style="width: 280px; margin: 0 auto; padding: 0.5rem 1rem; font-size: 0.9rem;">
+                <i class="fa-solid fa-xmark" style="color: red;"></i> @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)))
+        </div>
+    }
+
+    <form asp-action="AddMovie" method="post" enctype="multipart/form-data" novalidate>
+        @Html.AntiForgeryToken()
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Tựa phim</label>
+                <input asp-for="Title" class="form-control" placeholder="Nhập tên phim" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Link trailer</label>
+                <input asp-for="TrailerLink" class="form-control" placeholder="Link YouTube trailer" />
+            </div>
+            <div class="col-md-12">
+                <label class="form-label fw-bold">Mô tả</label>
+                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Tóm tắt nội dung phim"></textarea>
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label fw-bold">Thể loại</label>
+                <div class="row">
+                    @foreach (var column in columns)
+                    {
+                        <div class="col-md-6">
+                            @foreach (var genre in column)
+                            {
+                                <div class="form-check mb-1">
+                                    <input class="form-check-input" type="checkbox" name="Genres" value="@genre"
+                                        @(selectedGenres.Contains(genre) ? "checked" : "") />
+                                    <label class="form-check-label">@genre</label>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label class="form-label fw-bold">Kiểm duyệt</label><br />
+                @{
+                    var ratings = FilmHelper.RatingHelper.GetRatings();
+                }
+
+                @foreach (var rating in ratings)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input"
+                            type="radio"
+                            name="RatingCode"
+                            id="rating_@rating.Key"
+                            value="@rating.Key"
+                            @(Model!.RatingCode == rating.Key ? "checked" : "") />
+                        <label class="form-check-label text-uppercase" for="rating_@rating.Key">@rating.Value</label>
+                    </div>
+                }
+            </div>
+            <div class="col-md-12">
+                <label class="form-label fw-bold">Định dạng phim</label><br />
+                <div class="row">
+                    @foreach (var column in formatColumns)
+                    {
+                        <div class="col-md-6">
+                            @foreach (var format in column)
+                            {
+                                <div class="form-check mb-1">
+                                    <input class="form-check-input"
+                                        type="checkbox"
+                                        name="Format"
+                                        value="@format"
+                                        @(Model?.Format?.Contains(format) == true ? "checked" : "") />
+                                    <label class="form-check-label">@format</label>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Thời lượng (phút)</label>
+                <input asp-for="Duration" type="number" class="form-control" placeholder="Nhập số phút" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Ngày phát hành</label>
+                <input asp-for="ReleaseDate" type="date" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Nhà sản xuất</label>
+                <input asp-for="ProductionCompany" class="form-control" placeholder="Tên nhà sản xuất" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Đạo diễn</label>
+                <input asp-for="Director" class="form-control" placeholder="Tên đạo diễn" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Diễn viên</label>
+                <input asp-for="Cast" class="form-control" placeholder="Danh sách diễn viên" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Phụ đề</label>
+                <input asp-for="Subtitle" class="form-control" placeholder="Ngôn ngữ phụ đề" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Ảnh bìa</label>
+                <input asp-for="ImageFile" type="file" class="form-control" id="imageInput" />
+                @if (!string.IsNullOrEmpty(Model!.Image)) {
+                    <img id="imagePreview"
+                        src="@Url.Content(Model.Image)"
+                        class="img-thumbnail mt-2"
+                        style="max-height: 200px;" />
+                }
+                else {
+                    <img id="imagePreview"
+                        src="#" 
+                        class="img-thumbnail mt-2" 
+                        style="max-height: 200px;" />
+                }
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Ảnh carousel</label>
+                <input asp-for="CarouselImageFile" type="file" class="form-control" id="carouselImageInput" />
+                @if (!string.IsNullOrEmpty(Model.CarouselImage)) {
+                    <img id="carouselImagePreview"
+                        src="@Url.Content(Model.CarouselImage)"
+                        class="img-thumbnail mt-2"
+                        style="max-height: 200px;" />
+                }
+                else {
+                    <img id="carouselImagePreview" 
+                        src="#" 
+                        class="img-thumbnail mt-2" 
+                        style="max-height: 200px;" />
+                }
+            </div>
+        </div>
+        
+        <button type="button" class="btn btn-outline-primary" style="margin-top: 1rem;" onclick="addShowtimeRow()">
+            <i class="fa-solid fa-plus"></i> Thêm suất chiếu
+        </button>
+
+        <div id="showtimesContainer" style="margin-top: 1rem;"></div>
+        
+        <input type="hidden" id="ShowtimesJson" name="ShowtimesJson" value='@Html.Raw(Model.ShowtimesJson)' />
+
+        <div class="mt-4 d-grid">
+            <button type="submit" class="btn btn-dark btn-lg">Thêm phim</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/preview.js"></script>
+    <script src="~/js/movie.shared.js"></script>
+    <script>
+        window.allRooms = @Html.Raw(Json.Serialize(ViewBag.AllRooms));
+    </script>
+}

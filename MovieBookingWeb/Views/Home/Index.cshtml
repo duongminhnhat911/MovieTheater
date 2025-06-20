@@ -1,0 +1,126 @@
+@model MovieBookingWeb.Models.HomeViewModel
+
+@{
+    ViewData["Title"] = "Movie Booking Web | Trang chủ";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<link rel="stylesheet" href="~/css/site.css" />
+
+<section class="carousel-container">
+    <div class="carousel-wrapper">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                @foreach (var film in Model.Carousel!) {
+                    <div class="swiper-slide" style="background-image:url('@film.CarouselImage')">
+                        <div class="overlay">
+                            <h2>@film.Title</h2>
+                            <p style="margin-bottom: 6px;">@film.Tagline</p>
+                            <div class="btn-group">
+                                <a href="@film.TrailerLink" target="_blank" class="fw-bold btn-watch">
+                                    <i class="fas fa-play"></i> Xem trailer</a>
+                                <a href="@film.BookingLink" class="fw-bold btn-booking">
+                                    <i class="fas fa-ticket-alt"></i> Đặt vé
+                                </a>
+                            </div>  
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="arrow-btn prev"><i class="fas fa-chevron-left"></i></div>
+    <div class="arrow-btn next"><i class="fas fa-chevron-right"></i></div>
+    <hr class="section-divider" />
+</section>
+
+<section class="web-movie-slide desktop">
+    <div class="container">
+        <div class="section-heading">
+            <h2>PHIM ĐANG CHIẾU</h2>
+        </div>
+
+    <div class="swiper-wrapper-container">
+        <div class="swiper-btn swiper-btn-prev"><i class="fas fa-chevron-left"></i></div>
+        <div class="swiper-btn swiper-btn-next"><i class="fas fa-chevron-right"></i></div>
+        <div class="swiper movie-swiper">
+            <div class="swiper-wrapper">
+                @foreach (var film in Model.NowShowing!) {
+                    <div class="swiper-slide">
+                        <div class="movie-card">
+                            <div class="movie-thumb" style="background-image: url('@film.Image');">
+                            @if (film.Format != null && film.Format.Any())
+                            {
+                                <div class="d-flex position-absolute top-0 start-0">
+                                    @foreach (var fmt in film.Format)
+                                    {
+                                        <div class="type-movie">
+                                            <span class="txt">@fmt</span>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            </div>
+                            <div class="movie-info">
+                                <h3>@film.Title</h3>
+                                <p>@film.Tagline</p>
+                                <a href="@film.TrailerLink" target="_blank" class="fw-bold btn-watch">
+                                    <i class="fas fa-play"></i> Xem trailer</a>
+                                <a href="@film.BookingLink" class="fw-bold btn-booking">
+                                    <i class="fas fa-ticket-alt"></i> Đặt vé
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <hr class="section-divider" />
+</section>
+
+<section class="coming-soon-slide desktop">
+    <div class="container">
+        <div class="section-heading">
+            <h2>PHIM SẮP CHIẾU</h2>
+        </div>
+        
+    <div class="coming-soon-wrapper">
+        <div class="coming-soon-btn coming-soon-btn-prev"><i class="fas fa-chevron-left"></i></div>
+        <div class="coming-soon-btn coming-soon-btn-next"><i class="fas fa-chevron-right"></i></div>
+        <div class="swiper coming-soon-swiper">
+            <div class="swiper-wrapper">
+                @foreach (var film in Model.ComingSoon!) {
+                    <div class="swiper-slide">
+                        <div class="movie-card">
+                            <div class="movie-thumb" style="background-image: url('@film.Image');"></div>
+                            <div class="movie-info">
+                                <h3>@film.Title</h3>
+                                <p>@film.Tagline</p>
+                                <a href="@film.TrailerLink" class="fw-bold btn-watch">
+                                    <i class="fas fa-play"></i> Xem trailer</a>
+                                <a href="@film.BookingLink" class="fw-bold btn-booking">
+                                    <i class="fas fa-ticket-alt"></i> Đặt vé
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="~/js/swiper.js"></script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/homepage.css" />
+    <link rel="stylesheet" href="~/css/label.css" />
+}
+
+
+
