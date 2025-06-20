@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\MovieManagementWeb_API.props" />
-</Project>
