@@ -15,24 +15,21 @@ namespace MovieBookingWeb.Controllers
         private readonly IRoomService _roomService;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly MovieApiService _movieApiService;
         private const int PageSize = 10;
-        private static List<Film> films;
-
-        static AdminController()
-        {
-            films = MockFilmData.Films;
-        }
 
         public AdminController(
             IWebHostEnvironment environment,
             IRoomService roomService,
             IHttpClientFactory httpClientFactory,
-            IHttpContextAccessor contextAccessor)
+            IHttpContextAccessor contextAccessor,
+            MovieApiService movieApiService)
         {
             _environment = environment;
             _roomService = roomService;
             _httpClientFactory = httpClientFactory;
             _contextAccessor = contextAccessor;
+            _movieApiService = movieApiService;
         }
 
         private async Task<UserDto?> GetCurrentUserAsync()
@@ -49,21 +46,30 @@ namespace MovieBookingWeb.Controllers
             return JsonConvert.DeserializeObject<UserDto>(userJson);
         }
 
-        public IActionResult ViewMovie(int page = 1)
+        public async Task<IActionResult> ViewMovie(int page = 1)
         {
-            int totalFilms = films.Count;
-            int totalPages = (int)Math.Ceiling((double)totalFilms / PageSize);
+            try
+            {
+                var films = await _movieApiService.GetMovies();
+                int totalFilms = films.Count;
+                int totalPages = (int)Math.Ceiling((double)totalFilms / PageSize);
 
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
+                ViewBag.CurrentPage = page;
+                ViewBag.TotalPages = totalPages;
 
-            var pagedFilms = films
-                .OrderByDescending(f => f.ReleaseDate)
-                .Skip((page - 1) * PageSize)
-                .Take(PageSize)
-                .ToList();
+                var pagedFilms = films
+                    .OrderByDescending(f => f.ReleaseDate)
+                    .Skip((page - 1) * PageSize)
+                    .Take(PageSize)
+                    .ToList();
 
-            return View(pagedFilms);
+                return View(pagedFilms);
+            }
+            catch (HttpRequestException ex)
+            {
+                TempData["Error"] = $"Lỗi API: {ex.Message}. Vui lòng đảm bảo API đang chạy.";
+                return View(new List<Film>());
+            }
         }
 
         [HttpGet]
@@ -116,112 +122,138 @@ namespace MovieBookingWeb.Controllers
             string uploadPath = Path.Combine(_environment.WebRootPath, "uploads");
             await FilmHelper.SaveImagesAsync(film, uploadPath, useGuidName: true);
 
-            film.Id = films.Any() ? films.Max(f => f.Id) + 1 : 1;
             film.ShowtimesJson = FilmHelper.ConvertShowtimesToJson(film.Showtimes!);
-            films.Add(film);
+            
+            try
+            {
+                var movieDto = new MovieCreateDto
+                {
+                    Title = film.Title,
+                    Image = film.Image,
+                    CarouselImage = film.CarouselImage,
+                    TrailerLink = film.TrailerLink,
+                    Subtitle = film.Subtitle,
+                    RatingCode = film.RatingCode,
+                    Duration = film.Duration,
+                    Genres = film.Genres,
+                    Director = film.Director,
+                    Cast = film.Cast,
+                    Description = film.Description,
+                    ProductionCompany = film.ProductionCompany,
+                    Format = film.Format,
+                    ReleaseDate = film.ReleaseDate,
+                    Showtimes = film.Showtimes.Select(s => new ShowtimeCreateDto { Date = s.Date, Time = s.Time.ToString(@"hh\:mm"), RoomName = s.RoomName }).ToList()
+                };
 
-            TempData["Success"] = "Thêm phim thành công!";
-            return RedirectToAction("ViewMovie");
+                await _movieApiService.AddMovie(movieDto);
+
+                TempData["Success"] = "Thêm phim thành công!";
+                return RedirectToAction("ViewMovie");
+            }
+            catch (HttpRequestException ex)
+            {
+                ModelState.AddModelError("", $"Lỗi API: {ex.Message}. Vui lòng đảm bảo API đang chạy.");
+                ViewBag.AllRooms = _roomService.GetAllRoomLayouts().Keys.ToList();
+                return View(film);
+            }
         }
 
         [HttpGet]
-        public IActionResult EditMovie(int id)
+        public async Task<IActionResult> EditMovie(int id)
         {
-            var film = films.FirstOrDefault(f => f.Id == id);
-            if (film == null) return NotFound();
+            try
+            {
+                var film = await _movieApiService.GetMovie(id);
+                if (film == null) return NotFound();
 
-            ViewBag.AllRooms = _roomService.GetAllRoomLayouts().Keys.ToList();
+                ViewBag.AllRooms = _roomService.GetAllRoomLayouts().Keys.ToList();
 
-            film.ShowtimesJson = FilmHelper.ConvertShowtimesToJson(film.Showtimes!);
-            if (!string.IsNullOrEmpty(film.Rating)) film.RatingCode = film.Rating.Split(" - ")[0];
-            return View(film);
+                film.ShowtimesJson = FilmHelper.ConvertShowtimesToJson(film.Showtimes!);
+                if (!string.IsNullOrEmpty(film.Rating)) film.RatingCode = film.Rating.Split(" - ")[0];
+                return View(film);
+            }
+            catch (HttpRequestException ex)
+            {
+                TempData["Error"] = $"Lỗi API: {ex.Message}. Vui lòng đảm bảo API đang chạy.";
+                return RedirectToAction("ViewMovie");
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditMovie(Film model)
         {
-            var film = films.FirstOrDefault(f => f.Id == model.Id);
-            if (film == null) return NotFound();
+            // First, parse showtimes from the JSON string to the model's list property
+            model.Showtimes = FilmHelper.ParseShowtimesFromJson(model.ShowtimesJson ?? "[]");
 
-            if (string.IsNullOrEmpty(film.Image) && (model.ImageFile == null || model.ImageFile.Length == 0))
+            // Manually check for image files if the existing image properties are empty
+            if (string.IsNullOrEmpty(model.Image) && (model.ImageFile == null || model.ImageFile.Length == 0))
                 ModelState.AddModelError("ImageFile", "Vui lòng tải ảnh bìa");
 
-            if (string.IsNullOrEmpty(film.CarouselImage) && (model.CarouselImageFile == null || model.CarouselImageFile.Length == 0))
+            if (string.IsNullOrEmpty(model.CarouselImage) && (model.CarouselImageFile == null || model.CarouselImageFile.Length == 0))
                 ModelState.AddModelError("CarouselImageFile", "Vui lòng tải ảnh carousel");
-
-            film.Showtimes = FilmHelper.ParseShowtimesFromJson(model.ShowtimesJson ?? "[]");
-
+            
             if (!ModelState.IsValid)
             {
-                model.Showtimes = film.Showtimes;
-                model.ShowtimesJson = JsonConvert.SerializeObject(film.Showtimes);
                 ViewBag.AllRooms = _roomService.GetAllRoomLayouts().Keys.ToList();
                 return View(model);
             }
 
-            var user = await GetCurrentUserAsync();
-            if (user != null) film.EditedByUsername = user.Username;
+            try
+            {
+                // Save uploaded images and update model properties
+                string uploadPath = Path.Combine(_environment.WebRootPath, "uploads");
+                await FilmHelper.SaveImagesAsync(model, uploadPath, useGuidName: true);
 
-            film.Title = model.Title;
-            film.TrailerLink = model.TrailerLink;
-            film.Description = model.Description;
-            film.Genres = model.Genres;
-            film.Duration = model.Duration;
-            film.Format = model.Format;
-            film.ProductionCompany = model.ProductionCompany;
-            film.RatingCode = model.RatingCode;
+                // Map the processed Film model to the DTO for the API call
+                var movieDto = new MovieCreateDto
+                {
+                    Id = model.Id,
+                    Title = model.Title,
+                    Image = model.Image, // Use the updated image path
+                    CarouselImage = model.CarouselImage, // Use the updated carousel image path
+                    TrailerLink = model.TrailerLink,
+                    Subtitle = model.Subtitle,
+                    RatingCode = model.RatingCode,
+                    Duration = model.Duration,
+                    Genres = model.Genres,
+                    Director = model.Director,
+                    Cast = model.Cast,
+                    Description = model.Description,
+                    ProductionCompany = model.ProductionCompany,
+                    Format = model.Format,
+                    ReleaseDate = model.ReleaseDate,
+                    Showtimes = model.Showtimes.Select(s => new ShowtimeCreateDto { Date = s.Date, Time = s.Time.ToString(@"hh\:mm"), RoomName = s.RoomName }).ToList()
+                };
 
-            if (!string.IsNullOrEmpty(film.RatingCode))
-                film.Rating = FilmHelper.RatingHelper.GetFullRating(film.RatingCode);
+                await _movieApiService.UpdateMovie(movieDto);
 
-            film.ReleaseDate = model.ReleaseDate;
-            film.Director = model.Director;
-            film.Cast = model.Cast;
-            film.Subtitle = model.Subtitle;
-
-            string uploadPath = Path.Combine(_environment.WebRootPath, "uploads");
-            await FilmHelper.SaveImagesAsync(model, uploadPath, useGuidName: true);
-
-            if (model.ImageFile != null && model.ImageFile.Length > 0)
-                film.Image = model.Image;
-
-            if (model.CarouselImageFile != null && model.CarouselImageFile.Length > 0)
-                film.CarouselImage = model.CarouselImage;
-
-            film.ShowtimesJson = FilmHelper.ConvertShowtimesToJson(film.Showtimes);
-            TempData["Success"] = "Cập nhật thành công!";
-            return RedirectToAction("EditMovie", new { id = film.Id });
+                TempData["Success"] = "Cập nhật thành công!";
+                return RedirectToAction("EditMovie", new { id = model.Id });
+            }
+            catch (HttpRequestException ex)
+            {
+                ModelState.AddModelError("", $"Lỗi API: {ex.Message}. Vui lòng đảm bảo API đang chạy.");
+                ViewBag.AllRooms = _roomService.GetAllRoomLayouts().Keys.ToList();
+                return View(model);
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteMovie(int id)
+        public async Task<IActionResult> DeleteMovie(int id)
         {
-            var film = films.FirstOrDefault(f => f.Id == id);
-            if (film == null)
+            try
             {
-                TempData["Error"] = "Không tìm thấy phim cần xoá.";
+                await _movieApiService.DeleteMovie(id);
+                TempData["Success"] = "Xoá phim thành công!";
                 return RedirectToAction("ViewMovie");
             }
-
-            var wwwRoot = _environment.WebRootPath;
-
-            if (!string.IsNullOrWhiteSpace(film.Image))
+            catch (HttpRequestException ex)
             {
-                var imagePath = Path.Combine(wwwRoot, film.Image.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
-                if (System.IO.File.Exists(imagePath)) System.IO.File.Delete(imagePath);
+                TempData["Error"] = $"Lỗi API: {ex.Message}. Vui lòng đảm bảo API đang chạy.";
+                return RedirectToAction("ViewMovie");
             }
-
-            if (!string.IsNullOrWhiteSpace(film.CarouselImage))
-            {
-                var carouselPath = Path.Combine(wwwRoot, film.CarouselImage.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
-                if (System.IO.File.Exists(carouselPath)) System.IO.File.Delete(carouselPath);
-            }
-
-            films.Remove(film);
-            TempData["Success"] = $"Đã xoá phim \"{film.Title}\" và ảnh liên quan thành công!";
-            return RedirectToAction("ViewMovie");
         }
 
         [HttpGet]

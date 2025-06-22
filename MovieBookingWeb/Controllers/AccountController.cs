@@ -36,6 +36,12 @@ public class AccountController : Controller
         var userJson = await response.Content.ReadAsStringAsync();
         var user = JsonConvert.DeserializeObject<UserDto>(userJson);
 
+        if (user == null)
+        {
+            ModelState.AddModelError("", "Lỗi không xác định từ phía máy chủ.");
+            return View(model);
+        }
+
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.Username),

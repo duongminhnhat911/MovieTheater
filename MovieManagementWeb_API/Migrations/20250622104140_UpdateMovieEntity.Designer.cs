@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieManagementWeb_API.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MovieManagementWeb_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250622104140_UpdateMovieEntity")]
+    partial class UpdateMovieEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,6 +129,10 @@ namespace MovieManagementWeb_API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Tagline")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -154,35 +161,6 @@ namespace MovieManagementWeb_API.Migrations
                     b.HasIndex("GenreId");
 
                     b.ToTable("MovieGenres");
-                });
-
-            modelBuilder.Entity("MovieManagementWeb_API.Models.Entities.Showtime", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("MovieId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("RoomName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Time")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MovieId");
-
-                    b.ToTable("Showtimes");
                 });
 
             modelBuilder.Entity("MovieManagementWeb_API.Models.Entities.User", b =>
@@ -278,17 +256,6 @@ namespace MovieManagementWeb_API.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("MovieManagementWeb_API.Models.Entities.Showtime", b =>
-                {
-                    b.HasOne("MovieManagementWeb_API.Models.Entities.Movie", "Movie")
-                        .WithMany("Showtimes")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Movie");
-                });
-
             modelBuilder.Entity("MovieManagementWeb_API.Models.Entities.Actor", b =>
                 {
                     b.Navigation("ActorMovies");
@@ -304,8 +271,6 @@ namespace MovieManagementWeb_API.Migrations
                     b.Navigation("ActorMovies");
 
                     b.Navigation("MovieGenres");
-
-                    b.Navigation("Showtimes");
                 });
 #pragma warning restore 612, 618
         }
