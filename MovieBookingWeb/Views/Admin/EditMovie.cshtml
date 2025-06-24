@@ -197,9 +197,19 @@
         <div class="mt-4 d-grid">
             <button type="submit" class="btn btn-dark btn-lg">Lưu thay đổi</button>
         </div>
+        @* Preserve genres, formats, and image paths if user doesn't re-select *@
+        @foreach (var genre in selectedGenres)
+        {
+            <input type="hidden" name="Genres" value="@genre" />
+        }
+        @foreach (var format in selectedFormats)
+        {
+            <input type="hidden" name="Format" value="@format" />
+        }
+        <input type="hidden" name="Image" value="@Model.Image" />
+        <input type="hidden" name="CarouselImage" value="@Model.CarouselImage" />
     </form>
 </div>
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/alerts.js"></script>

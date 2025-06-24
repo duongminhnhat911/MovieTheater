@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-
-namespace MovieManagementWeb_API.Models.DTOs
+﻿namespace MovieManagementWeb_API.Models.DTOs
 {
-    public class FilmDto
+    public class FilmUpdateDto
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -22,7 +19,5 @@ namespace MovieManagementWeb_API.Models.DTOs
         public List<string>? Format { get; set; }
         public DateTime? ReleaseDate { get; set; }
         public List<ShowtimeDto>? Showtimes { get; set; }
-        public string? CreatedByUsername { get; set; }
-        public string? EditedByUsername { get; set; }
     }
-} 
+}

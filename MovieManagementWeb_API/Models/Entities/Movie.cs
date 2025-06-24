@@ -35,6 +35,9 @@ namespace MovieManagementWeb_API.Models.Entities
         public List<string> Format { get; set; }
 
         public DateTime ReleaseDate { get; set; }
+        public string CreatedByUsername { get; set; }
+        public string EditedByUsername { get; set; }
+
 
         public ICollection<Showtime> Showtimes { get; set; }
         public ICollection<ActorMovie> ActorMovies { get; set; }

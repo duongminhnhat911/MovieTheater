@@ -142,6 +142,7 @@ namespace MovieBookingWeb.Controllers
                     ProductionCompany = film.ProductionCompany,
                     Format = film.Format,
                     ReleaseDate = film.ReleaseDate,
+                    CreatedByUsername = user.Username,
                     Showtimes = film.Showtimes.Select(s => new ShowtimeCreateDto { Date = s.Date, Time = s.Time.ToString(@"hh\:mm"), RoomName = s.RoomName }).ToList()
                 };
 
@@ -181,7 +182,7 @@ namespace MovieBookingWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditMovie(Film model)
+        public async Task<IActionResult> EditMovie([FromForm] Film model)
         {
             // First, parse showtimes from the JSON string to the model's list property
             model.Showtimes = FilmHelper.ParseShowtimesFromJson(model.ShowtimesJson ?? "[]");

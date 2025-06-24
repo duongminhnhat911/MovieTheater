@@ -22,9 +22,42 @@ namespace MovieManagementWeb_API.Controllers
 
         // GET: api/Movies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
+        public async Task<ActionResult<IEnumerable<FilmDto>>> GetMovies()
         {
-            return await _context.Movies.ToListAsync();
+            var movies = await _context.Movies
+                .Include(m => m.MovieGenres)
+                    .ThenInclude(mg => mg.Genre)
+                .Include(m => m.Showtimes)
+                .ToListAsync();
+
+            var movieDtos = movies.Select(m => new FilmDto
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Image = m.Image,
+                CarouselImage = m.CarouselImage,
+                TrailerLink = m.TrailerLink,
+                Subtitle = m.Subtitle,
+                RatingCode = m.RatingCode,
+                Duration = m.Duration,
+                Genres = m.MovieGenres?.Select(g => g.Genre?.Name).Where(name => name != null).ToList(),
+                Director = m.Director,
+                Cast = m.Cast,
+                Description = m.Description,
+                ProductionCompany = m.ProductionCompany,
+                Format = m.Format,
+                ReleaseDate = m.ReleaseDate,
+                CreatedByUsername = m.CreatedByUsername,
+                EditedByUsername = m.EditedByUsername,
+                Showtimes = m.Showtimes?.Select(s => new ShowtimeDto
+                {
+                    Date = s.Date,
+                    Time = s.Time,
+                    RoomName = s.RoomName
+                }).ToList()
+            }).ToList();
+
+            return Ok(movieDtos);
         }
 
         // GET: api/Movies/5
@@ -61,7 +94,14 @@ namespace MovieManagementWeb_API.Controllers
                 Format = filmDto.Format,
                 ReleaseDate = (filmDto.ReleaseDate ?? DateTime.Now).ToUniversalTime(),
                 MovieGenres = new List<MovieGenre>(),
-                Showtimes = filmDto.Showtimes?.Select(s => new Showtime { Date = s.Date.ToUniversalTime(), Time = s.Time, RoomName = s.RoomName }).ToList() ?? new List<Showtime>()
+                CreatedByUsername = filmDto.CreatedByUsername ?? "Unknown", // ✅ LẤY TỪ DTO
+                EditedByUsername = filmDto.CreatedByUsername ?? "Unknown",
+                Showtimes = filmDto.Showtimes?.Select(s => new Showtime
+                {
+                    Date = s.Date.ToUniversalTime(),
+                    Time = s.Time,
+                    RoomName = s.RoomName
+                }).ToList() ?? new List<Showtime>(),
             };
 
             if (filmDto.Genres != null)
@@ -86,86 +126,65 @@ namespace MovieManagementWeb_API.Controllers
 
         // PUT: api/Movies/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovie(int id, FilmDto filmDto)
+        public async Task<IActionResult> PutMovie(int id, [FromBody] FilmUpdateDto updateDto)
         {
-            if (id != filmDto.Id)
-            {
-                return BadRequest();
-            }
-
             var movie = await _context.Movies
                 .Include(m => m.MovieGenres)
-                .ThenInclude(mg => mg.Genre)
+                .Include(m => m.Showtimes)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (movie == null)
+            if (movie == null) return NotFound();
+
+            // Cập nhật thông tin cơ bản
+            movie.Title = updateDto.Title;
+            movie.Image = updateDto.Image;
+            movie.CarouselImage = updateDto.CarouselImage;
+            movie.TrailerLink = updateDto.TrailerLink;
+            movie.Subtitle = updateDto.Subtitle;
+            movie.RatingCode = updateDto.RatingCode;
+            movie.Duration = updateDto.Duration;
+            movie.Director = updateDto.Director;
+            movie.Cast = updateDto.Cast;
+            movie.Description = updateDto.Description;
+            movie.ProductionCompany = updateDto.ProductionCompany;
+            movie.Format = updateDto.Format;
+            movie.ReleaseDate = (updateDto.ReleaseDate ?? DateTime.Now).ToUniversalTime();
+
+            // ✅ Ghi lại người chỉnh sửa từ session thực
+            movie.EditedByUsername = User?.Identity?.Name ?? "Unknown";
+            // movie.UpdatedAt = DateTime.UtcNow; // nếu bạn có field này
+
+            // Cập nhật genres
+            movie.MovieGenres.Clear();
+            if (updateDto.Genres?.Any() == true)
             {
-                return NotFound();
-            }
-
-            // Simple property mapping
-            movie.Title = filmDto.Title;
-            movie.Image = filmDto.Image;
-            movie.CarouselImage = filmDto.CarouselImage;
-            movie.TrailerLink = filmDto.TrailerLink;
-            movie.Subtitle = filmDto.Subtitle;
-            movie.RatingCode = filmDto.RatingCode;
-            movie.Duration = filmDto.Duration;
-            movie.Director = filmDto.Director;
-            movie.Cast = filmDto.Cast;
-            movie.Description = filmDto.Description;
-            movie.ProductionCompany = filmDto.ProductionCompany;
-            movie.Format = filmDto.Format;
-            movie.ReleaseDate = (filmDto.ReleaseDate ?? movie.ReleaseDate).ToUniversalTime();
-
-            // Update Showtimes
-            _context.Showtimes.RemoveRange(movie.Showtimes);
-            if(filmDto.Showtimes != null)
-            {
-                movie.Showtimes = filmDto.Showtimes.Select(s => new Showtime { Date = s.Date.ToUniversalTime(), Time = s.Time, RoomName = s.RoomName }).ToList();
-            }
-
-            // Update genres
-            var newGenreNames = filmDto.Genres ?? new List<string>();
-            var currentGenreNames = movie.MovieGenres.Select(mg => mg.Genre.Name).ToList();
-
-            var genresToRemove = movie.MovieGenres.Where(mg => !newGenreNames.Contains(mg.Genre.Name)).ToList();
-            var genreNamesToAdd = newGenreNames.Where(name => !currentGenreNames.Contains(name)).ToList();
-
-            _context.MovieGenres.RemoveRange(genresToRemove);
-
-            foreach (var genreName in genreNamesToAdd)
-            {
-                var genre = await _context.Genres.FirstOrDefaultAsync(g => g.Name == genreName);
-                if (genre == null)
+                foreach (var genreName in updateDto.Genres)
                 {
-                    genre = new Genre { Name = genreName };
-                    _context.Genres.Add(genre);
-                }
-                movie.MovieGenres.Add(new MovieGenre { MovieId = movie.Id, Genre = genre });
-            }
-
-            _context.Entry(movie).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MovieExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
+                    var genre = await _context.Genres.FirstOrDefaultAsync(g => g.Name == genreName)
+                                ?? new Genre { Name = genreName };
+                    movie.MovieGenres.Add(new MovieGenre { Genre = genre });
                 }
             }
 
+            // Cập nhật showtimes
+            movie.Showtimes.Clear();
+            if (updateDto.Showtimes?.Any() == true)
+            {
+                foreach (var s in updateDto.Showtimes)
+                {
+                    movie.Showtimes.Add(new Showtime
+                    {
+                        Date = s.Date.ToUniversalTime(),
+                        Time = s.Time,
+                        RoomName = s.RoomName
+                    });
+                }
+            }
+            Console.WriteLine($"[DEBUG] User: {User.Identity?.Name}, Authenticated: {User.Identity?.IsAuthenticated}");
+
+            await _context.SaveChangesAsync();
             return NoContent();
         }
-
         // DELETE: api/Movies/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovie(int id)

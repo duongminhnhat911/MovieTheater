@@ -91,6 +91,10 @@ namespace MovieManagementWeb_API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("CreatedByUsername")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -101,6 +105,10 @@ namespace MovieManagementWeb_API.Migrations
 
                     b.Property<int?>("Duration")
                         .HasColumnType("integer");
+
+                    b.Property<string>("EditedByUsername")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.PrimitiveCollection<List<string>>("Format")
                         .IsRequired()

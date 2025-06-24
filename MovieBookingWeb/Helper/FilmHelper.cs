@@ -37,8 +37,11 @@ namespace MovieBookingWeb.Helper
                     );
             }
         }
-        public static string ConvertShowtimesToJson(List<Showtime> showtimes)
+        public static string ConvertShowtimesToJson(List<Showtime>? showtimes)
         {
+            if (showtimes == null || !showtimes.Any())
+                return "[]";
+
             var simplified = showtimes.Select(s => new
             {
                 date = s.Date.ToString("yyyy-MM-dd"),
