@@ -7,6 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<IRoomService, RoomLayoutService>();
 
+builder.Services.AddScoped<MovieApiService>();
+builder.Services.AddHttpClient("MovieApiClient", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7281/");
+});
+
 builder.Services.AddHttpClient("ApiClient_User", client =>
 {
     client.BaseAddress = new Uri("https://localhost:7281/");

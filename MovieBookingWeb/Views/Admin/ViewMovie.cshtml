@@ -37,6 +37,7 @@
                     <th class="text-center" style="width: 22%;">Thể loại</th>
                     <th class="text-center" style="width: 13%;">Thời lượng (phút)</th>
                     <th class="text-center" style="width: 10%;">Khởi chiếu</th>
+                    <th class="text-center" style="width: 10%;">Trạng thái</th>
                     <th class="text-center" style="width: 8%;">Tạo bởi</th>
                     <th class="text-center" style="width: 8%;">Sửa bởi</th>
                     <th class="text-center" style="width: 12%;">Tác vụ</th>
@@ -51,6 +52,18 @@
                         <td class="align-middle">@(film.Genres != null ? string.Join(", ", film.Genres) : "")</td>
                         <td class="align-middle text-center">@film.Duration</td>
                         <td class="align-middle text-center">@film.ReleaseDate?.ToString("dd/MM/yyyy")</td>
+                        <td class="align-middle text-center">
+                            @{
+                                var statusDisplay = film.Status switch
+                                {
+                                    "Active" => "Đang chiếu",
+                                    "SoldOut" => "Hết vé",
+                                    "Deleted" => "Đã xóa",
+                                    _ => "Không xác định"
+                                };
+                            }
+                            @statusDisplay
+                        </td>
                         <td class="align-middle text-center">@film.CreatedByUsername</td>
                         <td class="align-middle text-center">@film.EditedByUsername</td>
                         <td class="align-middle text-center">
@@ -69,7 +82,7 @@
                 @for (int i = 1; i <= totalPages; i++)
                 {
                     <li class="page-item @(i == currentPage ? "active" : "")">
-                        <a class="page-link" asp-action="ViewMovie" asp-route-pageNumber="@i">@i</a>
+                        <a class="page-link" asp-action="ViewMovie" asp-route-page="@i">@i</a>
                     </li>
                 }
             </ul>
