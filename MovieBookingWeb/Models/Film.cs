@@ -34,6 +34,7 @@ namespace MovieBookingWeb.Models
         public Dictionary<string, Dictionary<string, string>>? RoomByDateTime { get; set; }
         public Dictionary<string, Dictionary<string, List<string>>>? BookedSeats { get; set; }
         [NotMapped] public string? RoomByDateTimeJson { get; set; }
+        public string? Status { get; set; }
         public string? CreatedByUsername { get; set; }
         public string? EditedByUsername { get; set; }
         public int? CreatedByUserId { get; set; }

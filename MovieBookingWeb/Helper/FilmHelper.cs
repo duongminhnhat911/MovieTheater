@@ -25,6 +25,9 @@ namespace MovieBookingWeb.Helper
         {
             public static Dictionary<string, Dictionary<string, string>> GenerateRoomByDateTime(List<Showtime> showtimes)
             {
+                if (showtimes == null)
+                    return new Dictionary<string, Dictionary<string, string>>();
+
                 return showtimes
                     .Where(s => !string.IsNullOrEmpty(s.RoomName))
                     .GroupBy(s => s.Date.ToString("yyyy-MM-dd"))
@@ -32,21 +35,36 @@ namespace MovieBookingWeb.Helper
                         g => g.Key,
                         g => g.ToDictionary(
                             s => s.Time.ToString(@"hh\:mm"),
-                            s => s.RoomName!
+                            s => s.RoomName
                         )
                     );
             }
         }
-        public static string ConvertShowtimesToJson(List<Showtime>? showtimes)
+        //public static string ConvertShowtimesToJson(List<Showtime> showtimes)
+        //{
+        //    if (showtimes == null)
+        //        return "[]";
+        //    var simplified = showtimes.Select(s => new
+        //    {
+        //        date = s.Date.ToString("yyyy-MM-dd"),
+        //        time = s.Time.ToString(@"hh\\:mm"),
+        //        roomName = s.RoomName
+        //    });
+        //    return JsonSerializer.Serialize(simplified);
+        //}
+        public static string ConvertShowtimesToJson(List<Showtime> showtimes)
         {
-            if (showtimes == null || !showtimes.Any())
+            if (showtimes == null)
                 return "[]";
-
-            var simplified = showtimes.Select(s => new
+            var simplified = (showtimes ?? new List<Showtime>())
+            .Where(s => s != null)
+            .Select(s => new
             {
-                date = s.Date.ToString("yyyy-MM-dd"),
-                time = s.Time.ToString(@"hh\:mm"),
-                roomName = s.RoomName
+                date = s.Date != default ? s.Date.ToString("yyyy-MM-dd") : "",
+                time = (s.Time != default && s.Time.TotalHours >= 0 && s.Time.TotalHours < 24)
+                    ? s.Time.ToString(@"hh\:mm")
+                    : "",
+                roomName = s.RoomName ?? ""
             });
             return JsonSerializer.Serialize(simplified);
         }
@@ -63,10 +81,19 @@ namespace MovieBookingWeb.Helper
                     var timeStr = el.GetProperty("time").GetString();
                     var roomName = el.GetProperty("roomName").GetString();
 
+                    DateTime date = default;
+                    TimeSpan time = default;
+
+                    // Defensive parsing
+                    if (!string.IsNullOrWhiteSpace(dateStr))
+                        DateTime.TryParse(dateStr, out date);
+                    if (!string.IsNullOrWhiteSpace(timeStr))
+                        TimeSpan.TryParse(timeStr, out time);
+
                     showtimes.Add(new Showtime
                     {
-                        Date = DateTime.TryParse(dateStr, out var date) ? date : default,
-                        Time = TimeSpan.TryParse(timeStr, out var time) ? time : default,
+                        Date = date,
+                        Time = time,
                         RoomName = roomName ?? ""
                     });
                 }
@@ -100,3 +127,4 @@ namespace MovieBookingWeb.Helper
         }
     }
 }
+

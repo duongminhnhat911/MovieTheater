@@ -1,41 +1,29 @@
-using Microsoft.AspNetCore.Mvc;
-using MovieBookingWeb.Models;
-using MovieBookingWeb.Services;
-
-namespace MovieBookingWeb.Controllers
+public async Task<IActionResult> Index()
 {
-    public class HomeController : Controller
+    try
     {
-        private readonly MovieApiService _movieApiService;
+        var films = await _movieApiService.GetMovies();
 
-        public HomeController(MovieApiService movieApiService)
+        foreach (var film in films)
         {
-            _movieApiService = movieApiService;
+            film.BookingLink = Url.Action("Index", "Booking", new { id = film.Id });
         }
 
-        public async Task<IActionResult> Index()
-        {
-            try
-            {
-                var films = await _movieApiService.GetMovies();
-                var carousel = films.Where(f => !string.IsNullOrEmpty(f.CarouselImage)).ToList();
-                var nowShowing = films.Where(f => f.ReleaseDate <= DateTime.Now).ToList();
-                var comingSoon = films.Where(f => f.ReleaseDate > DateTime.Now).ToList();
+        var carousel = films.Where(f => !string.IsNullOrEmpty(f.CarouselImage)).ToList();
+        var nowShowing = films.Where(f => f.ReleaseDate <= DateTime.Now).ToList();
+        var comingSoon = films.Where(f => f.ReleaseDate > DateTime.Now).ToList();
 
-                var model = new HomeViewModel
-                {
-                    Carousel = carousel,
-                    NowShowing = nowShowing,
-                    ComingSoon = comingSoon
-                };
-                return View(model);
-            }
-            catch (HttpRequestException ex)
-            {
-                // Log the exception: _logger.LogError(ex, "API call failed.");
-                ViewData["Error"] = "Không thể tải dữ liệu phim lúc này. Vui lòng thử lại sau.";
-                return View(new HomeViewModel());
-            }
-        }
+        var model = new HomeViewModel
+        {
+            Carousel = carousel,
+            NowShowing = nowShowing,
+            ComingSoon = comingSoon
+        };
+        return View(model);
+    }
+    catch (HttpRequestException ex)
+    {
+        ViewData["Error"] = "Không thể tải dữ liệu phim lúc này. Vui lòng thử lại sau.";
+        return View(new HomeViewModel());
     }
 }

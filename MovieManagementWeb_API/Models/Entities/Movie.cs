@@ -35,12 +35,16 @@ namespace MovieManagementWeb_API.Models.Entities
         public List<string> Format { get; set; }
 
         public DateTime ReleaseDate { get; set; }
-        public string CreatedByUsername { get; set; }
-        public string EditedByUsername { get; set; }
-
 
         public ICollection<Showtime> Showtimes { get; set; }
         public ICollection<ActorMovie> ActorMovies { get; set; }
         public ICollection<MovieGenre> MovieGenres { get; set; }
+
+        // Status for soft delete: "Active", "SoldOut", "Deleted"
+        public string Status { get; set; }
+
+        // Track who created and last edited the movie
+        public string? CreatedByUsername { get; set; }
+        public string? EditedByUsername { get; set; }
     }
 } 

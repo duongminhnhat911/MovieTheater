@@ -15,8 +15,9 @@ namespace MovieBookingWeb.Controllers
         private readonly IRoomService _roomService;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly MovieApiService _movieApiService;
-        private const int PageSize = 10;
+        private readonly MovieApiService _movieApiService;        
+	private const int PageSize = 5;
+
 
         public AdminController(
             IWebHostEnvironment environment,
@@ -124,6 +125,7 @@ namespace MovieBookingWeb.Controllers
 
             film.ShowtimesJson = FilmHelper.ConvertShowtimesToJson(film.Showtimes!);
 
+            
             try
             {
                 var movieDto = new MovieCreateDto
@@ -142,7 +144,6 @@ namespace MovieBookingWeb.Controllers
                     ProductionCompany = film.ProductionCompany,
                     Format = film.Format,
                     ReleaseDate = film.ReleaseDate,
-                    CreatedByUsername = user.Username,
                     Showtimes = film.Showtimes.Select(s => new ShowtimeCreateDto { Date = s.Date, Time = s.Time.ToString(@"hh\:mm"), RoomName = s.RoomName }).ToList()
                 };
 
@@ -187,13 +188,17 @@ namespace MovieBookingWeb.Controllers
             // First, parse showtimes from the JSON string to the model's list property
             model.Showtimes = FilmHelper.ParseShowtimesFromJson(model.ShowtimesJson ?? "[]");
 
+
+            // Set EditedByUsername to 'admin'
+            model.EditedByUsername = "admin";
+
             // Manually check for image files if the existing image properties are empty
             if (string.IsNullOrEmpty(model.Image) && (model.ImageFile == null || model.ImageFile.Length == 0))
                 ModelState.AddModelError("ImageFile", "Vui lòng tải ảnh bìa");
 
             if (string.IsNullOrEmpty(model.CarouselImage) && (model.CarouselImageFile == null || model.CarouselImageFile.Length == 0))
-                ModelState.AddModelError("CarouselImageFile", "Vui lòng tải ảnh carousel");
 
+            
             if (!ModelState.IsValid)
             {
                 ViewBag.AllRooms = _roomService.GetAllRoomLayouts().Keys.ToList();
@@ -224,7 +229,16 @@ namespace MovieBookingWeb.Controllers
                     ProductionCompany = model.ProductionCompany,
                     Format = model.Format,
                     ReleaseDate = model.ReleaseDate,
-                    Showtimes = model.Showtimes.Select(s => new ShowtimeCreateDto { Date = s.Date, Time = s.Time.ToString(@"hh\:mm"), RoomName = s.RoomName }).ToList()
+
+                    Showtimes = (model.Showtimes ?? new List<Showtime>())
+                        .Where(s => s != null)
+                        .Select(s => new ShowtimeCreateDto {
+                            Date = s.Date,
+                            Time = s.Time != default ? s.Time.ToString(@"hh\:mm") : "",
+                            RoomName = s.RoomName ?? ""
+                        }).ToList(),
+                    EditedByUsername = model.EditedByUsername,
+                    Status = model.Status
                 };
 
                 await _movieApiService.UpdateMovie(movieDto);

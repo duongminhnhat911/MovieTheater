@@ -24,5 +24,6 @@ namespace MovieManagementWeb_API.Models.DTOs
         public List<ShowtimeDto>? Showtimes { get; set; }
         public string? CreatedByUsername { get; set; }
         public string? EditedByUsername { get; set; }
+        public string? Status { get; set; }
     }
 } 
