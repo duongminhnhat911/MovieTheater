@@ -32,5 +32,40 @@ namespace MovieManagementWeb_API.Controllers
             var result = await _userService.UpdateProfileAsync(username!, dto);
             return result ? Ok("Profile updated") : BadRequest("Update failed");
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var users = await _userService.GetAllUsersAsync();
+            return Ok(users);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var user = await _userService.GetUserByIdAsync(id);
+            return user == null ? NotFound() : Ok(user);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] AdminUpdateUserDto dto)
+        {
+            var updated = await _userService.AdminUpdateUserAsync(id, dto);
+            return updated ? Ok("Updated") : NotFound();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> SoftDelete(int id)
+        {
+            var toggled = await _userService.ToggleUserLockAsync(id);
+            return toggled ? Ok("Toggled lock status") : NotFound("User not found");
+        }
+
+
     }
 }
+

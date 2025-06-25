@@ -18,6 +18,7 @@ builder.Services.AddHttpClient("ApiClient_User", client =>
     client.BaseAddress = new Uri("https://localhost:7281/");
 });
 
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllersWithViews();

@@ -15,7 +15,7 @@ namespace MovieManagementWeb_API.Services
 
         public async Task<User?> AuthenticateAsync(LoginDto dto)
         {
-            return await _repo.FindUserAsync(dto.UsernameOrEmail, dto.Password);
+            return await _repo.FindUserAsync(dto.UsernameOrEmail);
         }
 
         public async Task<bool> RegisterAsync(RegisterDto dto)
@@ -42,6 +42,21 @@ namespace MovieManagementWeb_API.Services
         public async Task<bool> UpdateProfileAsync(string username, UpdateProfileDto dto)
         {
             return await _repo.UpdateUserAsync(username, dto);
+        }
+
+        //Admin
+        public async Task<List<GetListUserDto>> GetAllUsersAsync()
+        => await _repo.GetAllUsersAsync();
+
+        public async Task<GetListUserDto?> GetUserByIdAsync(int id)
+            => await _repo.GetUserByIdAsync(id);
+
+        public async Task<bool> AdminUpdateUserAsync(int id, AdminUpdateUserDto dto)
+            => await _repo.UpdateUserByIdAsync(id, dto);
+
+        public async Task<bool> ToggleUserLockAsync(int id)
+        {
+            return await _repo.ToggleUserLockAsync(id);
         }
     }
 }

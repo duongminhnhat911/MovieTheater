@@ -57,7 +57,9 @@ namespace MovieManagementWeb_API.Migrations
                     Description = table.Column<string>(type: "text", nullable: false),
                     ProductionCompany = table.Column<string>(type: "text", nullable: false),
                     Format = table.Column<List<string>>(type: "text[]", nullable: false),
-                    ReleaseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    ReleaseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedByUsername = table.Column<string>(type: "text", nullable: false),
+                    EditedByUsername = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -123,7 +123,7 @@ namespace MovieBookingWeb.Controllers
             await FilmHelper.SaveImagesAsync(film, uploadPath, useGuidName: true);
 
             film.ShowtimesJson = FilmHelper.ConvertShowtimesToJson(film.Showtimes!);
-            
+
             try
             {
                 var movieDto = new MovieCreateDto
@@ -193,7 +193,7 @@ namespace MovieBookingWeb.Controllers
 
             if (string.IsNullOrEmpty(model.CarouselImage) && (model.CarouselImageFile == null || model.CarouselImageFile.Length == 0))
                 ModelState.AddModelError("CarouselImageFile", "Vui lòng tải ảnh carousel");
-            
+
             if (!ModelState.IsValid)
             {
                 ViewBag.AllRooms = _roomService.GetAllRoomLayouts().Keys.ToList();
@@ -257,48 +257,79 @@ namespace MovieBookingWeb.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> ViewAccounts(int page = 1)
         {
             var client = _httpClientFactory.CreateClient("ApiClient_User");
-            var response = await client.GetAsync($"api/user?role=User&page={page}");
+            var cookie = _contextAccessor.HttpContext?.Request.Headers["Cookie"].ToString();
+            if (!string.IsNullOrEmpty(cookie))
+                client.DefaultRequestHeaders.Add("Cookie", cookie);
+
+            var response = await client.GetAsync("api/user");
 
             if (!response.IsSuccessStatusCode)
             {
+                Console.WriteLine("StatusCode: " + response.StatusCode);
                 TempData["Error"] = "Lỗi khi tải danh sách người dùng.";
                 return RedirectToAction("ViewMovie");
             }
 
             var json = await response.Content.ReadAsStringAsync();
-            var users = JsonConvert.DeserializeObject<List<UserDto>>(json);
+            var users = JsonConvert.DeserializeObject<List<GetListUserDto>>(json);
 
             ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = 1; // Giả định nếu API không trả về tổng
+            ViewBag.TotalPages = 1;
             return View(users);
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> EditAccount(int id)
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient_User");
+            var response = await client.GetAsync($"api/user/{id}"); 
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["Error"] = "Không tìm thấy người dùng.";
+                return RedirectToAction("ViewAccounts");
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var user = JsonConvert.DeserializeObject<AdminUpdateUserDto>(json);
+            return View(user);
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAccount(AdminUpdateUserDto dto)
+        {
+            if (!ModelState.IsValid) return View(dto);
+
+            var client = _httpClientFactory.CreateClient("ApiClient_User");
+            var response = await client.PutAsJsonAsync($"api/user/{dto.Id}", dto);
+
+            TempData["Success"] = response.IsSuccessStatusCode
+                ? "Cập nhật người dùng thành công!"
+                : "Cập nhật thất bại.";
+            return RedirectToAction("ViewAccounts");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteAccount(int id)
         {
             var client = _httpClientFactory.CreateClient("ApiClient_User");
+
             var response = await client.DeleteAsync($"api/user/{id}");
 
             TempData["Success"] = response.IsSuccessStatusCode
-                ? "Đã xoá người dùng thành công."
-                : "Không xoá được người dùng.";
-            return RedirectToAction("ViewAccounts");
-        }
+                ? "Đã thay đổi trạng thái khoá tài khoản."
+                : "Không thể thay đổi trạng thái khoá tài khoản.";
 
-        [HttpPost]
-        public async Task<IActionResult> ToggleLockAccount(int id)
-        {
-            var client = _httpClientFactory.CreateClient("ApiClient_User");
-            var response = await client.PutAsync($"api/user/toggle-lock/{id}", null);
-
-            TempData["Success"] = response.IsSuccessStatusCode
-                ? "Đã đổi trạng thái khoá tài khoản."
-                : "Không cập nhật được tài khoản.";
             return RedirectToAction("ViewAccounts");
         }
     }
-}
+   }

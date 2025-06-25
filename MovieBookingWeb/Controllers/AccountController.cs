@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using System.Net;
 
 public class AccountController : Controller
 {
@@ -29,7 +30,20 @@ public class AccountController : Controller
 
         if (!response.IsSuccessStatusCode)
         {
-            ModelState.AddModelError("", "Sai tài khoản hoặc mật khẩu");
+            if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError("", "Mày đã bị ban!!! CÚT"); 
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                ModelState.AddModelError("", "Sai tài khoản hoặc mật khẩu");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Lỗi không xác định từ phía máy chủ.");
+            }
+
             return View(model);
         }
 

@@ -14,12 +14,11 @@ namespace MovieManagementWeb_API.Repositories
             _context = context;
         }
 
-        public async Task<User?> FindUserAsync(string usernameOrEmail, string password)
+        public async Task<User?> FindUserAsync(string usernameOrEmail)
         {
             return await _context.Users
                 .FirstOrDefaultAsync(u =>
-                    (u.Username == usernameOrEmail || u.Email == usernameOrEmail) &&
-                    u.Password == password);
+                    u.Username == usernameOrEmail || u.Email == usernameOrEmail);
         }
 
         public async Task<bool> AddUserAsync(RegisterDto dto)
@@ -70,5 +69,70 @@ namespace MovieManagementWeb_API.Repositories
             return true;
         }
 
+        //Admin
+        public async Task<List<GetListUserDto>> GetAllUsersAsync()
+        {
+            return await _context.Users
+                .Select(u => new GetListUserDto
+                {
+                    Id = u.Id,
+                    Username = u.Username!,
+                    FullName = u.FullName!,
+                    Email = u.Email!,
+                    Role = u.Role,
+                    IsLocked = u.IsLocked
+                })
+                .ToListAsync();
+        }
+
+        public async Task<GetListUserDto?> GetUserByIdAsync(int id)
+        {
+            return await _context.Users
+                .Where(u => u.Id == id)
+                .Select(u => new GetListUserDto
+                {
+                    Id = u.Id,
+                    Username = u.Username!,
+                    FullName = u.FullName!,
+                    Email = u.Email!,
+                    Role = u.Role,
+                    IsLocked = u.IsLocked
+                })
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> UpdateUserByIdAsync(int id, AdminUpdateUserDto dto)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null) return false;
+
+            user.Username = dto.Username;
+            user.FullName = dto.FullName;
+            user.BirthDate = dto.BirthDate;
+            user.Gender = dto.Gender;
+            user.Email = dto.Email;
+            user.IdCard = dto.IdCard;
+            user.PhoneNumber = dto.PhoneNumber;
+            user.Address = dto.Address;
+            user.Role = dto.Role;
+            user.IsLocked = dto.IsLocked;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> ToggleUserLockAsync(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null) return false;
+
+            if (user.Role == "Admin")
+                return false;
+
+            user.IsLocked = !user.IsLocked;
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }
+
