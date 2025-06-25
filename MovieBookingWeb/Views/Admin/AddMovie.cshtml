@@ -92,7 +92,7 @@
                             name="RatingCode"
                             id="rating_@rating.Key"
                             value="@rating.Key"
-                            @(Model!.RatingCode == rating.Key ? "checked" : "") />
+                            @(Model?.RatingCode == rating.Key ? "checked" : "") />
                         <label class="form-check-label text-uppercase" for="rating_@rating.Key">@rating.Value</label>
                     </div>
                 }
@@ -146,35 +146,20 @@
             <div class="col-md-6">
                 <label class="form-label fw-bold">Ảnh bìa</label>
                 <input asp-for="ImageFile" type="file" class="form-control" id="imageInput" />
-                @if (!string.IsNullOrEmpty(Model!.Image)) {
-                    <img id="imagePreview"
-                        src="@Url.Content(Model.Image)"
-                        class="img-thumbnail mt-2"
-                        style="max-height: 200px;" />
-                }
-                else {
-                    <img id="imagePreview"
-                        src="#" 
-                        class="img-thumbnail mt-2" 
-                        style="max-height: 200px;" />
-                }
+                <img id="imagePreview"
+                    src="@(string.IsNullOrEmpty(Model?.Image) ? "" : Url.Content(Model.Image))"
+                    class="img-thumbnail mt-2"
+                    style="max-height: 200px; @(string.IsNullOrEmpty(Model?.Image) ? "display: none;" : "")" />
             </div>
+            <input type="hidden" asp-for="Status" value="Active" />
 
             <div class="col-md-6">
                 <label class="form-label fw-bold">Ảnh carousel</label>
                 <input asp-for="CarouselImageFile" type="file" class="form-control" id="carouselImageInput" />
-                @if (!string.IsNullOrEmpty(Model.CarouselImage)) {
-                    <img id="carouselImagePreview"
-                        src="@Url.Content(Model.CarouselImage)"
-                        class="img-thumbnail mt-2"
-                        style="max-height: 200px;" />
-                }
-                else {
-                    <img id="carouselImagePreview" 
-                        src="#" 
-                        class="img-thumbnail mt-2" 
-                        style="max-height: 200px;" />
-                }
+                <img id="carouselImagePreview"
+                    src="@(string.IsNullOrEmpty(Model?.CarouselImage) ? "" : Url.Content(Model.CarouselImage))"
+                    class="img-thumbnail mt-2"
+                    style="max-height: 200px; @(string.IsNullOrEmpty(Model?.CarouselImage) ? "display: none;" : "")" />
             </div>
         </div>
         
@@ -184,7 +169,7 @@
 
         <div id="showtimesContainer" style="margin-top: 1rem;"></div>
         
-        <input type="hidden" id="ShowtimesJson" name="ShowtimesJson" value='@Html.Raw(Model.ShowtimesJson)' />
+        <input type="hidden" id="ShowtimesJson" name="ShowtimesJson" value='@Html.Raw(Model?.ShowtimesJson)' />
 
         <div class="mt-4 d-grid">
             <button type="submit" class="btn btn-dark btn-lg">Thêm phim</button>
@@ -194,9 +179,49 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/js/preview.js"></script>
     <script src="~/js/movie.shared.js"></script>
     <script>
-        window.allRooms = @Html.Raw(Json.Serialize(ViewBag.AllRooms));
+        document.addEventListener('DOMContentLoaded', function () {
+            // Safely initialize the rooms for the showtime script
+            window.allRooms = @Html.Raw(Json.Serialize(ViewBag.AllRooms ?? new List<string>()));
+
+            // Bulletproof image preview function
+            function setupPreview(inputId, previewId) {
+                try {
+                    const input = document.getElementById(inputId);
+                    const preview = document.getElementById(previewId);
+
+                    if (!input || !preview) {
+                        console.error(`Preview setup failed: element not found for ${inputId} or ${previewId}.`);
+                        return;
+                    }
+
+                    input.addEventListener('change', function () {
+                        try {
+                            if (this.files && this.files[0]) {
+                                const reader = new FileReader();
+                                reader.onload = function (e) {
+                                    preview.src = e.target.result;
+                                    preview.style.display = 'block';
+                                };
+                                reader.onerror = function (e) {
+                                    console.error("FileReader error: ", e);
+                                    alert("Could not read the selected file.");
+                                };
+                                reader.readAsDataURL(this.files[0]);
+                            }
+                        } catch (err) {
+                            console.error('Error processing file: ', err);
+                            alert("An error occurred while trying to preview the image.");
+                        }
+                    });
+                } catch (err) {
+                    console.error('Error setting up preview event listener: ', err);
+                }
+            }
+
+            setupPreview('imageInput', 'imagePreview');
+            setupPreview('carouselImageInput', 'carouselImagePreview');
+        });
     </script>
 }

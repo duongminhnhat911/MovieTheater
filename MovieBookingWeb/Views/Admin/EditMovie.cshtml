@@ -149,8 +149,15 @@
                 <label class="form-label fw-bold">Phụ đề</label>
                 <input asp-for="Subtitle" class="form-control" placeholder="Ngôn ngữ phụ đề" />
             </div>
-
             <div class="col-md-6">
+    <label class="form-label fw-bold">Trạng thái phim</label>
+    <select asp-for="Status" class="form-select" required>
+        <option value="Active">Đang chiếu</option>
+        <option value="SoldOut">Hết vé</option>
+        <option value="Deleted">Đã xóa</option>
+    </select>
+</div>
+            <div>
                 <label class="form-label fw-bold">Ảnh bìa</label>
                 <input asp-for="ImageFile" type="file" class="form-control" id="imageInput" />
                 @if (!string.IsNullOrEmpty(Model!.Image)) {

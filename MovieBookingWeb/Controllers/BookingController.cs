@@ -9,43 +9,49 @@ namespace MovieBookingWeb.Controllers
     public class BookingController : Controller
     {
         private readonly IRoomService _roomService;
+        private readonly MovieApiService _movieApiService;
 
-        public BookingController(IRoomService roomService)
+        public BookingController(IRoomService roomService, MovieApiService movieApiService)
         {
             _roomService = roomService;
+            _movieApiService = movieApiService;
         }
-        public IActionResult Index(string id)
+
+        public async Task<IActionResult> Index(int id)
         {
-            var film = MockFilmData.Films.FirstOrDefault(f => f.BookingLink != null && f.BookingLink.EndsWith("/" + id));
-            if (film == null)
+            try
             {
-                return NotFound($"Không tìm thấy phim với id: {id}");
+                var film = await _movieApiService.GetMovie(id);
+                if (film == null) return NotFound();
+
+                var viewModel = new BookingViewModel
+                {
+                    Title = film.Title,
+                    Image = film.Image,
+                    Genres = film.Genres,
+                    Duration = film.Duration,
+                    Rating = film.Rating,
+                    Subtitle = film.Subtitle,
+                    Director = film.Director,
+                    Cast = film.Cast,
+                    Format = film.Format,
+                    ReleaseDate = film.ReleaseDate,
+                    Description = film.Description,
+                    ProductionCompany = film.ProductionCompany,
+                    Showtimes = film.Showtimes,
+                    AvailableDates = film.AvailableDates,
+                    RoomByDateTime = film.RoomByDateTime,
+                    BookedSeats = film.BookedSeats,
+                    RoomLayouts = _roomService.GetAllRoomLayouts()
+                };
+                return View(viewModel);
             }
-            var viewModel = new BookingViewModel
+            catch (HttpRequestException ex)
             {
-                Title = film.Title,
-                Image = film.Image,
-                Genres = film.Genres,
-                Duration = film.Duration ?? 0,
-                Rating = film.Rating,
-                Subtitle = film.Subtitle,
-                ProductionCompany = film.ProductionCompany,
-                Director = film.Director,
-                Cast = film.Cast,
-                Format = film.Format,
-                ReleaseDate = film.ReleaseDate,
-                Description = film.Description,
-                Showtimes = film.Showtimes ?? new List<Showtime>(),
-                RoomByDateTime = film.RoomByDateTime ?? new Dictionary<string, Dictionary<string, string>>(),
-                BookedSeats = film.BookedSeats ?? new Dictionary<string, Dictionary<string, List<string>>>(),
-                RoomLayouts = _roomService.GetAllRoomLayouts(),
-                AvailableDates = (film.Showtimes ?? new List<Showtime>())
-                    .Select(s => s.Date.ToString("yyyy-MM-dd"))
-                    .Distinct()
-                    .OrderBy(d => d)
-                    .ToList()
-            };
-            return View(viewModel);
+                // Log the exception
+                TempData["Error"] = "Không thể tải thông tin chi tiết phim. Vui lòng thử lại sau.";
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
