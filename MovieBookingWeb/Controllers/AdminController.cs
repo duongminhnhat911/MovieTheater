@@ -15,9 +15,8 @@ namespace MovieBookingWeb.Controllers
         private readonly IRoomService _roomService;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly MovieApiService _movieApiService;        
-	private const int PageSize = 5;
-
+        private readonly MovieApiService _movieApiService;
+        private const int PageSize = 5;
 
         public AdminController(
             IWebHostEnvironment environment,
@@ -197,7 +196,7 @@ namespace MovieBookingWeb.Controllers
                 ModelState.AddModelError("ImageFile", "Vui lòng tải ảnh bìa");
 
             if (string.IsNullOrEmpty(model.CarouselImage) && (model.CarouselImageFile == null || model.CarouselImageFile.Length == 0))
-
+                ModelState.AddModelError("CarouselImageFile", "Vui lòng tải ảnh carousel");
             
             if (!ModelState.IsValid)
             {
