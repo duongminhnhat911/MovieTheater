@@ -18,6 +18,10 @@ namespace MovieBookingWeb.Controllers
             try
             {
                 var films = await _movieApiService.GetMovies();
+                foreach (var film in films)
+                {
+                    film.BookingLink = Url.Action("Index", "Booking", new { id = film.Id });
+                }
                 var carousel = films.Where(f => !string.IsNullOrEmpty(f.CarouselImage)).ToList();
                 var nowShowing = films.Where(f => f.ReleaseDate <= DateTime.Now).ToList();
                 var comingSoon = films.Where(f => f.ReleaseDate > DateTime.Now).ToList();

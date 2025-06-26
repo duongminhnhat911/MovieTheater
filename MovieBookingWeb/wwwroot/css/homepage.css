@@ -213,5 +213,22 @@
     font-size: 14px;
     color: #d4cdcd;
     margin-bottom: 10px;
+} 
+
+.swiper-pagination-bullet {
+    background: #999 !important;
+    cursor: pointer;
+    display: inline-block;
+    height: 0.75rem !important;
+    width: 0.75rem !important;
+    margin: 0 5px !important;
+    opacity: 1 !important;
+    position: relative;
+    transition: all .3s ease;
 }
+
+.swiper-pagination-bullet-active {
+    background: #353638 !important; 
+}
+
 

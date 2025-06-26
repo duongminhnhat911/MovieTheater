@@ -2,6 +2,11 @@
 
 @{
     ViewData["Title"] = "Movie Booking Web | Trang chủ";
+    var films = Model.NowShowing!;
+    var pageSize = 4;
+    var comingSoonPageSize = 4;
+    var totalPages = (int)Math.Ceiling((double)films.Count / pageSize);
+    var totalComingSoonPages = (int)Math.Ceiling((double)Model.ComingSoon!.Count / comingSoonPageSize);
 }
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -89,7 +94,7 @@
         <div class="section-heading">
             <h2>PHIM SẮP CHIẾU</h2>
         </div>
-
+        
         <div class="coming-soon-wrapper">
             <div class="coming-soon-btn coming-soon-btn-prev"><i class="fas fa-chevron-left"></i></div>
             <div class="coming-soon-btn coming-soon-btn-next"><i class="fas fa-chevron-right"></i></div>
