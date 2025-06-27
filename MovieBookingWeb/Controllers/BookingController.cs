@@ -45,7 +45,15 @@ namespace MovieBookingWeb.Controllers
         .Distinct()
         .ToList(),
 
-                    RoomByDateTime = film.RoomByDateTime,
+                    RoomByDateTime = film.Showtimes?
+    .GroupBy(s => s.Date.ToString("yyyy-MM-dd"))
+    .ToDictionary(
+        g => g.Key,
+        g => g.ToDictionary(
+            s => s.Time.ToString(@"hh\:mm"),
+            s => s.RoomName ?? ""
+        )
+    ),
                     BookedSeats = film.BookedSeats,
                     RoomLayouts = _roomService.GetAllRoomLayouts()
                 };
