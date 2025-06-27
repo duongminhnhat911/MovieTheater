@@ -53,41 +53,50 @@
             <div class="swiper-btn swiper-btn-next"><i class="fas fa-chevron-right"></i></div>
             <div class="swiper movie-swiper">
                 <div class="swiper-wrapper">
-                    @foreach (var film in Model.NowShowing!)
+                    @for (int page = 0; page < totalPages; page++)
                     {
+                        var pageFilms = films.Skip(page * pageSize).Take(pageSize).ToList();
                         <div class="swiper-slide">
-                            <div class="movie-card">
-                                <div class="movie-thumb" style="background-image: url('@film.Image');">
-                                    @if (film.Format != null && film.Format.Any())
-                                    {
-                                        <div class="d-flex position-absolute top-0 start-0">
-                                            @foreach (var fmt in film.Format)
+                            <div class="d-flex flex-wrap justify-content-start" style="gap: 20px;">
+                                @foreach (var film in pageFilms)
+                                {
+                                    <div class="movie-card">
+                                        <div class="movie-thumb position-relative" style="background-image: url('@film.Image');">
+                                            @if (film.Format != null && film.Format.Any())
                                             {
-                                                <div class="type-movie">
-                                                    <span class="txt">@fmt</span>
+                                                <div class="d-flex position-absolute top-0 start-0">
+                                                    @foreach (var fmt in film.Format)
+                                                    {
+                                                        <div class="type-movie">
+                                                            <span class="txt">@fmt</span>
+                                                        </div>
+                                                    }
                                                 </div>
                                             }
                                         </div>
-                                    }
-                                </div>
-                                <div class="movie-info">
-                                    <h3>@film.Title</h3>
-                                    <p>@film.Tagline</p>
-                                    <a href="@film.TrailerLink" class="fw-bold btn-watch">
-                                        <i class="fas fa-play"></i> Xem trailer
-                                    </a>
-                                    <a href="@film.BookingLink" class="fw-bold btn-booking">
-                                        <i class="fas fa-ticket-alt"></i> Đặt vé
-                                    </a>
-                                </div>
+                                        <div class="movie-info">
+                                            <h3>@film.Title</h3>
+                                            <p>@film.Tagline</p>
+                                            <a href="@film.TrailerLink" target="_blank" class="fw-bold btn-watch">
+                                                <i class="fas fa-play"></i> Xem trailer
+                                            </a>
+                                            <a href="@film.BookingLink" class="fw-bold btn-booking">
+                                                <i class="fas fa-ticket-alt"></i> Đặt vé
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                     }
                 </div>
             </div>
         </div>
-        <hr class="section-divider" />
+    </div>
+    <div class="swiper-pagination movie-swiper-pagination" style="margin-top: 20px; position: static;"></div>
+    <hr class="section-divider" />
 </section>
+
 
 <section class="coming-soon-slide desktop">
     <div class="container">
@@ -120,6 +129,7 @@
                     }
                 </div>
             </div>
+        </div>
         </div>
 </section>
 

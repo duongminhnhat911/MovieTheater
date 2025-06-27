@@ -2,8 +2,8 @@
     border: none;
     height: 2px;
     background-color: #ccc;
-    margin: 20px auto; 
-    width: 100%; 
+    margin: 20px auto;
+    width: 100%;
 }
 
 .arrow-btn, .swiper-btn, .coming-soon-btn {
@@ -48,7 +48,7 @@
 }
 
 .swiper-slide {
-    background-size: cover; 
+    background-size: cover;
     background-position: center;
     position: relative;
 }
@@ -74,52 +74,52 @@
 }
 
 .btn-watch {
-    display: inline-block;       
+    display: inline-block;
     padding: 6px 12px;
     background: #2c78c4;
     color: white;
     border-radius: 4px;
-    text-decoration: none;        
+    text-decoration: none;
     font-size: 14px;
     transition: background 0.3s;
-    max-width: max-content;  
+    max-width: max-content;
 }
 
-.btn-watch:hover {
-    background: #2a3e8c;
-}
+    .btn-watch:hover {
+        background: #2a3e8c;
+    }
 
 .btn-booking {
     margin-left: 5px;
-    display: inline-block;       
+    display: inline-block;
     padding: 6px 12px;
     background: #e50914;
     color: white;
     border-radius: 4px;
-    text-decoration: none;        
+    text-decoration: none;
     font-size: 14px;
     transition: background 0.3s;
-    max-width: max-content; 
+    max-width: max-content;
 }
 
-.btn-booking:hover {
-    background-color: #b00610;
-}
+    .btn-booking:hover {
+        background-color: #b00610;
+    }
 
 .arrow-btn:hover, .swiper-btn:hover {
     background-color: #f26b38;
     color: #fff;
 }
 
-.carousel-wrapper:hover .arrow-btn { 
-    opacity: 1; 
+.carousel-wrapper:hover .arrow-btn {
+    opacity: 1;
 }
 
-.prev { 
+.prev {
     left: -7px;
 }
 
-.next { 
+.next {
     right: -7px;
 }
 
@@ -127,19 +127,19 @@
     margin: 0;
 }
 
-.web-movie-slide, .coming-soon-slide {   
-    position: relative;             
+.web-movie-slide, .coming-soon-slide {
+    position: relative;
 }
 
-.web-movie-slide.desktop, .coming-soon-slide.desktop {
-    margin-top: 30px;
-    padding: 0;
-}
+    .web-movie-slide.desktop, .coming-soon-slide.desktop {
+        margin-top: 30px;
+        padding: 0;
+    }
 
-.web-movie-slide.desktop .container, .coming-soon-slide.desktop .container {
-    max-width: 1200px;
-    padding: 0 15px;
-}
+        .web-movie-slide.desktop .container, .coming-soon-slide.desktop .container {
+            max-width: 1200px;
+            padding: 0 15px;
+        }
 
 .section-heading h2 {
     font-size: 28px;
@@ -156,11 +156,11 @@
     width: 100%;
 }
 
-.movie-swiper .swiper-slide, .coming-soon-swiper .swiper-slide{
-    height: auto;
-    display: flex;
-    flex-direction: column;
-}
+    .movie-swiper .swiper-slide, .coming-soon-swiper .swiper-slide {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+    }
 
 .swiper-wrapper-container, .coming-soon-wrapper {
     position: relative;
@@ -181,17 +181,18 @@
 }
 
 .movie-card {
+    width: calc(25% - 15px);
     background: #353638;
     border-radius: 0.4rem;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
-    margin: 0;
-    padding: 0;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .movie-thumb {
-    aspect-ratio: 27 / 40; 
+    aspect-ratio: 27 / 40;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -203,17 +204,17 @@
     padding: 12px;
 }
 
-.movie-info h3 {
-    color: #fff;
-    font-size: 18px;
-    margin: 0 0 8px 0;
-}
+    .movie-info h3 {
+        color: #fff;
+        font-size: 18px;
+        margin: 0 0 8px 0;
+    }
 
-.movie-info p {
-    font-size: 14px;
-    color: #d4cdcd;
-    margin-bottom: 10px;
-} 
+    .movie-info p {
+        font-size: 14px;
+        color: #d4cdcd;
+        margin-bottom: 10px;
+    }
 
 .swiper-pagination-bullet {
     background: #999 !important;
@@ -228,7 +229,5 @@
 }
 
 .swiper-pagination-bullet-active {
-    background: #353638 !important; 
+    background: #353638 !important;
 }
-
-
