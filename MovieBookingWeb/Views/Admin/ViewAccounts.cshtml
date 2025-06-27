@@ -1,4 +1,4 @@
-@model List<MovieBookingWeb.Models.UserDto>
+@model List<MovieBookingWeb.Models.GetListUserDto>
 @{
     ViewData["Title"] = "Quản lý người dùng";
     int currentPage = ViewBag.CurrentPage as int? ?? 1;
@@ -42,7 +42,7 @@
                         <th class="text-center" style="width: 20%;">Tên đăng nhập</th>
                         <th class="text-center" style="width: 24%;">Họ và tên</th>
                         <th class="text-center" style="width: 20%;">Email</th>
-                        <th class="text-center" style="width: 9%;">SĐT</th>
+                        <th class="text-center" style="width: 9%;">Role</th>
                         <th class="text-center" style="width: 9%;">Trạng thái</th>
                         <th class="text-center" style="width: 15%;">Tác vụ</th>
                     </tr>
@@ -55,7 +55,7 @@
                             <td class="align-middle">@user.Username</td>
                             <td class="align-middle">@user.FullName</td>
                             <td class="align-middle">@user.Email</td>
-                            <td class="align-middle">@user.PhoneNumber</td>
+                            <td class="align-middle">@user.Role</td>
                             <td class="align-middle text-center">
                             @if (user.IsLocked)
                             {
@@ -67,10 +67,10 @@
                             }
                             </td>
                             <td class="align-middle text-center">
-                                <form asp-controller="Admin" asp-action="DeleteAccount" asp-route-id="@user.Id" method="post" style="display:inline;" onsubmit="return confirm('Bạn có muốn xoá người dùng này không?');">
-                                    <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i> Xoá</button>
-                                </form>
-                                <form asp-controller="Admin" asp-action="ToggleLockAccount" asp-route-id="@user.Id" method="post" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn @(user.IsLocked ? "mở khóa" : "khóa") tài khoản này không?');">
+                                <form asp-controller="Admin" asp-action="EditAccount" asp-route-id="@user.Id" method="post" style="display:inline;" onsubmit="return confirm('Bạn có muốn xoá người dùng này không?');"> 
+                                     <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i> Edit</button> 
+                                 </form>
+                                <form asp-controller="Admin" asp-action="DeleteAccount" asp-route-id="@user.Id" method="post" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn @(user.IsLocked ? "mở khóa" : "khóa") tài khoản này không?');">
                                     <button type="submit" class="btn btn-sm @(user.IsLocked ? "btn-success" : "btn-secondary")">
                                         <i class="fa-solid @(user.IsLocked ? "fa-lock-open" : "fa-lock")"></i> @(user.IsLocked ? "Mở khóa" : "Khóa")
                                     </button>

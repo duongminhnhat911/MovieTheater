@@ -39,7 +39,12 @@ namespace MovieBookingWeb.Controllers
                     Description = film.Description,
                     ProductionCompany = film.ProductionCompany,
                     Showtimes = film.Showtimes,
-                    AvailableDates = film.AvailableDates,
+
+                    AvailableDates = film.Showtimes?
+        .Select(s => s.Date.ToString("yyyy-MM-dd"))
+        .Distinct()
+        .ToList(),
+
                     RoomByDateTime = film.RoomByDateTime,
                     BookedSeats = film.BookedSeats,
                     RoomLayouts = _roomService.GetAllRoomLayouts()

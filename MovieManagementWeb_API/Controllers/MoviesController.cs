@@ -25,9 +25,10 @@ namespace MovieManagementWeb_API.Controllers
         public async Task<ActionResult<IEnumerable<FilmDto>>> GetMovies()
         {
             var movies = await _context.Movies
-     .Include(m => m.MovieGenres)
-     .ThenInclude(mg => mg.Genre)
-     .ToListAsync();
+    .Include(m => m.MovieGenres)
+        .ThenInclude(mg => mg.Genre)
+    .Include(m => m.Showtimes) 
+    .ToListAsync();
 
             var filmDtos = movies.Select(m => new FilmDto
             {
@@ -46,11 +47,17 @@ namespace MovieManagementWeb_API.Controllers
                 Format = m.Format,
                 ReleaseDate = m.ReleaseDate,
                 Genres = m.MovieGenres.Select(mg => mg.Genre.Name).ToList(),
-                Showtimes = null, // You can map showtimes if needed
+                Showtimes = m.Showtimes.Select(s => new ShowtimeDto
+                {
+                    Date = s.Date,
+                    Time = s.Time,
+                    RoomName = s.RoomName
+                }).ToList(),
                 CreatedByUsername = m.CreatedByUsername,
                 EditedByUsername = m.EditedByUsername,
                 Status = m.Status
             }).ToList();
+
 
             return filmDtos;
         }
@@ -61,7 +68,8 @@ namespace MovieManagementWeb_API.Controllers
         {
             var movie = await _context.Movies
                 .Include(m => m.MovieGenres)
-                .ThenInclude(mg => mg.Genre)
+                    .ThenInclude(mg => mg.Genre)
+                .Include(m => m.Showtimes) 
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (movie == null)
@@ -86,9 +94,17 @@ namespace MovieManagementWeb_API.Controllers
                 Format = movie.Format,
                 ReleaseDate = movie.ReleaseDate,
                 Genres = movie.MovieGenres.Select(mg => mg.Genre.Name).ToList(),
-                Showtimes = null, // You can map showtimes if needed
+
+                Showtimes = movie.Showtimes.Select(s => new ShowtimeDto
+                {
+                    Date = s.Date,
+                    Time = s.Time,
+                    RoomName = s.RoomName
+                }).ToList(),
+
                 CreatedByUsername = movie.CreatedByUsername,
-                EditedByUsername = movie.EditedByUsername
+                EditedByUsername = movie.EditedByUsername,
+                Status = movie.Status
             };
 
             return filmDto;

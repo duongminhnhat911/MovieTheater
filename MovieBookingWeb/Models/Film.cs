@@ -23,7 +23,9 @@ namespace MovieBookingWeb.Models
         [Required(ErrorMessage = "Vui lòng nhập diễn viên")] public string? Cast { get; set; }
         [Required(ErrorMessage = "Vui lòng nhập mô tả phim")] public string? Description { get; set; }
         [Required(ErrorMessage = "Vui lòng nhập nhà sản xuất")] public string? ProductionCompany { get; set; }
-        [Required(ErrorMessage = "Vui lòng nhập định dạng")] public List<string>? Format { get; set; }
+        [NotMapped]
+        [Required(ErrorMessage = "Vui lòng nhập định dạng")]
+        public List<string>? Format { get; set; }
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Vui lòng nhập ngày khởi chiếu")] public DateTime? ReleaseDate { get; set; }
         public List<Showtime>? Showtimes { get; set; }

@@ -23,7 +23,14 @@ namespace MovieManagementWeb_API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
             var user = await _userService.AuthenticateAsync(dto);
-            if (user == null) return Unauthorized("Invalid credentials");
+            if (user == null)
+                return Unauthorized("Invalid credentials");
+
+            if (user.IsLocked)
+                return StatusCode(StatusCodes.Status403Forbidden, "Mày bị ban!!!!!!!!!!!!"); 
+
+            if (user.Password != dto.Password)
+                return Unauthorized("Invalid credentials");
 
             var claims = new List<Claim>
         {

@@ -21,7 +21,7 @@ namespace MovieManagementWeb_API.Models.DTOs
         public string? ProductionCompany { get; set; }
         public List<string>? Format { get; set; }
         public DateTime? ReleaseDate { get; set; }
-        public List<ShowtimeDto>? Showtimes { get; set; }
+        public List<ShowtimeDto> Showtimes { get; set; }
         public string? CreatedByUsername { get; set; }
         public string? EditedByUsername { get; set; }
         public string? Status { get; set; }
