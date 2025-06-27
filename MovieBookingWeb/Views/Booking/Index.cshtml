@@ -132,11 +132,10 @@
 @section Scripts {
     <script src="~/js/booking.js"></script>
     <script>
-        const showtimes = @Html.Raw(Json.Serialize(Model.Showtimes));
-        console.log("Showtimes:", showtimes); // 👈 BẮT BUỘC
-        window.roomByDateTime = @Html.Raw(Json.Serialize(Model.RoomByDateTime));
-        window.bookedSeats = @Html.Raw(Json.Serialize(Model.BookedSeats));
-        window.roomLayouts = @Html.Raw(Json.Serialize(Model.RoomLayouts));
+        const showtimes = @Html.Raw(Json.Serialize(Model.Showtimes ?? new List<Showtime>()));
+        window.roomByDateTime = @Html.Raw(Json.Serialize(Model.RoomByDateTime ?? new Dictionary<string, Dictionary<string, string>>()));
+        window.bookedSeats = @Html.Raw(Json.Serialize(Model.BookedSeats ?? new Dictionary<string, Dictionary<string, List<string>>>()));
+        window.roomLayouts = @Html.Raw(Json.Serialize(Model.RoomLayouts ?? new Dictionary<string, Room>()));
     </script>
 }
 
