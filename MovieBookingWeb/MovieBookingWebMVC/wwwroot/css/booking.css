@@ -1,0 +1,182 @@
+.section-divider {
+    border: none;
+    height: 2px;
+    background-color: #ccc;
+    margin: 20px auto;
+    width: 100%;
+}
+
+.container-sm {
+    max-width: 1200px;
+    margin-top: 30px;
+}
+
+.seat.booked {
+    background-color: #999 !important;
+    pointer-events: none;
+    color: white;
+}
+
+#submit-btn {
+    display: inline-block !important;
+}
+
+.web-movie-box {
+    aspect-ratio: 27 / 40;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+    position: relative;
+}
+
+.web-movie-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.movie-info ul, .movie-desc ul {
+    list-style: none;
+    padding: 0;
+}
+
+.movie-info li, .movie-desc li {
+    margin-bottom: 8px;
+}
+
+.movie-schedule {
+    text-align: center;
+}
+
+.movie-schedule ul {
+    padding-left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+}
+
+.movie-schedule li {
+    background: #f8f9fa;
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.movie-schedule li:hover {
+    background-color: #d1e7dd;
+}
+
+.slider-dates {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.slider-dates button {
+    margin-right: 10px;
+}
+
+.time-slots {
+    display: flex;
+    justify-content: center;
+}
+
+#time-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 0;
+}
+
+.time-btn {
+    cursor: pointer;
+}
+
+.movie-section {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 0;
+}
+
+.movie-info, .movie-desc, .movie-content {
+    width: 100%;
+    padding: 0;
+}
+
+.movie-content p {
+    margin: 0;
+    text-align: justify;
+}
+
+.movie-section h1,
+.movie-section h3 {
+    margin-bottom: 15px;
+}
+
+#screen-img {
+    display: block;
+    object-fit: contain;
+}
+
+#seatContainer {
+    max-width: 600px;      
+    margin: 0 auto;     
+}
+
+#seatContainer table {
+    border-collapse: separate;
+    border-spacing: 15px 15px;
+    margin: 0 auto;
+    table-layout: auto;
+}
+
+#seatContainer td {
+    padding: 0;
+    text-align: center;
+    border: none;
+}
+
+.seat-btn {
+    min-width: 36px;
+    min-height: 36px;
+    padding: 4px 6px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+#booking-summary {
+    position: fixed;
+    bottom: 0; 
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    background-color: #474698;
+    color: #fff;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+    padding: 10px 20px;
+}
+
+#booking-summary.sticky-stop {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: auto !important;
+}
+
+.btn-success {
+    margin-left: 5px;
+    display: inline-block;       
+    padding: 6px 12px;
+    background: #e50914;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;        
+    font-size: 14px;
+    transition: background 0.3s;
+    max-width: max-content; 
+}
