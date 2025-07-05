@@ -1,4 +1,5 @@
-﻿using BookingManagement.Models.Entities;
+﻿using BookingManagement.Models.DTOs;
+using BookingManagement.Models.Entities;
 using BookingManagement.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +54,14 @@ namespace BookingManagement.Controllers
             var success = await _service.DisableOrderAsync(id);
             if (!success) return NotFound();
             return Ok("Đơn hàng đã bị khóa.");
+        }
+        [HttpPost("payment")]
+        public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentRequestDto request)
+        {
+            var result = await _service.CreatePaymentAsync(request);
+            if (result == null)
+                return NotFound("Suất chiếu không tồn tại");
+            return Ok(result);
         }
     }
 }

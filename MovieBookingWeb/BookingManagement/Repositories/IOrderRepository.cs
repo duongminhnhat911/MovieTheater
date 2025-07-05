@@ -9,5 +9,7 @@ namespace BookingManagement.Repositories
         Task AddAsync(Order order);
         Task UpdateAsync(Order order);
         Task SaveChangesAsync();
+        Task CreateOrderAsync(Order order);
+        Task AddOrderDetailAsync(OrderDetail detail);
     }
 }

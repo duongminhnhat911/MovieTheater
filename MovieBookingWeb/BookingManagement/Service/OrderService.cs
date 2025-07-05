@@ -1,4 +1,5 @@
-﻿using BookingManagement.Models.Entities;
+﻿using BookingManagement.Models.DTOs;
+using BookingManagement.Models.Entities;
 using BookingManagement.Repositories;
 
 namespace BookingManagement.Service
@@ -6,10 +7,16 @@ namespace BookingManagement.Service
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _repo;
+        private readonly IShowtimeRepository _showtimeRepository;
+        private readonly ISeatShowtimeRepository _seatShowtimeRepo;
+        private readonly ISeatRepository _seatRepo;
 
-        public OrderService(IOrderRepository repo)
+        public OrderService(IOrderRepository repo,IShowtimeRepository showtimeRepository, ISeatShowtimeRepository seatShowtimeRepo, ISeatRepository seatRepository)
         {
             _repo = repo;
+            _showtimeRepository = showtimeRepository;
+            _seatShowtimeRepo = seatShowtimeRepo;
+            _seatRepo = seatRepository;
         }
 
         public async Task<List<Order>> GetAllOrdersAsync() => await _repo.GetAllAsync();
@@ -47,6 +54,54 @@ namespace BookingManagement.Service
             order.Status = false;
             await _repo.SaveChangesAsync();
             return true;
+        }
+        public async Task<OrderConfirmationDto?> CreatePaymentAsync(CreatePaymentRequestDto request)
+        {
+            const int ticketPrice = 80000;
+            var total = request.SeatIds.Count * ticketPrice;
+
+            var showtime = await _showtimeRepository.GetShowtimeByIdAsync(request.ShowtimeId);
+            if (showtime == null)
+                return null;
+
+            var order = new Order
+            {
+                UserId = request.UserId,
+                BookingDate = DateOnly.FromDateTime(DateTime.Now),
+                TotalPrice = total,
+                Status = false
+            };
+
+            await _repo.CreateOrderAsync(order);
+
+            foreach (var seatId in request.SeatIds)
+            {
+                await _repo.AddOrderDetailAsync(new OrderDetail
+                {
+                    OrderId = order.Id,
+                    SeatId = seatId,
+                    ShowtimeId = request.ShowtimeId,
+                    Price = ticketPrice
+                });
+
+                await _seatShowtimeRepo.HoldSeatAsync(seatId, request.ShowtimeId);
+            }
+
+            var seatNames = await _seatRepo.GetSeatNamesAsync(request.SeatIds);
+
+            return new OrderConfirmationDto
+            {
+                OrderId = order.Id,
+                UserId = request.UserId,
+                ShowtimeId = request.ShowtimeId,
+                MovieId = showtime.MovieId,
+                BookingDate = order.BookingDate,
+                TotalPrice = total,
+                ShowtimeDate = showtime.ShowDate.ToString("yyyy-MM-dd"),
+                ShowtimeTime = showtime.FromTime.ToString("HH:mm"),
+                Seats = seatNames,
+                Status = order.Status
+            };
         }
     }
 }

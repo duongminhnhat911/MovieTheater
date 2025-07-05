@@ -1,4 +1,5 @@
 ﻿using BookingManagement.Models.Entities;
+using BookingManagement.Models.Entities.Enums;
 
 namespace BookingManagement.Repositories
 {
@@ -9,5 +10,7 @@ namespace BookingManagement.Repositories
         Task AddAsync(SeatShowtime seatShowtime);
         Task SaveChangesAsync();
         void Remove(SeatShowtime seatShowtime);
+        Task HoldSeatAsync(int seatId, int showtimeId);
+        Task<Dictionary<int, SeatStatus>> GetSeatStatusesAsync(int showtimeId);
     }
 }

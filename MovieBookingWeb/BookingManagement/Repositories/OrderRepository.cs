@@ -21,5 +21,16 @@ namespace BookingManagement.Repositories
         public async Task UpdateAsync(Order order) => _db.Orders.Update(order);
 
         public async Task SaveChangesAsync() => await _db.SaveChangesAsync();
+        public async Task CreateOrderAsync(Order order)
+        {
+            _db.Orders.Add(order);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task AddOrderDetailAsync(OrderDetail detail)
+        {
+            _db.OrderDetails.Add(detail);
+            await _db.SaveChangesAsync();
+        }
     }
 }

@@ -11,6 +11,13 @@ namespace BookingManagement.Repositories
         {
             _db = db;
         }
+        public async Task<List<string>> GetSeatNamesAsync(List<int> seatIds)
+        {
+            return await _db.Seats
+                .Where(s => seatIds.Contains(s.Id))
+                .Select(s => $"{s.SeatRow}{s.SeatColumn}")
+                .ToListAsync();
+        }
 
         public async Task<List<Seat>> GetSeatsByRoomAsync(int roomId) =>
             await _db.Seats
@@ -28,5 +35,11 @@ namespace BookingManagement.Repositories
 
         public async Task SaveChangesAsync() =>
             await _db.SaveChangesAsync();
+        public async Task<List<Seat>> GetSeatsByRoomIdAsync(int roomId)
+        {
+            return await _db.Seats
+                .Where(s => s.RoomId == roomId)
+                .ToListAsync();
+        }
     }
 }

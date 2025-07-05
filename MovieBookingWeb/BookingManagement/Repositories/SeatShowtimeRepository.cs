@@ -1,4 +1,5 @@
 ﻿using BookingManagement.Models.Entities;
+using BookingManagement.Models.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookingManagement.Repositories
@@ -42,6 +43,23 @@ namespace BookingManagement.Repositories
         public async Task SaveChangesAsync()
         {
             await _db.SaveChangesAsync();
+        }
+        public async Task HoldSeatAsync(int seatId, int showtimeId)
+        {
+            var seatShowtime = await _db.SeatShowtimes
+                .FirstOrDefaultAsync(ss => ss.SeatId == seatId && ss.ShowtimeId == showtimeId);
+
+            if (seatShowtime != null)
+            {
+                seatShowtime.Status = SeatStatus.Held;
+                await _db.SaveChangesAsync();
+            }
+        }
+        public async Task<Dictionary<int, SeatStatus>> GetSeatStatusesAsync(int showtimeId)
+        {
+            return await _db.SeatShowtimes
+                .Where(ss => ss.ShowtimeId == showtimeId)
+                .ToDictionaryAsync(ss => ss.SeatId, ss => ss.Status);
         }
     }
 }

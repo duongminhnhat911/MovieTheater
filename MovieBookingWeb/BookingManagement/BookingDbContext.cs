@@ -18,10 +18,6 @@ namespace BookingManagement
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseNpgsql("Host=localhost;Database=BookingDB;Username=postgres;Password=12345");
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

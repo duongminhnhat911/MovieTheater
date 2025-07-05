@@ -1,4 +1,5 @@
-﻿using BookingManagement.Models.Entities;
+﻿using BookingManagement.Models.DTOs;
+using BookingManagement.Models.Entities;
 
 namespace BookingManagement.Service
 {
@@ -9,5 +10,6 @@ namespace BookingManagement.Service
         Task<Order> CreateOrderAsync(Order order);
         Task<Order?> UpdateOrderAsync(int id, Order dto);
         Task<bool> DisableOrderAsync(int id);
+        Task<OrderConfirmationDto?> CreatePaymentAsync(CreatePaymentRequestDto request);
     }
 }
