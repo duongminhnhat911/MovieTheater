@@ -61,6 +61,16 @@ namespace BookingManagement.Controllers
             if (!success) return NotFound();
             return Ok("Đã xoá thành công.");
         }
-    }
+        [HttpGet("seats/showtime")]
+        public async Task<IActionResult> GetSeatsByShowtime(int showtimeId)
+        {
+            var result = await _service.GetSeatsByShowtimeAsync(showtimeId);
+            if (result == null)
+                return NotFound("Showtime không tồn tại.");
 
+            return Ok(result);
+        }
+
+    }
 }
+    

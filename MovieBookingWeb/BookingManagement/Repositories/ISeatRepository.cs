@@ -9,5 +9,8 @@ namespace BookingManagement.Repositories
         Task<Seat?> GetSeatByIdAsync(int id);
         Task<Seat?> GetSeatWithRoomAsync(int id);
         Task SaveChangesAsync();
+        Task<List<string>> GetSeatNamesAsync(List<int> seatIds);
+
+        Task<List<Seat>> GetSeatsByRoomIdAsync(int roomId);
     }
 }

@@ -24,6 +24,8 @@ builder.Services.AddScoped<IShowtimeRepository, ShowtimeRepository>();
 builder.Services.AddScoped<IShowtimeService, ShowtimeService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddDbContext<BookingDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 //Đăng ký DbContext
@@ -31,7 +33,7 @@ builder.Services.AddDbContext<BookingDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddHttpClient<IMovieServiceClient, MovieManagementHttpClient>(client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7197/"); // ⚠️ Đổi đúng URI MovieManagement service của bạn
+    client.BaseAddress = new Uri("http://localhost:5200/"); // ⚠️ Đổi đúng URI MovieManagement service của bạn
 });
 //Cấu hình CORS cho MVC
 builder.Services.AddCors(options =>

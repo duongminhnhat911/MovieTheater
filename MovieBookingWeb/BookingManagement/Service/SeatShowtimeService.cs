@@ -1,6 +1,7 @@
 ﻿using BookingManagement.Models.Entities.Enums;
 using BookingManagement.Models.Entities;
 using BookingManagement.Repositories;
+using BookingManagement.Models.DTOs;
 
 namespace BookingManagement.Service
 {
@@ -8,10 +9,14 @@ namespace BookingManagement.Service
     public class SeatShowtimeService : ISeatShowtimeService
     {
         private readonly ISeatShowtimeRepository _repo;
+        private readonly IShowtimeRepository _showtimeRepository;
+        private readonly ISeatRepository _seatRepository;
 
-        public SeatShowtimeService(ISeatShowtimeRepository repo)
+        public SeatShowtimeService(ISeatShowtimeRepository repo, IShowtimeRepository showtimeRepository, ISeatRepository seatRepository )
         {
             _repo = repo;
+            _showtimeRepository = showtimeRepository;
+            _seatRepository = seatRepository;
         }
 
         public async Task<List<SeatShowtime>> GetAllAsync() =>
@@ -45,6 +50,32 @@ namespace BookingManagement.Service
             _repo.Remove(entity);
             await _repo.SaveChangesAsync();
             return true;
+        }
+        public async Task<SeatShowtimeDto?> GetSeatsByShowtimeAsync(int showtimeId)
+        {
+            var showtime = await _showtimeRepository.GetShowtimeByIdAsync(showtimeId);
+            if (showtime == null)
+                return null;
+
+            var seats = await _seatRepository.GetSeatsByRoomIdAsync(showtime.RoomId);
+            var seatStatuses = await _repo.GetSeatStatusesAsync(showtimeId);
+
+            var seatDtos = seats.Select(s => new SeatDto
+            {
+                SeatId = s.Id,
+                Row = s.SeatRow,
+                Column = s.SeatColumn,
+                Status = seatStatuses.TryGetValue(s.Id, out var status)
+                    ? status.ToString()
+                    : "Unavailable"
+            }).ToList();
+
+            return new SeatShowtimeDto
+            {
+                RoomId = showtime.RoomId,
+                ShowtimeId = showtimeId,
+                Seats = seatDtos
+            };
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BookingManagement.Models.Entities.Enums;
 using BookingManagement.Models.Entities;
+using BookingManagement.Models.DTOs;
 
 namespace BookingManagement.Service
 {
@@ -10,5 +11,6 @@ namespace BookingManagement.Service
         Task<SeatShowtime> CreateAsync(SeatShowtime seatShowtime);
         Task<SeatShowtime?> UpdateStatusAsync(int showtimeId, int seatId, SeatStatus status);
         Task<bool> DeleteAsync(int showtimeId, int seatId);
+        Task<SeatShowtimeDto?> GetSeatsByShowtimeAsync(int showtimeId);
     }
 }
