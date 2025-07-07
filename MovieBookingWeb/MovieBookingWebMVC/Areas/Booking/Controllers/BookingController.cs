@@ -68,6 +68,12 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             }
 
             ViewBag.SelectedDate = date.Value;
+
+            // ✅ Thêm dòng này để truyền danh sách 7 ngày tới View
+            ViewBag.WeekDates = Enumerable.Range(0, 7)
+                .Select(offset => DateTime.Today.AddDays(offset))
+                .ToList();
+
             return View(result);
         }
 

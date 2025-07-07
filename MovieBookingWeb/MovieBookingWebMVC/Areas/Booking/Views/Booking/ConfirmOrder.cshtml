@@ -1,73 +1,597 @@
 ﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModels.ConfirmBookingViewModel
-
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 @{
     ViewData["Title"] = "Xác nhận đơn đặt vé";
 }
 
-<h2 class="mt-4 mb-3">Xác nhận đơn đặt vé</h2>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #4a4e69;
+            --primary-medium: #9a8c98;
+            --primary-light: #c9ada7;
+            --background-light: #f2f3f4;
+            --accent-gold: #ffd700;
+            --success-green: #28a745;
+            --warning-orange: #fd7e14;
+            --info-blue: #17a2b8;
+            --danger-red: #dc3545;
+            --light-gray: #f8f9fa;
+        }
 
-<div class="card p-4 shadow">
-    <!-- Hình ảnh phim -->
-    <div class="row">
-        <div class="col-md-4">
-            <img src="@Model.Movie.Image" alt="@Model.Movie.Title"
-                 class="img-fluid rounded shadow-sm mb-3" style="max-height: 250px;" />
-        </div>
-        <div class="col-md-8">
-            <h4 class="text-primary">@Model.Movie.Title</h4>
-            <p class="text-muted">@Model.Movie.Subtitle</p>
-        </div>
-    </div>
+        body {
+            background: linear-gradient(135deg, var(--background-light) 0%, #e8e9ea 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
 
-    <table class="table table-bordered mt-3">
-        <tr>
-            <th>Mã đơn hàng</th>
-            <td>@Model.OrderId</td>
-        </tr>
-        <tr>
-            <th>Người đặt (User ID)</th>
-            <td>@Model.UserId</td>
-        </tr>
-        <tr>
-            <th>Phòng chiếu</th>
-            <td>@Model.Showtime.RoomName</td>
-        </tr>
-        <tr>
-            <th>Ngày chiếu</th>
-            <td>@Model.Showtime.ShowDate.ToString("dd/MM/yyyy")</td>
-        </tr>
-        <tr>
-            <th>Giờ chiếu</th>
-            <td>@Model.Showtime.FromTime.ToString(@"hh\:mm")</td>
-        </tr>
-        <tr>
-            <th>Ngày đặt vé</th>
-            <td>@Model.BookingDate.ToString("dd/MM/yyyy")</td>
-        </tr>
-        <tr>
-            <th>Ghế đã chọn</th>
-            <td>
-                @foreach (var seat in Model.SelectedSeats)
-                {
-                    <span class="badge bg-success me-1">@seat.Row@seat.Column</span>
+        .confirm-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-subtitle {
+            color: var(--primary-medium);
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(74, 78, 105, 0.12);
+            overflow: hidden;
+            border: 1px solid rgba(154, 140, 152, 0.1);
+            position: relative;
+        }
+
+            .booking-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 5px;
+                background: linear-gradient(90deg, var(--primary-dark), var(--primary-medium), var(--primary-light));
+            }
+
+        .movie-section {
+            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(154, 140, 152, 0.05) 0%, rgba(242, 243, 244, 0.1) 100%);
+            border-bottom: 1px solid rgba(154, 140, 152, 0.1);
+        }
+
+        .movie-poster {
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+        }
+
+            .movie-poster:hover {
+                transform: scale(1.02);
+            }
+
+        .movie-info {
+            padding-left: 2rem;
+        }
+
+        .movie-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.8rem;
+            line-height: 1.2;
+        }
+
+        .movie-subtitle {
+            color: var(--primary-medium);
+            font-size: 1.1rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+
+        .booking-details {
+            padding: 2.5rem;
+        }
+
+        .details-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            border: none;
+        }
+
+            .details-table th {
+                background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+                color: white;
+                font-weight: 600;
+                padding: 1.2rem 1.5rem;
+                border: none;
+                font-size: 1rem;
+                position: relative;
+            }
+
+                .details-table th::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    bottom: 0;
+                    width: 4px;
+                    background: var(--accent-gold);
                 }
-            </td>
-        </tr>
-        <tr>
-            <th>Tổng tiền</th>
-            <td>@Model.TotalPrice.ToString("N0") VND</td>
-        </tr>
-        <tr>
-            <th>Trạng thái</th>
-            <td>@(Model.Status ? "Đã thanh toán" : "Chưa thanh toán")</td>
-        </tr>
-    </table>
 
-    <div class="mt-4">
-        <form asp-action="SelectSeat" method="get" class="d-inline">
-            <input type="hidden" name="showtimeId" value="@Model.Showtime.Id" />
-            <button type="submit" class="btn btn-secondary">Quay lại chọn ghế</button>
-        </form>
-        <button class="btn btn-primary" disabled>Xác nhận thanh toán (chưa tích hợp)</button>
+            .details-table td {
+                padding: 1.2rem 1.5rem;
+                border: none;
+                border-bottom: 1px solid rgba(154, 140, 152, 0.1);
+                font-size: 1rem;
+                color: var(--primary-dark);
+                position: relative;
+            }
+
+            .details-table tr:last-child td {
+                border-bottom: none;
+            }
+
+            .details-table tr:nth-child(even) {
+                background: rgba(154, 140, 152, 0.02);
+            }
+
+        .order-id {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: var(--primary-dark);
+            background: var(--light-gray);
+            padding: 0.3rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .seat-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .seat-badge {
+            background: linear-gradient(135deg, var(--success-green) 0%, #20a038 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+            transition: transform 0.2s ease;
+        }
+
+            .seat-badge:hover {
+                transform: translateY(-2px);
+            }
+
+        .total-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--success-green);
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(40, 167, 69, 0.05) 100%);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--success-green);
+        }
+
+        .status-badge {
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-paid {
+            background: linear-gradient(135deg, var(--success-green) 0%, #20a038 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+        }
+
+        .status-unpaid {
+            background: linear-gradient(135deg, var(--warning-orange) 0%, #e8600e 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(253, 126, 20, 0.3);
+        }
+
+        .action-section {
+            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(154, 140, 152, 0.05) 0%, rgba(242, 243, 244, 0.1) 100%);
+            border-top: 1px solid rgba(154, 140, 152, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, var(--primary-medium) 0%, var(--primary-light) 100%);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(154, 140, 152, 0.3);
+        }
+
+            .btn-back:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 30px rgba(154, 140, 152, 0.4);
+                background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-medium) 100%);
+                color: white;
+            }
+
+        .btn-confirm {
+            background: linear-gradient(135deg, var(--info-blue) 0%, #138496 100%);
+            border: none;
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(23, 162, 184, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-confirm:disabled {
+                background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+                cursor: not-allowed;
+                opacity: 0.7;
+            }
+
+            .btn-confirm:not(:disabled):hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 30px rgba(23, 162, 184, 0.4);
+                background: linear-gradient(135deg, #138496 0%, var(--info-blue) 100%);
+            }
+
+        .info-icon {
+            color: var(--accent-gold);
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .coming-soon {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--warning-orange) 0%, #e8600e 100%);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @@keyframes pulse {
+            0%
+
+        {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.05);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+
+        }
+
+        .booking-summary {
+            background: linear-gradient(135deg, rgba(23, 162, 184, 0.1) 0%, rgba(23, 162, 184, 0.05) 100%);
+            border: 2px solid rgba(23, 162, 184, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-title {
+            color: var(--info-blue);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid rgba(23, 162, 184, 0.1);
+        }
+
+            .summary-item:last-child {
+                border-bottom: none;
+                font-weight: 600;
+                font-size: 1.1rem;
+                color: var(--info-blue);
+            }
+
+        @@media (max-width: 768px) {
+            .page-title
+
+        {
+            font-size: 2rem;
+        }
+
+        .movie-section {
+            padding: 1.5rem;
+        }
+
+        .movie-info {
+            padding-left: 0;
+            margin-top: 1.5rem;
+        }
+
+        .movie-title {
+            font-size: 1.8rem;
+        }
+
+        .booking-details {
+            padding: 1.5rem;
+        }
+
+        .details-table th,
+        .details-table td {
+            padding: 1rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn-back,
+        .btn-confirm {
+            width: 100%;
+        }
+
+        .seat-badges {
+            justify-content: center;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="confirm-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-check-circle text-success me-2"></i>
+                Xác nhận đơn đặt vé
+            </h1>
+            <p class="page-subtitle">Vui lòng kiểm tra thông tin trước khi xác nhận thanh toán</p>
+        </div>
+
+        <!-- Booking Card -->
+        <div class="booking-card">
+            <!-- Movie Section -->
+            <div class="movie-section">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <img src="@Model.Movie.Image" alt="@Model.Movie.Title" class="movie-poster" />
+                    </div>
+                    <div class="col-md-8">
+                        <div class="movie-info">
+                            <h2 class="movie-title">@Model.Movie.Title</h2>
+                            <p class="movie-subtitle">@Model.Movie.Subtitle</p>
+
+                            <!-- Booking Summary -->
+                            <div class="booking-summary">
+                                <h5 class="summary-title">
+                                    <i class="fas fa-clipboard-list me-2"></i>
+                                    Tóm tắt đặt vé
+                                </h5>
+                                <div class="summary-item">
+                                    <span>Số ghế:</span>
+                                    <span>@Model.SelectedSeats.Count() ghế</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Giá mỗi ghế:</span>
+                                    <span>@((@Model.TotalPrice / @Model.SelectedSeats.Count()).ToString("N0")) VND</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Tổng tiền:</span>
+                                    <span>@Model.TotalPrice.ToString("N0") VND</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Details -->
+            <div class="booking-details">
+                <table class="table details-table">
+                    <tr>
+                        <th>
+                            <i class="fas fa-barcode info-icon"></i>
+                            Mã đơn hàng
+                        </th>
+                        <td>
+                            <span class="order-id">@Model.OrderId</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <i class="fas fa-user info-icon"></i>
+                            Người đặt (User ID)
+                        </th>
+                        <td>@Model.UserId</td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <i class="fas fa-door-open info-icon"></i>
+                            Phòng chiếu
+                        </th>
+                        <td>@Model.Showtime.RoomName</td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <i class="fas fa-calendar-alt info-icon"></i>
+                            Ngày chiếu
+                        </th>
+                        <td>@Model.Showtime.ShowDate.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <i class="fas fa-clock info-icon"></i>
+                            Giờ chiếu
+                        </th>
+                        <td>@Model.Showtime.FromTime.ToString(@"hh\:mm")</td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <i class="fas fa-calendar-check info-icon"></i>
+                            Ngày đặt vé
+                        </th>
+                        <td>@Model.BookingDate.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <i class="fas fa-couch info-icon"></i>
+                            Ghế đã chọn
+                        </th>
+                        <td>
+                            <div class="seat-badges">
+                                @foreach (var seat in Model.SelectedSeats)
+                                {
+                                    <span class="seat-badge">@seat.Row@seat.Column</span>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <i class="fas fa-money-bill-wave info-icon"></i>
+                            Tổng tiền
+                        </th>
+                        <td>
+                            <span class="total-price">@Model.TotalPrice.ToString("N0") VND</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <i class="fas fa-info-circle info-icon"></i>
+                            Trạng thái
+                        </th>
+                        <td>
+                            <span class="status-badge @(Model.Status ? "status-paid" : "status-unpaid")">
+                                @if (Model.Status)
+                                {
+                                    <i class="fas fa-check-circle me-1"></i>
+                                    <text>Đã thanh toán</text>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                    <text>Chưa thanh toán</text>
+                                }
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Action Section -->
+            <div class="action-section">
+                <div class="action-buttons">
+                    <button type="button" class="btn btn-back" onclick="history.back()">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Quay lại chọn ghế
+                    </button>
+                    <button class="btn btn-confirm" disabled>
+                        <i class="fas fa-credit-card me-2"></i>
+                        Xác nhận thanh toán
+                        <span class="coming-soon">Sắp có</span>
+                    </button>
+                </div>
+                <div class="mt-3 text-center">
+                    <small class="text-muted">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        Thông tin thanh toán của bạn được bảo mật tuyệt đối
+                    </small>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate seat badges on load
+            const seatBadges = document.querySelectorAll('.seat-badge');
+            seatBadges.forEach((badge, index) => {
+                setTimeout(() => {
+                    badge.style.opacity = '0';
+                    badge.style.transform = 'translateY(20px)';
+                    badge.style.transition = 'all 0.5s ease';
+                    setTimeout(() => {
+                        badge.style.opacity = '1';
+                        badge.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 100);
+            });
+
+            // Add hover effect to table rows
+            const tableRows = document.querySelectorAll('.details-table tr');
+            tableRows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = 'rgba(154, 140, 152, 0.08)';
+                });
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

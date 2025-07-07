@@ -1,54 +1,341 @@
 ﻿@model List<MovieBookingWebMVC.Areas.Booking.Models.DTOs.ShowtimeDTO>
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
     ViewData["Title"] = $"Lịch chiếu";
-
     var today = DateOnly.FromDateTime(DateTime.Today);
     var availableDates = Model.Select(s => s.ShowDate).Distinct().OrderBy(d => d).ToList();
     var selectedDate = availableDates.Contains(today) ? today : (availableDates.FirstOrDefault() != default ? availableDates.FirstOrDefault() : today);
-
     var selectedDateStr = Context.Request.Query["date"];
     if (!string.IsNullOrEmpty(selectedDateStr) &&
         DateOnly.TryParseExact(selectedDateStr, "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out var parsedDate))
     {
         selectedDate = parsedDate;
     }
-
     var movieId = Context.Request.Query["movieId"].ToString();
     var schedules = Model.Where(s => s.ShowDate == selectedDate).OrderBy(s => s.FromTime).ToList();
 }
 
-<h2>@ViewData["Title"]</h2>
-
-<div class="btn-group mb-3">
-    @foreach (var date in availableDates)
-    {
-        <a class="btn btn-outline-primary @(date == selectedDate ? "active" : "")"
-           href="?movieId=@movieId&date=@date.ToString("dd-MM-yyyy")">
-            @date.ToString("dd/MM")
-        </a>
+<style>
+    .showtime-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 0;
     }
-</div>
 
-@if (schedules.Any())
-{
-    <div class="list-group">
-        @foreach (var s in schedules)
-        {
-            <div class="list-group-item">
-                <strong>@s.FromTime.ToString(@"hh\:mm")</strong>
-                <br />
-                Còn trống: @s.AvailableSeats ghế
-                <a class="btn btn-sm btn-success float-end"
-                   href="/Booking/Booking/SelectSeat?scheduleId=@s.Id">
-                    Đặt vé
-                </a>
-            </div>
+    .showtime-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin: 0 auto;
+        max-width: 1000px;
+    }
+
+    .showtime-header {
+        background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+        color: white;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .showtime-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
         }
+
+    @@keyframes shimmer {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    .showtime-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        position: relative;
+        z-index: 1;
+    }
+
+    .date-selector {
+        padding: 30px;
+        background: #f8f9fa;
+    }
+
+    .date-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .date-btn {
+        background: #ffffff;
+        border: 2px solid #e9ecef;
+        color: #6c757d;
+        padding: 15px 25px;
+        border-radius: 15px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .date-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .date-btn:hover::before {
+            left: 100%;
+        }
+
+        .date-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            color: #495057;
+        }
+
+        .date-btn.active {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(255,107,107,0.3);
+        }
+
+    .schedule-content {
+        padding: 30px;
+    }
+
+    .schedule-grid {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .schedule-item {
+        background: #ffffff;
+        border: 2px solid #e9ecef;
+        border-radius: 15px;
+        padding: 25px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .schedule-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .schedule-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-color: #FF6B6B;
+        }
+
+            .schedule-item:hover::before {
+                opacity: 1;
+            }
+
+    .schedule-time {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .schedule-time::before {
+            content: '🎬';
+            font-size: 1.5rem;
+        }
+
+    .schedule-info {
+        color: #6c757d;
+        margin-bottom: 20px;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .schedule-info::before {
+            content: '🪑';
+            font-size: 1rem;
+        }
+
+    .book-btn {
+        background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(255,107,107,0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .book-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .book-btn:hover::before {
+            left: 100%;
+        }
+
+        .book-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(255,107,107,0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+    .no-schedule {
+        text-align: center;
+        padding: 60px 20px;
+        color: #6c757d;
+    }
+
+    .no-schedule-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+
+    .no-schedule-text {
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+
+    .schedule-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 15px;
+    }
+
+    @@media (max-width: 768px) {
+        .showtime-title
+
+    {
+        font-size: 2rem;
+    }
+
+    .date-buttons {
+        gap: 10px;
+    }
+
+    .date-btn {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+
+    .schedule-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .schedule-time {
+        font-size: 1.5rem;
+    }
+
+    }
+</style>
+
+<div class="showtime-container">
+    <div class="showtime-card">
+        <div class="showtime-header">
+            <h2 class="showtime-title">@ViewData["Title"]</h2>
+        </div>
+
+        <div class="date-selector">
+            <div class="date-buttons">
+                @foreach (var date in availableDates)
+                {
+                    <a class="date-btn @(date == selectedDate ? "active" : "")"
+                       href="?movieId=@movieId&date=@date.ToString("dd-MM-yyyy")">
+                        @date.ToString("dd/MM")
+                    </a>
+                }
+            </div>
+        </div>
+
+        <div class="schedule-content">
+            @if (schedules.Any())
+            {
+                <div class="schedule-grid">
+                    @foreach (var s in schedules)
+                    {
+                        <div class="schedule-item">
+                            <div class="schedule-time">
+                                @s.FromTime.ToString(@"hh\:mm")
+                            </div>
+                            <div class="schedule-info">
+                                Còn trống: @s.AvailableSeats ghế
+                            </div>
+                            <div class="schedule-actions">
+                                <a class="book-btn"
+                                   href="/Booking/Booking/SelectSeat?scheduleId=@s.Id">
+                                    Đặt vé
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="no-schedule">
+                    <div class="no-schedule-icon">📅</div>
+                    <div class="no-schedule-text">Không có suất chiếu trong ngày này.</div>
+                </div>
+            }
+        </div>
     </div>
-}
-else
-{
-    <p>Không có suất chiếu trong ngày này.</p>
-}
+</div>
