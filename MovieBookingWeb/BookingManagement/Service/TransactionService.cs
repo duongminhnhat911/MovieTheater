@@ -1,5 +1,6 @@
 ﻿using BookingManagement.Models.Entities;
 using BookingManagement.Repositories;
+using VNPAY.NET.Models;
 
 namespace BookingManagement.Service
 {
@@ -7,10 +8,12 @@ namespace BookingManagement.Service
     public class TransactionService : ITransactionService
     {
         private readonly ITransactionRepository _repo;
+        private readonly IOrderRepository _OrderRepo;
 
-        public TransactionService(ITransactionRepository repo)
+        public TransactionService(ITransactionRepository repo, IOrderRepository OrderRepo)
         {
             _repo = repo;
+            _OrderRepo = OrderRepo;
         }
 
         public async Task<object> CreateTransactionAsync(Transaction dto)
@@ -32,7 +35,7 @@ namespace BookingManagement.Service
             if (transaction == null) return null;
 
             transaction.OrderId = updated.OrderId;
-            transaction.PaymentId = updated.PaymentId;
+            
             transaction.TransactionDate = updated.TransactionDate;
             transaction.Price = updated.Price;
             transaction.Status = updated.Status;
@@ -49,6 +52,35 @@ namespace BookingManagement.Service
 
             _repo.Remove(transaction);
             await _repo.SaveChangesAsync();
+            return true;
+        }
+        public async Task<bool> SaveTransactionAsync(PaymentResult result)
+        {
+            if (!result.IsSuccess) return false;
+
+            // Check xem transaction đã tồn tại chưa
+            var existing = await _repo.GetByOrderIdAsync((int)result.PaymentId);
+            if (existing != null) return true;
+
+            // Lấy order
+            var order = await _OrderRepo.GetByIdAsync((int)result.PaymentId);
+            if (order == null) return false;
+
+            var transaction = new Transaction
+            {
+                OrderId = order.Id,
+                TransactionDate = DateOnly.FromDateTime(DateTime.Now),
+                Price = order.TotalPrice,
+                Status = true,
+                
+            };
+
+            await _repo.AddAsync(transaction);
+
+            // Cập nhật trạng thái đơn hàng
+            order.Status = true;
+            await _repo.SaveChangesAsync();
+
             return true;
         }
     }
