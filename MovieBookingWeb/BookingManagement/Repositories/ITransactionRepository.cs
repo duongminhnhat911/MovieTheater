@@ -10,5 +10,7 @@ namespace BookingManagement.Repositories
         Task<Transaction?> GetByIdNoTrackingAsync(int id);
         void Remove(Transaction transaction);
         Task SaveChangesAsync();
+        Task<bool> SaveTransactionAsync(IQueryCollection query);
+        Task<Transaction?> GetByOrderIdAsync(int orderId);
     }
 }

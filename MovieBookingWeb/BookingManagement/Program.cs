@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using BookingManagement;
 using BookingManagement.Service;
 using BookingManagement.Repositories;
+using BookingManagement.Service.VnPay;
+using VNPAY.NET;
+using BookingManagement.Models.VnPayModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +49,10 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
+// cấu hình API VNPAY
+builder.Services.Configure<VnpayOptions>(builder.Configuration.GetSection("Vnpay"));
+builder.Services.AddSingleton<IVnpay, Vnpay>();
+builder.Services.AddScoped<IVnpayPaymentService, VnpayPaymentService>();
 
 //Đăng ký các DI (Interface - Service - Repository)
 

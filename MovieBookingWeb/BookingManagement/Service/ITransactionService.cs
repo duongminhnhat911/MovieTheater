@@ -1,4 +1,5 @@
 ﻿using BookingManagement.Models.Entities;
+using VNPAY.NET.Models;
 
 namespace BookingManagement.Service
 {
@@ -9,5 +10,7 @@ namespace BookingManagement.Service
         Task<Transaction?> GetTransactionByIdAsync(int id);
         Task<object?> UpdateTransactionAsync(int id, Transaction updated);
         Task<bool> DeleteTransactionAsync(int id);
+
+        Task<bool> SaveTransactionAsync(PaymentResult result);
     }
 }
