@@ -1,4 +1,5 @@
-﻿using BookingManagement.Models.Entities;
+﻿using BookingManagement.Models.DTOs;
+using BookingManagement.Models.Entities;
 using BookingManagement.Models.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,5 +37,36 @@ namespace BookingManagement.Repositories
 
         public async Task<int> CountBookedSeatShowtimesAsync(int showtimeId) =>
             await _db.SeatShowtimes.CountAsync(s => s.ShowtimeId == showtimeId && s.Status == SeatStatus.Booked);
+
+        public async Task<List<Seat>> GetSeatsByRoomIdAsync(int roomId)
+        {
+            return await _db.Seats.Where(s => s.RoomId == roomId).ToListAsync();
+        }
+
+        public async Task RemoveSeatsByRoomIdAsync(int roomId)
+        {
+            var seats = _db.Seats.Where(s => s.RoomId == roomId);
+            _db.Seats.RemoveRange(seats);
+            await _db.SaveChangesAsync();
+        }
+        public async Task<RoomDetailsDto?> GetRoomDetailsByIdAsync(int roomId)
+        {
+            var room = await _db.Rooms.FindAsync(roomId);
+            if (room == null) return null;
+
+            var seats = await _db.Seats
+                .Where(s => s.RoomId == roomId)
+                .Select(s => s.SeatRow.ToString() + s.SeatColumn.ToString())
+                .ToListAsync();
+
+            return new RoomDetailsDto
+            {
+                Id = room.Id,
+                RoomName = room.RoomName,
+                RoomQuantity = room.RoomQuantity,
+                Status = room.Status,
+                Seats = seats
+            };
+        }
     }
 }

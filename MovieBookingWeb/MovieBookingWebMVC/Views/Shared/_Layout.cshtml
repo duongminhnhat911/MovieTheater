@@ -144,10 +144,11 @@
                         </a>
 
                         <a class="nav-link d-flex align-items-center gap-2 text-dark ms-1 hover-effect
-                                @(currentController == "Admin" && currentAction == "ViewRoom" ? "active" : "")"
-                           asp-controller="Admin" asp-action="AddMovie">
+        @(currentController == "AdminRoom" && currentAction == "Index" ? "active" : "")"
+                           asp-area="Booking" asp-controller="AdminRoom" asp-action="Index">
                             <i class="fas fa-door-open"></i> Danh sách phòng chiếu
                         </a>
+
                         <a class="nav-link d-flex align-items-center gap-2 text-dark ms-1 hover-effect
                                 @(currentController == "Admin" && currentAction == "ViewPromotions" ? "active" : "")"
                            href="#">

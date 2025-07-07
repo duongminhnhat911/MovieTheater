@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using MovieBookingWebMVC.Areas.Booking.Services;
 using MovieBookingWebMVC.Areas.Movie.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,9 +22,17 @@ builder.Services.AddHttpClient("ApiClient_Movie", client =>
     client.BaseAddress = new Uri("https://localhost:7197/");
     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 });
+builder.Services.AddHttpClient("ApiClient_Booking", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7116/");
+    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+});
 
-builder.Services.AddScoped<IRoomService, RoomLayoutService>();
+
+builder.Services.AddScoped<MovieBookingWebMVC.Areas.Movie.Services.IRoomService, RoomLayoutService>();
 builder.Services.AddScoped<MovieApiService>();
+builder.Services.AddScoped<MovieBookingWebMVC.Areas.Booking.Services.IRoomService, RoomService>();
+builder.Services.AddScoped<IShowtimeApiService, ShowtimeApiService>();
 
 builder.Services.AddControllersWithViews()
     .AddViewOptions(options =>
@@ -42,7 +51,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage(); // ✔️ Hiện lỗi Razor và lỗi chi tiết
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
@@ -66,6 +79,10 @@ app.MapAreaControllerRoute(
     name: "movie",
     areaName: "Movie",
     pattern: "Movie/{controller=Home}/{action=Index}/{id?}");
+app.MapAreaControllerRoute(
+    name: "booking",
+    areaName: "Booking",
+    pattern: "Booking/{controller=Home}/{action=Index}/{id?}");
 
 // ✅ Route mặc định (không có Area)
 app.MapControllerRoute(

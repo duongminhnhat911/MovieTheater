@@ -1,4 +1,5 @@
-﻿using BookingManagement.Models.Entities;
+﻿using BookingManagement.Models.DTOs;
+using BookingManagement.Models.Entities;
 
 namespace BookingManagement.Repositories
 {
@@ -13,5 +14,8 @@ namespace BookingManagement.Repositories
         Task<List<Showtime>> GetShowtimesByRoomIdAsync(int roomId);
         Task<int> CountSeatShowtimesAsync(int showtimeId);
         Task<int> CountBookedSeatShowtimesAsync(int showtimeId);
+        Task<List<Seat>> GetSeatsByRoomIdAsync(int roomId);
+        Task RemoveSeatsByRoomIdAsync(int roomId);
+        Task<RoomDetailsDto?> GetRoomDetailsByIdAsync(int roomId);
     }
 }
