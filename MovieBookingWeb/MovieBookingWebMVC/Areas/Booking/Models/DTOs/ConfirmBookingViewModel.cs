@@ -13,7 +13,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Models.ViewModels
         public string RoomName { get; set; }
 
         public MovieDTO Movie { get; set; } = new();
-        public ShowtimeDTO Showtime { get; set; } = new();
-        public List<SeatDTO> SelectedSeats { get; set; } = new();
+        public ShowtimeDto Showtime { get; set; } = new();
+        public List<SelectedSeatDTO> SelectedSeats { get; set; } = new();
     }
 }

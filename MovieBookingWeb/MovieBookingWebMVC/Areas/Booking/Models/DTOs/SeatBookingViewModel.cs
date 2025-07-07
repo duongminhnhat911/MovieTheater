@@ -16,6 +16,6 @@ namespace MovieBookingWebMVC.Areas.Booking.Models.ViewModels
         // Dùng FilmViewModel thay vì MovieCreateDto
         public FilmViewModel Movie { get; set; }
 
-        public List<SeatDTO> Seats { get; set; } = new();
+        public List<SeatDTOUser> Seats { get; set; } = new();
     }
 }

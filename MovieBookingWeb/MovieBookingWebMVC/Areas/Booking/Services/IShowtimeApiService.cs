@@ -5,7 +5,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
 {
     public interface IShowtimeApiService
     {
-        Task<List<ShowtimeDto>> GetAllShowtimesAsync();
+        Task<List<ShowtimeViewModel>> GetAllShowtimesAsync();
         Task<bool> CreateShowtimeAsync(CreateShowtimeDto dto);
     }
 }

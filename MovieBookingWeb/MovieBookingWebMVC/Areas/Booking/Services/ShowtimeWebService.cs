@@ -13,7 +13,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<List<ShowtimeDTO>> GetShowtimesByMovieIdAsync(int movieId)
+        public async Task<List<ShowtimeDTOUser>> GetShowtimesByMovieIdAsync(int movieId)
         {
             var client = _httpClientFactory.CreateClient("ApiClient_Booking");
             var movieClient = _httpClientFactory.CreateClient("ApiClient_Movie");
@@ -21,10 +21,10 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
             // ❌ Không truyền movieId
             var response = await client.GetAsync($"/api/showtime");
             if (!response.IsSuccessStatusCode)
-                return new List<ShowtimeDTO>();
+                return new List<ShowtimeDTOUser>();
 
             var rawList = await response.Content.ReadFromJsonAsync<List<ShowtimeRawDTO>>();
-            if (rawList == null) return new List<ShowtimeDTO>();
+            if (rawList == null) return new List<ShowtimeDTOUser>();
 
             // ✅ Lọc theo movieId sau khi đã lấy toàn bộ
             var filteredRawList = rawList.Where(s => s.MovieId == movieId).ToList();
@@ -40,13 +40,13 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
 
             return await MapShowtimesWithAvailableSeats(client, filteredRawList, movieTitle);
         }
-        private async Task<List<ShowtimeDTO>> MapShowtimesWithAvailableSeats(HttpClient client, List<ShowtimeRawDTO> rawList, string movieTitle = "")
+        private async Task<List<ShowtimeDTOUser>> MapShowtimesWithAvailableSeats(HttpClient client, List<ShowtimeRawDTO> rawList, string movieTitle = "")
         {
-            var result = new List<ShowtimeDTO>();
+            var result = new List<ShowtimeDTOUser>();
 
             foreach (var raw in rawList)
             {
-                var showtime = new ShowtimeDTO
+                var showtime = new ShowtimeDTOUser
                 {
                     Id = raw.Id,
                     MovieId = raw.MovieId,
@@ -71,16 +71,16 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
 
             return result;
         }
-        public async Task<List<ShowtimeDTO>> GetAllShowtimesAsync()
+        public async Task<List<ShowtimeDTOUser>> GetAllShowtimesAsync()
         {
             var client = _httpClientFactory.CreateClient("ApiClient_Booking");
             var response = await client.GetAsync("/api/Showtime");
 
             if (!response.IsSuccessStatusCode)
-                return new List<ShowtimeDTO>();
+                return new List<ShowtimeDTOUser>();
 
             var rawList = await response.Content.ReadFromJsonAsync<List<ShowtimeRawDTO>>();
-            if (rawList == null) return new List<ShowtimeDTO>();
+            if (rawList == null) return new List<ShowtimeDTOUser>();
 
             // Gán tên phim trống vì gọi tất cả lịch chiếu nhiều phim
             return await MapShowtimesWithAvailableSeats(client, rawList, "");
@@ -99,7 +99,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
         {
             public int ShowtimeId { get; set; }
             public int RoomId { get; set; }
-            public List<SeatDTO> Seats { get; set; } = new();
+            public List<SeatDTOUser> Seats { get; set; } = new();
         }
     }
 }

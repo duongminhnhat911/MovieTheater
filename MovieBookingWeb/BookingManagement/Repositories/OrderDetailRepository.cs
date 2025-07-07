@@ -16,18 +16,22 @@ namespace BookingManagement.Repositories
             await _db.OrderDetails.AddAsync(detail);
 
         public async Task<List<OrderDetail>> GetAllWithIncludesAsync() =>
-            await _db.OrderDetails
-                .Include(od => od.Seat)
-                .Include(od => od.Order)
-                .Include(od => od.Showtime)
-                .ToListAsync();
+    await _db.OrderDetails
+ .Include(od => od.Seat)
+     .ThenInclude(seat => seat.Room)
+ .Include(od => od.Order)
+ .Include(od => od.Showtime)
+     .ThenInclude(showtime => showtime.Room)
+ .ToListAsync();
 
         public async Task<OrderDetail?> GetByIdWithIncludesAsync(int id) =>
             await _db.OrderDetails
-                .Include(od => od.Seat)
-                .Include(od => od.Order)
-                .Include(od => od.Showtime)
-                .FirstOrDefaultAsync(od => od.Id == id);
+        .Include(od => od.Seat)
+            .ThenInclude(seat => seat.Room)
+        .Include(od => od.Order)
+        .Include(od => od.Showtime)
+            .ThenInclude(showtime => showtime.Room)
+        .FirstOrDefaultAsync(od => od.Id == id);
 
         public async Task<OrderDetail?> GetByIdAsync(int id) =>
             await _db.OrderDetails.FindAsync(id);

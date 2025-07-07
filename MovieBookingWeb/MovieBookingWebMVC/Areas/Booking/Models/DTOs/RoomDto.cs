@@ -1,4 +1,4 @@
-﻿namespace MovieBookingWebMVC.Areas.Booking.Models.DTOs
+namespace MovieBookingWebMVC.Areas.Booking.Models.DTOs
 {
     public class RoomDto
     {
@@ -7,4 +7,6 @@
         public int RoomQuantity { get; set; }
         public bool Status { get; set; }
     }
+
 }
+

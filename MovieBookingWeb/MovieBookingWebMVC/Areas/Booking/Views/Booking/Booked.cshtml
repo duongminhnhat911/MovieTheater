@@ -1,0 +1,51 @@
+﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModels.ConfirmBookingViewModel
+
+@{
+    ViewData["Title"] = "Đặt vé thành công";
+}
+
+<div class="container mt-4">
+    <div class="alert alert-success text-center" role="alert">
+        <h2 class="mb-3">🎉 ĐẶT VÉ THÀNH CÔNG!</h2>
+        <p>Cảm ơn bạn đã sử dụng hệ thống đặt vé của chúng tôi.</p>
+    </div>
+
+    <hr />
+
+    <div class="row mb-4">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="@Model.Movie.Image" alt="@Model.Movie.Title"
+                     class="img-fluid rounded shadow-sm mb-3" style="max-height: 250px;" />
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h3>@Model.Movie.Title</h3>
+            @if (!string.IsNullOrEmpty(Model.Movie.Subtitle))
+            {
+                <h5 class="text-muted">@Model.Movie.Subtitle</h5>
+            }
+
+            <p><strong>Phòng chiếu:</strong> @Model.Showtime.RoomName</p>
+            <p><strong>Ngày chiếu:</strong> @Model.Showtime.ShowDate.ToString("dd/MM/yyyy")</p>
+            <p><strong>Giờ chiếu:</strong> @Model.Showtime.FromTime</p>
+            <p>
+                <strong>Ghế đã đặt:</strong>
+               
+                        @foreach (var seat in Model.SelectedSeats)
+                        {
+                            <span class="badge bg-success me-1">@seat.Row@seat.Column</span>
+                        }
+            </p>
+            <p><strong>Tổng tiền:</strong> @Model.TotalPrice.ToString("N0") VNĐ</p>
+            <p><strong>Mã đơn hàng:</strong> @Model.OrderId</p>
+            <p><strong>Ngày đặt vé:</strong> @Model.BookingDate.ToString("dd/MM/yyyy")</p>
+            <p><strong>Trạng thái:</strong> <span class="text-success fw-bold">Đã thanh toán</span></p>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="/" class="btn btn-outline-success px-4">🏠 Về trang chủ</a>
+        <a href="/Booking/Booking/MoviesByDate" class="btn btn-primary px-4 ms-3">🎬 Xem thêm phim</a>
+    </div>
+</div>
