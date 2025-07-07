@@ -1,0 +1,54 @@
+﻿@model List<MovieBookingWebMVC.Areas.Booking.Models.DTOs.ShowtimeDTO>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = $"Lịch chiếu";
+
+    var today = DateOnly.FromDateTime(DateTime.Today);
+    var availableDates = Model.Select(s => s.ShowDate).Distinct().OrderBy(d => d).ToList();
+    var selectedDate = availableDates.Contains(today) ? today : (availableDates.FirstOrDefault() != default ? availableDates.FirstOrDefault() : today);
+
+    var selectedDateStr = Context.Request.Query["date"];
+    if (!string.IsNullOrEmpty(selectedDateStr) &&
+        DateOnly.TryParseExact(selectedDateStr, "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out var parsedDate))
+    {
+        selectedDate = parsedDate;
+    }
+
+    var movieId = Context.Request.Query["movieId"].ToString();
+    var schedules = Model.Where(s => s.ShowDate == selectedDate).OrderBy(s => s.FromTime).ToList();
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="btn-group mb-3">
+    @foreach (var date in availableDates)
+    {
+        <a class="btn btn-outline-primary @(date == selectedDate ? "active" : "")"
+           href="?movieId=@movieId&date=@date.ToString("dd-MM-yyyy")">
+            @date.ToString("dd/MM")
+        </a>
+    }
+</div>
+
+@if (schedules.Any())
+{
+    <div class="list-group">
+        @foreach (var s in schedules)
+        {
+            <div class="list-group-item">
+                <strong>@s.FromTime.ToString(@"hh\:mm")</strong>
+                <br />
+                Còn trống: @s.AvailableSeats ghế
+                <a class="btn btn-sm btn-success float-end"
+                   href="/Booking/Booking/SelectSeat?scheduleId=@s.Id">
+                    Đặt vé
+                </a>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>Không có suất chiếu trong ngày này.</p>
+}

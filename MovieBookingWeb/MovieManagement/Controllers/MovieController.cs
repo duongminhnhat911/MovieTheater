@@ -3,12 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MovieManagement.Data;
 using MovieManagement.Models.DTOs;
 using MovieManagement.Models.Entities;
-using MovieManagement.Data;
-using MovieManagement.Models.DTOs;
-using MovieManagement.Models.Entities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace MovieManagementWeb_API.Controllers
 {

@@ -1,0 +1,40 @@
+﻿@using MovieBookingWebMVC.Areas.Booking.Models.DTOs
+@model List<MovieWithShowtimeDTO>
+@{
+    var date = (DateTime)ViewBag.SelectedDate;
+}
+
+<h2>Lịch chiếu ngày @date.ToString("dd/MM/yyyy")</h2>
+
+<form method="get" asp-action="MoviesByDate">
+    <input type="date" name="date" value="@date.ToString("yyyy-MM-dd")" />
+    <button type="submit">Xem</button>
+</form>
+
+@if (!Model.Any())
+{
+    <p>Không có phim nào chiếu ngày này.</p>
+}
+else
+{
+    foreach (var movie in Model)
+    {
+        <div class="movie-card">
+            <img src="@movie.Image" width="100" alt="@movie.Title" />
+            <h3>@movie.Title (@movie.Subtitle)</h3>
+            <p>Đạo diễn: @movie.Director</p>
+            <p>Thể loại: @string.Join(", ", movie.Genres)</p>
+            <p>Định dạng: @string.Join(", ", movie.Format)</p>
+            <p>Thời lượng: @movie.Duration phút</p>
+
+            <h4>Suất chiếu:</h4>
+            <ul>
+                @foreach (var show in movie.Showtimes)
+                {
+                    <li>@show.FromTime - @show.ToTime | Phòng: @show.Room</li>
+                }
+            </ul>
+        </div>
+    }
+}
+

@@ -19,6 +19,7 @@ namespace BookingManagement.Repositories
             return await _db.SeatShowtimes
                 .Include(s => s.Seat)
                 .Include(s => s.Showtime)
+                 .ThenInclude(st => st.Room)
                 .ToListAsync();
         }
 

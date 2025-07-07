@@ -27,9 +27,14 @@
                                 <a href="@film.TrailerLink" class="fw-bold btn-watch">
                                     <i class="fas fa-play"></i> Xem trailer
                                 </a>
-                                <a href="@film.BookingLink" class="fw-bold btn-booking">
+                                <a asp-area="Booking"
+                                   asp-controller="Booking"
+                                   asp-action="Showtimes"
+                                   asp-route-movieId="@film.Id"
+                                   class="fw-bold btn-booking">
                                     <i class="fas fa-ticket-alt"></i> Đặt vé
                                 </a>
+
                             </div>
                         </div>
                     </div>
@@ -80,9 +85,14 @@
                                             <a href="@film.TrailerLink" target="_blank" class="fw-bold btn-watch">
                                                 <i class="fas fa-play"></i> Xem trailer
                                             </a>
-                                            <a href="@film.BookingLink" class="fw-bold btn-booking">
+                                            <a asp-area="Booking"
+                                               asp-controller="Booking"
+                                               asp-action="Showtimes"
+                                               asp-route-movieId="@film.Id"
+                                               class="fw-bold btn-booking">
                                                 <i class="fas fa-ticket-alt"></i> Đặt vé
                                             </a>
+
                                         </div>
                                     </div>
                                 }
@@ -124,9 +134,14 @@
                                             <a href="@film.TrailerLink" class="fw-bold btn-watch">
                                                 <i class="fas fa-play"></i> Xem trailer
                                             </a>
-                                            <a href="@film.BookingLink" class="fw-bold btn-booking">
+                                            <a asp-area="Booking"
+                                               asp-controller="Booking"
+                                               asp-action="Showtimes"
+                                               asp-route-movieId="@film.Id"
+                                               class="fw-bold btn-booking">
                                                 <i class="fas fa-ticket-alt"></i> Đặt vé
                                             </a>
+
                                         </div>
                                     </div>
                                 }

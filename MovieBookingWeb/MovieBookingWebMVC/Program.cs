@@ -34,6 +34,11 @@ builder.Services.AddScoped<MovieApiService>();
 builder.Services.AddScoped<MovieBookingWebMVC.Areas.Booking.Services.IRoomService, RoomService>();
 builder.Services.AddScoped<IShowtimeApiService, ShowtimeApiService>();
 
+//DI Booking-------------------------------------------------------
+builder.Services.AddScoped<IShowtimeWebService, ShowtimeWebService>();
+builder.Services.AddScoped<ISeatWebService, SeatWebService>();
+builder.Services.AddScoped<IBookingApiService, BookingApiService>();
+
 builder.Services.AddControllersWithViews()
     .AddViewOptions(options =>
     {
@@ -83,6 +88,12 @@ app.MapAreaControllerRoute(
     name: "booking",
     areaName: "Booking",
     pattern: "Booking/{controller=Home}/{action=Index}/{id?}");
+
+// ✅ Route cho Area "Booking"
+app.MapAreaControllerRoute(
+    name: "booking",
+    areaName: "Booking",
+    pattern: "Booking/{controller=Booking}/{action=Index}/{id?}");
 
 // ✅ Route mặc định (không có Area)
 app.MapControllerRoute(
