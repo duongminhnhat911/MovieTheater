@@ -5,7 +5,7 @@
         public int Id { get; set; }
 
         public OrderDTO Order { get; set; } = new();
-        public ShowtimeDTO Showtime { get; set; } = new();
-        public SeatDTO Seat { get; set; } = new();
+        public ShowtimeDTOUser Showtime { get; set; } = new();
+        public SeatDTOUser Seat { get; set; } = new();
     }
 }

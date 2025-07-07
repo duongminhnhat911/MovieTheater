@@ -192,7 +192,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
                     Subtitle = movie.Subtitle,
                     Image = movie.Image
                 },
-                Showtime = new ShowtimeDTO
+                Showtime = new ShowtimeDTOUser
                 {
                     Id = detail.Showtime.Id,
                     RoomName = detail.Showtime.RoomName,
@@ -239,6 +239,18 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             }
 
             return RedirectToAction("ConfirmOrder", new { orderId = dto.OrderId });
+        }
+        [HttpGet]
+        public async Task<IActionResult> Booked(int orderId)
+        {
+            var viewModel = await _bookingApiService.MarkOrderAsBookedAsync(orderId);
+            if (viewModel == null)
+            {
+                TempData["ErrorMessage"] = "Không thể xử lý đơn hàng.";
+                return RedirectToAction("MoviesByDate");
+            }
+
+            return View("Booked", viewModel);
         }
     }
 
