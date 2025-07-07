@@ -4,8 +4,8 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
 {
     public interface IShowtimeWebService
     {
-        Task<List<ShowtimeDTO>> GetShowtimesByMovieIdAsync(int movieId);
+        Task<List<ShowtimeDTOUser>> GetShowtimesByMovieIdAsync(int movieId);
 
-        Task<List<ShowtimeDTO>> GetAllShowtimesAsync();
+        Task<List<ShowtimeDTOUser>> GetAllShowtimesAsync();
     }
 }

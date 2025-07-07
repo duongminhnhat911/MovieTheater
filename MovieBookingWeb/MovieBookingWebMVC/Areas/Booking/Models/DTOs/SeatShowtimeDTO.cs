@@ -4,6 +4,6 @@
     {
         public int RoomId { get; set; }
         public int ShowtimeId { get; set; }
-        public List<SeatDTO> Seats { get; set; } = new();
+        public List<SeatDTOUser> Seats { get; set; } = new();
     }
 }

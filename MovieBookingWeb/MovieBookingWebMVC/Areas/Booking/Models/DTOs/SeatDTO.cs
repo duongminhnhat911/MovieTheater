@@ -1,10 +1,11 @@
 ﻿namespace MovieBookingWebMVC.Areas.Booking.Models.DTOs
 {
-    public class SeatDTO
+    public class SeatDto
     {
-        public int SeatId { get; set; }
-        public string Row { get; set; } = string.Empty;
-        public string Column { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public int RoomId { get; set; }
+        public char SeatRow { get; set; }
+        public char SeatColumn { get; set; }
+        public bool SeatStatus { get; set; }
     }
 }

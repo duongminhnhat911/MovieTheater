@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using Microsoft.Extensions.Logging;
+using MovieBookingWebMVC.Areas.Booking.Models;
 using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
 using MovieBookingWebMVC.Areas.Booking.Models.ViewModels;
 using MovieBookingWebMVC.Areas.Movie.Services;
@@ -22,7 +23,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
             _movieApiService = movieApiService;
         }
 
-        public async Task<ShowtimeDTOUser?> GetScheduleDetailAsync(int scheduleId)
+        public async Task<ShowTime?> GetScheduleDetailAsync(int scheduleId)
         {
             try
             {
@@ -35,7 +36,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
                     return null;
                 }
 
-                return await response.Content.ReadFromJsonAsync<ShowtimeDTOUser>();
+                return await response.Content.ReadFromJsonAsync<ShowTime>();
             }
             catch (Exception ex)
             {
@@ -65,7 +66,6 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
                 return new SeatShowtimeDTO();
             }
         }
-        // ✅ HÀM MỚI: Đánh dấu đơn hàng đã đặt (Booked)
         public async Task<ConfirmBookingViewModel?> MarkOrderAsBookedAsync(int orderId)
         {
             try
@@ -81,7 +81,11 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
                 }
 
                 var order = await orderRes.Content.ReadFromJsonAsync<OrderDTO>();
-                if (order == null) return null;
+                if (order == null)
+                {
+                    _logger.LogWarning("Dữ liệu đơn hàng null với OrderId: {OrderId}", orderId);
+                    return null;
+                }
 
                 // 2. Cập nhật trạng thái
                 order.Status = true;
@@ -102,11 +106,33 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
 
                 var allDetails = await detailRes.Content.ReadFromJsonAsync<List<OrderDetailDTO>>();
                 var orderDetails = allDetails?.Where(d => d.Order.Id == orderId).ToList();
-                if (orderDetails == null || !orderDetails.Any()) return null;
+                if (orderDetails == null || !orderDetails.Any())
+                {
+                    _logger.LogWarning("Không có chi tiết đơn hàng nào cho OrderId: {OrderId}", orderId);
+                    return null;
+                }
 
-                var detail = orderDetails.First();
-                var movie = await _movieApiService.GetMovie(detail.Showtime.MovieId);
-                if (movie == null) return null;
+                // 🔍 Log thông tin từng ghế: hàng, cột
+                foreach (var detail in orderDetails)
+                {
+                    var seat = detail.Seat;
+                    if (seat != null)
+                    {
+                        _logger.LogDebug("Ghế được đặt: Hàng={SeatRow}, Cột={SeatColumn}", seat.Row, seat.Column);
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Chi tiết đơn hàng Id={DetailId} có Seat null", detail.Id);
+                    }
+                }
+
+                var detailFirst = orderDetails.First();
+                var movie = await _movieApiService.GetMovie(detailFirst.Showtime.MovieId);
+                if (movie == null)
+                {
+                    _logger.LogWarning("Không lấy được thông tin phim với MovieId={MovieId}", detailFirst.Showtime.MovieId);
+                    return null;
+                }
 
                 return new ConfirmBookingViewModel
                 {
@@ -122,12 +148,12 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
                         Subtitle = movie.Subtitle,
                         Image = movie.Image
                     },
-                    Showtime = new ShowtimeDTOUser
+                    Showtime = new ShowtimeDTO
                     {
-                        Id = detail.Showtime.Id,
-                        RoomName = detail.Showtime.RoomName,
-                        ShowDate = detail.Showtime.ShowDate,
-                        FromTime = detail.Showtime.FromTime
+                        Id = detailFirst.Showtime.Id,
+                        Room = detailFirst.Showtime.Room,
+                        ShowDate = detailFirst.Showtime.ShowDate,
+                        FromTime = detailFirst.Showtime.FromTime
                     },
                     SelectedSeats = orderDetails.Select(d => d.Seat).ToList()
                 };
@@ -137,8 +163,9 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
                 _logger.LogError(ex, "Lỗi khi xử lý MarkOrderAsBookedAsync cho đơn hàng {OrderId}", orderId);
                 return null;
             }
+        
 
-        }
+    }
 
     }
 }
