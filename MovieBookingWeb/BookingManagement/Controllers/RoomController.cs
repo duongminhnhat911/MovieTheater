@@ -31,9 +31,16 @@ namespace BookingManagement.Controllers
         public async Task<IActionResult> UpdateRoom(int id, UpdateRoomDto dto)
         {
             var room = await _service.UpdateRoomAsync(id, dto);
-            if (room == null) return NotFound();
-            return Ok(room);
+            if (room == null) return NotFound("Không tìm thấy phòng.");
+            return Ok(new
+            {
+                Message = "Cập nhật phòng thành công.",
+                room.Id,
+                room.RoomName,
+                room.Status
+            });
         }
+
 
         [HttpGet("statistics/{id}")]
         public async Task<IActionResult> GetRoomUtilization(int id)
@@ -54,7 +61,36 @@ namespace BookingManagement.Controllers
         {
             var room = await _service.GetRoomByIdAsync(id);
             if (room == null) return NotFound("Không tìm thấy phòng.");
-            return Ok(room);
+
+            var seats = await _service.GetSeatsByRoomIdAsync(room.Id);
+
+            var rows = seats.Select(s => s.SeatRow).Distinct().Count();
+
+            var columns = seats.Select(s =>
+            {
+                var colStr = s.SeatColumn.ToString(); // đảm bảo là string hoặc convert từ char
+                return int.TryParse(colStr, out var c) ? c : 0;
+            }).Distinct().Count(c => c > 0);
+
+            var dto = new UpdateRoomDto
+            {
+                RoomName = room.RoomName,
+                Status = room.Status,
+                Rows = rows,
+                Columns = columns
+            };
+
+            return Ok(dto);
+        }
+        // GET: api/room/details/3
+        [HttpGet("details/{id}")]
+        public async Task<IActionResult> GetRoomDetails(int id)
+        {
+            var result = await _service.GetRoomDetailsAsync(id);
+            if (result == null)
+                return NotFound($"Không tìm thấy phòng có ID = {id}");
+
+            return Ok(result);
         }
     }
 }

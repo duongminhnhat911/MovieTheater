@@ -10,5 +10,7 @@ namespace BookingManagement.Service
         Task<List<object>> GetRoomUtilizationAsync(int id);
         Task<List<Room>> GetRoomsAsync();
         Task<Room?> GetRoomByIdAsync(int id);
+        Task<List<Seat>> GetSeatsByRoomIdAsync(int roomId);
+        Task<RoomDetailsDto?> GetRoomDetailsAsync(int roomId);
     }
 }

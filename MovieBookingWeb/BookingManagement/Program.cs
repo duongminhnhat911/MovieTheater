@@ -33,14 +33,14 @@ builder.Services.AddDbContext<BookingDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddHttpClient<IMovieServiceClient, MovieManagementHttpClient>(client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5200/"); // ⚠️ Đổi đúng URI MovieManagement service của bạn
+    client.BaseAddress = new Uri("https://localhost:7197/"); // ⚠️ Đổi đúng URI MovieManagement service của bạn
 });
 //Cấu hình CORS cho MVC
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowMVC", policy =>
     {
-        policy.WithOrigins("http://localhost:7169") // Port của frontend MVC
+        policy.WithOrigins("https://localhost:7169") // Port của frontend MVC
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();

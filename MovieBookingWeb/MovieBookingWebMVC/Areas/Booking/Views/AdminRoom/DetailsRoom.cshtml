@@ -1,0 +1,50 @@
+﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModel.RoomDetailsViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết phòng";
+}
+
+<h2 class="mb-4">Chi tiết phòng chiếu</h2>
+
+<div class="row mb-2">
+    <dt class="col-sm-3">ID</dt>
+    <dd class="col-sm-9">@Model.Id</dd>
+</div>
+
+<div class="row mb-2">
+    <dt class="col-sm-3">Tên phòng</dt>
+    <dd class="col-sm-9">@Model.RoomName</dd>
+</div>
+
+<div class="row mb-2">
+    <dt class="col-sm-3">Số lượng ghế</dt>
+    <dd class="col-sm-9">@Model.RoomQuantity</dd>
+</div>
+
+<div class="row mb-2">
+    <dt class="col-sm-3">Trạng thái</dt>
+    <dd class="col-sm-9">
+        @(Model.Status ? "Đang hoạt động" : "Tạm ngưng")
+    </dd>
+</div>
+
+<div class="row mb-2">
+    <dt class="col-sm-3">Danh sách ghế</dt>
+    <dd class="col-sm-9">
+        <div class="d-flex flex-wrap">
+            @if (Model.Seats != null && Model.Seats.Any())
+            {
+                foreach (var seat in Model.Seats.Distinct()) // tránh trùng lặp như "A1" nhiều lần
+                {
+                    <span class="badge bg-primary m-1 px-3 py-2">@seat</span>
+                }
+            }
+            else
+            {
+                <span class="text-muted">Không có ghế nào.</span>
+            }
+        </div>
+    </dd>
+</div>
+
+<a asp-action="RoomList" class="btn btn-secondary mt-3">Quay lại danh sách</a>
