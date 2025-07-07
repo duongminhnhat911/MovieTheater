@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Booking\Data\" />
-    <Folder Include="Areas\Booking\Models\" />
-    <Folder Include="Areas\Booking\Views\" />
+    <Compile Remove="Areas\Booking\Data\**" />
+    <Content Remove="Areas\Booking\Data\**" />
+    <EmbeddedResource Remove="Areas\Booking\Data\**" />
+    <None Remove="Areas\Booking\Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Areas\Movie\Data\" />
     <Folder Include="Areas\User\Data\" />
   </ItemGroup>

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using MovieBookingWebMVC.Areas.Booking.Services;
 using MovieBookingWebMVC.Areas.Movie.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,9 +22,19 @@ builder.Services.AddHttpClient("ApiClient_Movie", client =>
     client.BaseAddress = new Uri("https://localhost:7197/");
     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 });
+builder.Services.AddHttpClient("ApiClient_Booking", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7116/");
+    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+});
 
 builder.Services.AddScoped<IRoomService, RoomLayoutService>();
 builder.Services.AddScoped<MovieApiService>();
+
+//DI Booking-------------------------------------------------------
+builder.Services.AddScoped<IShowtimeWebService, ShowtimeWebService>();
+builder.Services.AddScoped<ISeatWebService, SeatWebService>();
+builder.Services.AddScoped<IBookingApiService, BookingApiService>();
 
 builder.Services.AddControllersWithViews()
     .AddViewOptions(options =>
@@ -66,6 +77,12 @@ app.MapAreaControllerRoute(
     name: "movie",
     areaName: "Movie",
     pattern: "Movie/{controller=Home}/{action=Index}/{id?}");
+
+// ✅ Route cho Area "Booking"
+app.MapAreaControllerRoute(
+    name: "booking",
+    areaName: "Booking",
+    pattern: "Booking/{controller=Booking}/{action=Index}/{id?}");
 
 // ✅ Route mặc định (không có Area)
 app.MapControllerRoute(

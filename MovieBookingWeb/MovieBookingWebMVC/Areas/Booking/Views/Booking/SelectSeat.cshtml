@@ -1,0 +1,74 @@
+﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModels.SeatBookingViewModel
+
+@{
+    ViewData["Title"] = "Chọn ghế";
+    var movie = Model.Movie;
+}
+
+<div class="container mt-4">
+    <div class="d-flex mb-4">
+        <div class="me-4">
+            <img src="@movie.Image" alt="@movie.Title" style="width: 150px; height: auto; border-radius: 8px;" />
+        </div>
+        <div>
+            <h2 class="fw-bold text-primary">@movie.Title</h2>
+            <p class="text-muted">@movie.Subtitle</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><i class="bi bi-calendar-event"></i> <strong>Ngày chiếu:</strong> @Model.ShowDate.ToString("dddd, dd/MM/yyyy")</p>
+                    <p><i class="bi bi-clock"></i> <strong>Giờ chiếu:</strong> @Model.FromTime</p>
+                </div>
+                <div class="col-md-6">
+                    <p><i class="bi bi-tv"></i> <strong>Phòng:</strong> @Model.RoomName</p>
+                    <p><i class="bi bi-cash-coin"></i> <strong>Giá vé:</strong> 80.000 VND</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="SelectSeat" asp-controller="Booking" asp-area="Booking" method="post">
+        <input type="hidden" name="showtimeId" value="@Model.ShowtimeId" />
+
+        <div class="mb-4">
+            @if (Model.Seats.Any(s => s.Status == "Available"))
+            {
+                @foreach (var row in Model.Seats.GroupBy(s => s.Row))
+                {
+                    <div class="mb-2">
+                        <strong>Hàng @row.Key:</strong>
+                        @foreach (var seat in row.OrderBy(s => s.Column))
+                        {
+                            var isDisabled = seat.Status != "Available";
+                            <label class="me-2 @(isDisabled ? "text-muted" : "")">
+                                <input type="checkbox"
+                                       name="seatIds"
+                                       value="@seat.SeatId"
+                                @(isDisabled ? "disabled" : "") />
+                                @seat.Column
+                            </label>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-danger">Hiện tại không còn ghế nào trống cho suất chiếu này.</p>
+            }
+        </div>
+
+        <button type="submit" class="btn btn-success float-end">
+            Đặt vé
+        </button>
+    </form>
+</div>
+
+<script>
+    document.querySelector("form").addEventListener("submit", function (e) {
+        const checkedSeats = Array.from(document.querySelectorAll("input[name='seatIds']:checked"))
+                                  .map(cb => cb.value);
+        if (checkedSeats.length === 0) {
+            e.preventDefault();
+            alert("Vui lòng chọn ít nhất một ghế để tiếp tục.");
+        }
+    });
+</script>

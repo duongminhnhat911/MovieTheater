@@ -60,7 +60,14 @@
                     <div class="collapse navbar-collapse" id="mainNavbar">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-1">
                             <li class="nav-item mx-2"><a class="nav-link text-white" href="/">Trang chủ</a></li>
-                            <li class="nav-item mx-2"><a class="nav-link text-white" href="#">Lịch chiếu</a></li>
+                            <li class="nav-item mx-2">
+                                <a class="nav-link text-white"
+                                   asp-area="Booking"
+                                   asp-controller="Booking"
+                                   asp-action="MoviesByDate">
+                                    Lịch chiếu
+                                </a>
+                            </li>
                             <li class="nav-item mx-2"><a class="nav-link text-white" href="#">Phim</a></li>
                         </ul>
                     </div>

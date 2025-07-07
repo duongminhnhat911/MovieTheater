@@ -1,0 +1,73 @@
+﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModels.ConfirmBookingViewModel
+
+@{
+    ViewData["Title"] = "Xác nhận đơn đặt vé";
+}
+
+<h2 class="mt-4 mb-3">Xác nhận đơn đặt vé</h2>
+
+<div class="card p-4 shadow">
+    <!-- Hình ảnh phim -->
+    <div class="row">
+        <div class="col-md-4">
+            <img src="@Model.Movie.Image" alt="@Model.Movie.Title"
+                 class="img-fluid rounded shadow-sm mb-3" style="max-height: 250px;" />
+        </div>
+        <div class="col-md-8">
+            <h4 class="text-primary">@Model.Movie.Title</h4>
+            <p class="text-muted">@Model.Movie.Subtitle</p>
+        </div>
+    </div>
+
+    <table class="table table-bordered mt-3">
+        <tr>
+            <th>Mã đơn hàng</th>
+            <td>@Model.OrderId</td>
+        </tr>
+        <tr>
+            <th>Người đặt (User ID)</th>
+            <td>@Model.UserId</td>
+        </tr>
+        <tr>
+            <th>Phòng chiếu</th>
+            <td>@Model.Showtime.RoomName</td>
+        </tr>
+        <tr>
+            <th>Ngày chiếu</th>
+            <td>@Model.Showtime.ShowDate.ToString("dd/MM/yyyy")</td>
+        </tr>
+        <tr>
+            <th>Giờ chiếu</th>
+            <td>@Model.Showtime.FromTime.ToString(@"hh\:mm")</td>
+        </tr>
+        <tr>
+            <th>Ngày đặt vé</th>
+            <td>@Model.BookingDate.ToString("dd/MM/yyyy")</td>
+        </tr>
+        <tr>
+            <th>Ghế đã chọn</th>
+            <td>
+                @foreach (var seat in Model.SelectedSeats)
+                {
+                    <span class="badge bg-success me-1">@seat.Row@seat.Column</span>
+                }
+            </td>
+        </tr>
+        <tr>
+            <th>Tổng tiền</th>
+            <td>@Model.TotalPrice.ToString("N0") VND</td>
+        </tr>
+        <tr>
+            <th>Trạng thái</th>
+            <td>@(Model.Status ? "Đã thanh toán" : "Chưa thanh toán")</td>
+        </tr>
+    </table>
+
+    <div class="mt-4">
+        <form asp-action="SelectSeat" method="get" class="d-inline">
+            <input type="hidden" name="showtimeId" value="@Model.Showtime.Id" />
+            <button type="submit" class="btn btn-secondary">Quay lại chọn ghế</button>
+        </form>
+        <button class="btn btn-primary" disabled>Xác nhận thanh toán (chưa tích hợp)</button>
+    </div>
+</div>
