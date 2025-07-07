@@ -1,10 +1,10 @@
 ﻿namespace BookingManagement.Models.DTOs
 {
-    public class UpdateRoomDto
+    public class RoomDto
     {
+        public int Id { get; set; }
         public string RoomName { get; set; }
+        public int RoomQuantity { get; set; }
         public bool Status { get; set; }
-        public int Rows { get; set; }
-        public int Columns { get; set; }
     }
 }
