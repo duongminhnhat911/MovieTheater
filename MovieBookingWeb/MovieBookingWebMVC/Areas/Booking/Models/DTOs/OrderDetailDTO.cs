@@ -6,6 +6,6 @@
 
         public OrderDTO Order { get; set; } = new();
         public ShowtimeDTO Showtime { get; set; } = new();
-        public SeatDTO Seat { get; set; } = new();
+        public SelectedSeatDTO Seat { get; set; } = new();
     }
 }
