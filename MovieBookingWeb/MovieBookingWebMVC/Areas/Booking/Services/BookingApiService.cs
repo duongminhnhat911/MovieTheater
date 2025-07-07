@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using Microsoft.Extensions.Logging;
+using MovieBookingWebMVC.Areas.Booking.Models;
 using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
 
 namespace MovieBookingWebMVC.Areas.Booking.Services
@@ -15,7 +16,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
             _logger = logger;
         }
 
-        public async Task<ShowtimeDTO?> GetScheduleDetailAsync(int scheduleId)
+        public async Task<ShowTime?> GetScheduleDetailAsync(int scheduleId)
         {
             try
             {
@@ -28,7 +29,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
                     return null;
                 }
 
-                return await response.Content.ReadFromJsonAsync<ShowtimeDTO>();
+                return await response.Content.ReadFromJsonAsync<ShowTime>();
             }
             catch (Exception ex)
             {

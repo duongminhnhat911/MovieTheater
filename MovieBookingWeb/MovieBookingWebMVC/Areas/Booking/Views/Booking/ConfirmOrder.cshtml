@@ -64,10 +64,7 @@
     </table>
 
     <div class="mt-4">
-        <form asp-action="SelectSeat" method="get" class="d-inline">
-            <input type="hidden" name="showtimeId" value="@Model.Showtime.Id" />
-            <button type="submit" class="btn btn-secondary">Quay lại chọn ghế</button>
-        </form>
+        <button type="button" class="btn btn-secondary" onclick="history.back()">Quay lại chọn ghế</button>
         <button class="btn btn-primary" disabled>Xác nhận thanh toán (chưa tích hợp)</button>
     </div>
 </div>
