@@ -21,7 +21,7 @@
 
 <style>
     .cinema-container {
-        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+        background: linear-gradient(135deg, #FAF7F3 0%, #99BC85 100%);
         min-height: 100vh;
         padding: 30px 0;
         margin: 0 -15px -20px -15px;
@@ -56,16 +56,13 @@
         }
 
     @@keyframes rotate {
-        0%
+        0% {
+            transform: rotate(0deg);
+        }
 
-    {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-
+        100% {
+            transform: rotate(360deg);
+        }
     }
 
     .cinema-title {
@@ -376,41 +373,38 @@
     }
 
     @@media (max-width: 768px) {
-        .cinema-title
+        .cinema-title {
+            font-size: 2rem;
+        }
 
-    {
-        font-size: 2rem;
-    }
+        .week-selector {
+            gap: 10px;
+        }
 
-    .week-selector {
-        gap: 10px;
-    }
+        .day-btn {
+            padding: 12px 15px;
+            min-width: 70px;
+            font-size: 0.9rem;
+        }
 
-    .day-btn {
-        padding: 12px 15px;
-        min-width: 70px;
-        font-size: 0.9rem;
-    }
+        .movies-grid {
+            grid-template-columns: 1fr;
+        }
 
-    .movies-grid {
-        grid-template-columns: 1fr;
-    }
+        .movie-header {
+            flex-direction: column;
+            text-align: center;
+        }
 
-    .movie-header {
-        flex-direction: column;
-        text-align: center;
-    }
+        .movie-poster {
+            width: 100px;
+            height: 150px;
+            align-self: center;
+        }
 
-    .movie-poster {
-        width: 100px;
-        height: 150px;
-        align-self: center;
-    }
-
-    .date-picker-form {
-        flex-direction: column;
-    }
-
+        .date-picker-form {
+            flex-direction: column;
+        }
     }
 </style>
 
