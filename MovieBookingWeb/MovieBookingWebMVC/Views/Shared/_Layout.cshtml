@@ -4,7 +4,7 @@
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
 
     // Điều kiện hiển thị sidebar cho Admin (bao gồm các controller quản trị như Admin, Movie, User)
-    var showAdminSidebar = isAdmin && new[] { "Admin", "Movie", "User" }.Contains(currentController);
+    var showAdminSidebar = isAdmin && new[] { "Admin", "Movie", "User", "AdminShowtime", "AdminRoom" }.Contains(currentController);
 
     // Điều kiện hiển thị sidebar cho người dùng, chỉ khi ở trang "Profile"
     var showUserSidebar = User?.Identity?.IsAuthenticated == true
@@ -149,6 +149,13 @@
                            asp-area="Movie" asp-controller="Movie" asp-action="ViewMovie">
                             <i class="fas fa-film"></i> Danh sách phim
                         </a>
+                        <a class="nav-link d-flex align-items-center gap-2 text-dark ms-1 hover-effect
+                @(currentController == "AdminShowtime" && currentAction == "Index" ? "active" : "")"
+                           asp-area="Booking"
+                           asp-controller="AdminShowtime"
+                           asp-action="Index">
+                            <i class="fas fa-clock"></i> Quản lý suất chiếu
+                        </a>
 
                         <a class="nav-link d-flex align-items-center gap-2 text-dark ms-1 hover-effect
         @(currentController == "AdminRoom" && currentAction == "Index" ? "active" : "")"
@@ -173,7 +180,6 @@
                            asp-action="ViewAccounts">
                             <i class="fas fa-user"></i> Danh sách thành viên
                         </a>
-
                     </nav>
                 </aside>
                 <main role="main" class="flex-grow-1">

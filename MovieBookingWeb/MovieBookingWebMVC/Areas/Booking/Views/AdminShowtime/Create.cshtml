@@ -1,57 +1,72 @@
 ﻿@model MovieBookingWebMVC.Areas.Booking.Models.DTOs.CreateShowtimeDto
-
 @{
-    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Thêm suất chiếu";
 }
 
-<h1>Create Showtime</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<h2 class="text-center fw-bold mb-4">Thêm suất chiếu mới</h2>
 
-            <select name="MovieId" class="form-control">
-                <option value="">-- Chọn phim --</option>
-                @foreach (var movie in (List<SelectListItem>)ViewBag.Movies)
-                {
-                    <option value="@movie.Value">@movie.Text</option>
-                }
-            </select>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-            <select name="RoomId" class="form-control">
-                <option value="">-- Chọn phòng --</option>
-                @foreach (var room in (List<SelectListItem>)ViewBag.Rooms)
-                {
-                    <option value="@room.Value">@room.Text</option>
-                }
-            </select>
+                    <!-- Chọn phim -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Chọn phim</label>
+                        <select name="MovieId" class="form-select" required>
+                            <option value="">-- Chọn phim --</option>
+                            @foreach (var movie in (List<SelectListItem>)ViewBag.Movies)
+                            {
+                                <option value="@movie.Value">@movie.Text</option>
+                            }
+                        </select>
+                    </div>
 
-            <!-- Date -->
-            <div class="form-group">
-                <label asp-for="ShowDate" class="control-label"></label>
-                <input asp-for="ShowDate" name="ShowDate" type="date" class="form-control" />
-                <span asp-validation-for="ShowDate" class="text-danger"></span>
+                    <!-- Chọn phòng -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Chọn phòng</label>
+                        <select name="RoomId" class="form-select" required>
+                            <option value="">-- Chọn phòng --</option>
+                            @foreach (var room in (List<SelectListItem>)ViewBag.Rooms)
+                            {
+                                <option value="@room.Value">@room.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Ngày chiếu -->
+                    <div class="mb-3">
+                        <label asp-for="ShowDate" class="form-label fw-semibold">Ngày chiếu</label>
+                        <input asp-for="ShowDate" type="date" class="form-control" />
+                        <span asp-validation-for="ShowDate" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Giờ bắt đầu -->
+                    <div class="mb-3">
+                        <label asp-for="StartTime" class="form-label fw-semibold">Giờ bắt đầu</label>
+                        <input asp-for="StartTime" type="time" class="form-control" />
+                        <span asp-validation-for="StartTime" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Quay lại
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Lưu suất chiếu
+                        </button>
+                    </div>
+                </form>
             </div>
-
-            <!-- Time -->
-            <div class="form-group">
-                <label asp-for="StartTime" class="control-label"></label>
-                <input asp-for="StartTime" name="StartTime" type="time" class="form-control" />
-                <span asp-validation-for="StartTime" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
