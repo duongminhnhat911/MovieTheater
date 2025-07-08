@@ -4,6 +4,8 @@ using MovieBookingWebMVC.Areas.Movie.Services;
 using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
 using System.Net.Http;
 using MovieBookingWebMVC.Areas.Booking.Models.ViewModels;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace MovieBookingWebMVC.Areas.Booking.Controllers
 {
@@ -15,7 +17,6 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
         private readonly IShowtimeWebService _showtimeService;
         private readonly ILogger<BookingController> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
-
 
         public BookingController(
             IBookingApiService bookingApiService,
@@ -132,73 +133,35 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             return View(viewModel);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> ConfirmBooking(int showtimeId, List<int> seatIds)
-        //{
-        //    if (seatIds == null || !seatIds.Any())
-        //    {
-        //        TempData["ErrorMessage"] = "Bạn chưa chọn ghế.";
-        //        return RedirectToAction("SelectSeat", new { scheduleId = showtimeId });
-        //    }
-
-        //    var userId = 2; // Hardcoded
-
-        //    var request = new CreatePaymentRequestDto
-        //    {
-        //        ShowtimeId = showtimeId,
-        //        UserId = userId,
-        //        SeatIds = seatIds
-        //    };
-
-        //    var client = _httpClientFactory.CreateClient("ApiClient_Booking");
-        //    var response = await client.PostAsJsonAsync("api/Order/payment", request);
-
-        //    if (!response.IsSuccessStatusCode)
-        //    {
-        //        TempData["ErrorMessage"] = "Lỗi khi tạo đơn hàng.";
-        //        return RedirectToAction("SelectSeat", new { scheduleId = showtimeId });
-        //    }
-
-        //    var dto = await response.Content.ReadFromJsonAsync<OrderConfirmationDTO>();
-        //    if (dto == null)
-        //    {
-        //        TempData["ErrorMessage"] = "Lỗi đọc dữ liệu đơn hàng.";
-        //        return RedirectToAction("SelectSeat", new { scheduleId = showtimeId });
-        //    }
-
-        //    return RedirectToAction("ConfirmOrder", new { orderId = dto.OrderId });
-        //}
-
         [HttpGet]
-public async Task<IActionResult> ConfirmOrder(int orderId)
-{
-    var client = _httpClientFactory.CreateClient("ApiClient_Booking");
+        public async Task<IActionResult> ConfirmOrder(int orderId)
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient_Booking");
+            _logger.LogInformation("ConfirmOrder GET started for OrderId: {OrderId}", orderId);
 
-    _logger.LogInformation("ConfirmOrder started for OrderId: {OrderId}", orderId);
+            // 1. Lấy thông tin đơn hàng
+            var orderRes = await client.GetAsync($"api/Order/{orderId}");
+            if (!orderRes.IsSuccessStatusCode)
+            {
+                _logger.LogWarning("Failed to fetch Order with ID {OrderId}. StatusCode: {StatusCode}", orderId, orderRes.StatusCode);
+                TempData["ErrorMessage"] = "Không lấy được đơn hàng.";
+                return RedirectToAction("MoviesByDate");
+            }
 
-    // 1. Lấy thông tin đơn hàng
-    var orderRes = await client.GetAsync($"api/Order/{orderId}");
-    if (!orderRes.IsSuccessStatusCode)
-    {
-        _logger.LogWarning("Failed to fetch Order with ID {OrderId}. StatusCode: {StatusCode}", orderId, orderRes.StatusCode);
-        TempData["ErrorMessage"] = "Không lấy được đơn hàng.";
-        return RedirectToAction("MoviesByDate");
-    }
+            var order = await orderRes.Content.ReadFromJsonAsync<OrderDTO>();
+            _logger.LogInformation("Order fetched: UserId={UserId}, TotalPrice={TotalPrice}, Status={Status}",
+                order.UserId, order.TotalPrice, order.Status);
 
-    var order = await orderRes.Content.ReadFromJsonAsync<OrderDTO>();
-    _logger.LogInformation("Order fetched: UserId={UserId}, TotalPrice={TotalPrice}, Status={Status}",
-        order.UserId, order.TotalPrice, order.Status);
+            // 2. Lấy toàn bộ OrderDetail
+            var detailsRes = await client.GetAsync("api/OrderDetail");
+            if (!detailsRes.IsSuccessStatusCode)
+            {
+                _logger.LogWarning("Failed to fetch OrderDetail. StatusCode: {StatusCode}", detailsRes.StatusCode);
+                TempData["ErrorMessage"] = "Không lấy được chi tiết đơn hàng.";
+                return RedirectToAction("MoviesByDate");
+            }
 
-    // 2. Lấy toàn bộ OrderDetail
-    var detailsRes = await client.GetAsync("api/OrderDetail");
-    if (!detailsRes.IsSuccessStatusCode)
-    {
-        _logger.LogWarning("Failed to fetch OrderDetail. StatusCode: {StatusCode}", detailsRes.StatusCode);
-        TempData["ErrorMessage"] = "Không lấy được chi tiết đơn hàng.";
-        return RedirectToAction("MoviesByDate");
-    }
-
-    var allDetails = await detailsRes.Content.ReadFromJsonAsync<List<OrderDetailDTO>>();
+            var allDetails = await detailsRes.Content.ReadFromJsonAsync<List<OrderDetailDTO>>();
             var orderDetails = allDetails.Where(d => d.Order.Id == orderId).ToList();
 
             if (!orderDetails.Any())
@@ -217,45 +180,196 @@ public async Task<IActionResult> ConfirmOrder(int orderId)
             }
 
             var detail = orderDetails.First();
-    _logger.LogInformation("First detail: ShowtimeId={ShowtimeId}, RoomName={RoomName}",
-        detail.Showtime.Id, detail.Showtime.RoomName ?? "NULL");
+            _logger.LogInformation("First detail: ShowtimeId={ShowtimeId}, RoomName={RoomName}",
+                detail.Showtime.Id, detail.Showtime.RoomName ?? "NULL");
 
-    var movie = await _movieApiService.GetMovie(detail.Showtime.MovieId);
-    _logger.LogInformation("Movie fetched: {Title} - {Subtitle}", movie.Title, movie.Subtitle);
+            var movie = await _movieApiService.GetMovie(detail.Showtime.MovieId);
+            _logger.LogInformation("Movie fetched: {Title} - {Subtitle}", movie.Title, movie.Subtitle);
 
             var seatNames = orderDetails.Select(d => $"{d.Seat.Row}{d.Seat.Column}").ToList();
             _logger.LogInformation("Ghế đã chọn: {SeatList}", string.Join(", ", seatNames));
 
             var viewModel = new ConfirmBookingViewModel
-    {
-        OrderId = order.Id,
-        UserId = order.UserId,
-        BookingDate = order.BookingDate,
-        TotalPrice = order.TotalPrice,
-        Status = order.Status,
-        Movie = new MovieDTO
-        {
-            Id = movie.Id,
-            Title = movie.Title,
-            Subtitle = movie.Subtitle,
-            Image = movie.Image
-        },
-        Showtime = new ShowtimeDto
-        {
-            Id = detail.Showtime.Id,
-            Room = detail.Showtime.Room,
-            ShowDate = detail.Showtime.ShowDate,
-            FromTime = detail.Showtime.FromTime
-        },
-        SelectedSeats = orderDetails.Select(d => d.Seat).ToList()
+            {
+                OrderId = order.Id,
+                UserId = order.UserId,
+                BookingDate = order.BookingDate,
+                TotalPrice = order.TotalPrice,
+                Status = order.Status,
+                Movie = new MovieDTO
+                {
+                    Id = movie.Id,
+                    Title = movie.Title,
+                    Subtitle = movie.Subtitle,
+                    Image = movie.Image
+                },
+                Showtime = new ShowtimeDto
+                {
+                    Id = detail.Showtime.Id,
+                    Room = detail.Showtime.Room,
+                    ShowDate = detail.Showtime.ShowDate,
+                    FromTime = detail.Showtime.FromTime
+                },
+                SelectedSeats = orderDetails.Select(d => d.Seat).ToList()
+            };
 
-    };
             _logger.LogInformation("Seats in ViewModel: {Seats}",
-    string.Join(", ", orderDetails.Select(d => $"{d.Seat?.Row}{d.Seat?.Column}")));
+                string.Join(", ", orderDetails.Select(d => $"{d.Seat?.Row}{d.Seat?.Column}")));
             _logger.LogInformation("Returning ConfirmBookingViewModel with {SeatCount} seats", viewModel.SelectedSeats.Count);
 
-    return View("ConfirmOrder", viewModel);
-}
+            return View("ConfirmOrder", viewModel);
+        }
+
+        [HttpPost]
+        [ActionName("ConfirmOrder")]
+        public async Task<IActionResult> ConfirmOrderPost(int orderId)
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient_Booking"); // ✅ SỬA: _ thay vì *
+            _logger.LogInformation("ConfirmOrder POST called with OrderId={OrderId}", orderId);
+
+            // Gọi API tạo URL thanh toán VnPay
+            var response = await client.GetAsync($"api/Vnpay/create-url?orderId={orderId}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Không thể tạo URL thanh toán.";
+                return RedirectToAction("ConfirmOrder", new { orderId });
+            }
+
+            // ✅ SỬA: Đọc JSON response đúng cách
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var responseJson = JsonConvert.DeserializeObject<dynamic>(jsonString);
+            var paymentUrl = responseJson.paymentUrl?.ToString();
+
+            if (string.IsNullOrEmpty(paymentUrl))
+            {
+                TempData["ErrorMessage"] = "Không thể tạo URL thanh toán.";
+                return RedirectToAction("ConfirmOrder", new { orderId });
+            }
+
+            _logger.LogInformation("Redirecting to VnPay URL for OrderId: {OrderId}", orderId);
+            return Redirect(paymentUrl);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmBooking(int showtimeId, List<int> seatIds)
+        {
+            if (seatIds == null || !seatIds.Any())
+            {
+                TempData["ErrorMessage"] = "Bạn chưa chọn ghế.";
+                return RedirectToAction("SelectSeat", new { scheduleId = showtimeId });
+            }
+
+            var userId = 2; // Hardcoded (nên thay bằng lấy từ User.Identity)
+
+            var request = new CreatePaymentRequestDto
+            {
+                ShowtimeId = showtimeId,
+                UserId = userId,
+                SeatIds = seatIds
+            };
+
+            var client = _httpClientFactory.CreateClient("ApiClient_Booking");
+
+            // Gọi API tạo đơn hàng
+            var response = await client.PostAsJsonAsync("api/Vnpay/create-url", request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Lỗi khi tạo đơn hàng.";
+                return RedirectToAction("SelectSeat", new { scheduleId = showtimeId });
+            }
+
+            var dto = await response.Content.ReadFromJsonAsync<OrderConfirmationDTO>();
+
+            if (dto == null)
+            {
+                TempData["ErrorMessage"] = "Lỗi đọc dữ liệu đơn hàng.";
+                return RedirectToAction("SelectSeat", new { scheduleId = showtimeId });
+            }
+
+            // Gọi API tạo URL thanh toán VnPay
+            var vnpayUrlResponse = await client.GetAsync($"api/Vnpay/create-url?orderId={dto.OrderId}");
+
+            if (!vnpayUrlResponse.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Lỗi khi tạo URL thanh toán.";
+                return RedirectToAction("ConfirmOrder", new { orderId = dto.OrderId });
+            }
+
+            // ✅ SỬA: Đọc JSON thay vì string thuần
+            var responseJson = await vnpayUrlResponse.Content.ReadFromJsonAsync<dynamic>();
+            var paymentUrl = responseJson.paymentUrl.ToString();
+
+            // Chuyển hướng tới VnPay
+            return Redirect(paymentUrl);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> VNPayReturn()
+        {
+            try
+            {
+                _logger.LogInformation("🔄 VNPay return callback received");
+
+                // Log tất cả parameters VNPay trả về
+                _logger.LogInformation("📋 ALL VNPAY PARAMETERS:");
+                foreach (var param in Request.Query)
+                {
+                    _logger.LogInformation("  {Key} = {Value}", param.Key, param.Value);
+                }
+
+                // Lấy các thông tin cần thiết từ VNPay response
+                var responseCode = Request.Query["vnp_ResponseCode"].ToString();
+                var transactionStatus = Request.Query["vnp_TransactionStatus"].ToString();
+                var orderId = Request.Query["vnp_TxnRef"].ToString();
+                var amount = Request.Query["vnp_Amount"].ToString();
+                var transactionNo = Request.Query["vnp_TransactionNo"].ToString();
+
+                // Kiểm tra kết quả thanh toán
+                if (responseCode == "00" && transactionStatus == "00")
+                {
+                    _logger.LogInformation("✅ Payment SUCCESS! Processing order: {OrderId}", orderId);
+
+                    // Cập nhật trạng thái đơn hàng thành công
+                    var client = _httpClientFactory.CreateClient("ApiClient_Booking");
+                    var updateResponse = await client.PostAsync($"api/Vnpay/confirm-payment?orderId={orderId}&transactionNo={transactionNo}", null);
+
+                    if (updateResponse.IsSuccessStatusCode)
+                    {
+                        _logger.LogInformation("✅ Order status updated successfully");
+                    }
+                    else
+                    {
+                        _logger.LogWarning("⚠️ Failed to update order status, but payment was successful");
+                    }
+
+                    // Set success message
+                    TempData["SuccessMessage"] = "Thanh toán VNPay thành công! Đặt vé hoàn tất.";
+                    TempData["BookingCode"] = $"BK{orderId.PadLeft(6, '0')}";
+                    TempData["TransactionNo"] = transactionNo;
+                    TempData["VNPaySuccess"] = true;
+
+                    // ✅ SỬA: Redirect đến trang Booked thay vì ConfirmOrder
+                    return RedirectToAction("Booked", new { orderId = orderId });
+                }
+                else
+                {
+                    _logger.LogWarning("❌ Payment FAILED!");
+                    _logger.LogWarning("  Response Code: {ResponseCode}", responseCode);
+                    _logger.LogWarning("  Transaction Status: {TransactionStatus}", transactionStatus);
+
+                    TempData["ErrorMessage"] = "Thanh toán không thành công.";
+                    return RedirectToAction("MoviesByDate");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "💥 Exception in VNPayReturn");
+                TempData["ErrorMessage"] = "Có lỗi xảy ra khi xử lý kết quả thanh toán.";
+                return RedirectToAction("MoviesByDate");
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> SelectSeat(int showtimeId, List<int> seatIds)
@@ -293,9 +407,12 @@ public async Task<IActionResult> ConfirmOrder(int orderId)
 
             return RedirectToAction("ConfirmOrder", new { orderId = dto.OrderId });
         }
+
         [HttpGet]
         public async Task<IActionResult> Booked(int orderId)
         {
+            _logger.LogInformation("Booked page accessed for OrderId: {OrderId}", orderId);
+            
             var viewModel = await _bookingApiService.MarkOrderAsBookedAsync(orderId);
             if (viewModel == null)
             {
@@ -306,5 +423,4 @@ public async Task<IActionResult> ConfirmOrder(int orderId)
             return View("Booked", viewModel);
         }
     }
-
 }
