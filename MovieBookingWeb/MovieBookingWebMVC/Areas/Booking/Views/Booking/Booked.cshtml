@@ -1,8 +1,410 @@
 ﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModels.ConfirmBookingViewModel
-
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 @{
     ViewData["Title"] = "Đặt vé thành công";
 }
+
+<style>
+/* Booking Confirmation Page Styling */
+body {
+    background-color: #F5F5F5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: #CCFFE4;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    border: 3px solid #9FCBC0;
+}
+
+/* Success Alert Styling */
+.alert.alert-success {
+    background: linear-gradient(135deg, #9FCBC0, #7FB3A5);
+    border: none;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 6px 20px rgba(159, 203, 192, 0.3);
+    animation: successPulse 2s ease-in-out;
+}
+
+@@keyframes successPulse {
+    0% { transform: scale(0.9); opacity: 0.7; }
+    50% { transform: scale(1.02); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.alert.alert-success h2 {
+    color: #000000;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    animation: bounceIn 1s ease-out;
+}
+
+@@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+    70% { transform: scale(0.9); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.alert.alert-success p {
+    color: #000000;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Divider */
+hr {
+    border: none;
+    height: 4px;
+    background: linear-gradient(to right, #9FCBC0, #CCFFE4, #9FCBC0);
+    margin: 30px 0;
+    border-radius: 2px;
+}
+
+/* Main Content Row */
+.row.mb-4 {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 2px solid #9FCBC0;
+    margin-bottom: 30px;
+}
+
+/* Movie Image */
+.col-md-4 img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    border: 3px solid #9FCBC0;
+    transition: transform 0.3s ease;
+}
+
+.col-md-4 img:hover {
+    transform: scale(1.05);
+}
+
+/* Movie Details */
+.col-md-8 h3 {
+    color: #000000;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.col-md-8 h5 {
+    color: #666666;
+    font-size: 1.3rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.col-md-8 p {
+    color: #000000;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    padding: 10px 0;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.col-md-8 p:last-child {
+    border-bottom: none;
+}
+
+.col-md-8 p strong {
+    color: #000000;
+    font-weight: 700;
+    min-width: 140px;
+    display: inline-block;
+}
+
+/* Seat Badges */
+.badge.bg-success {
+    background: linear-gradient(135deg, #9FCBC0, #7FB3A5) !important;
+    color: #000000 !important;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin: 0 5px 5px 0;
+    box-shadow: 0 2px 8px rgba(159, 203, 192, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.badge.bg-success:hover {
+    transform: translateY(-2px);
+}
+
+/* Status Text */
+.text-success.fw-bold {
+    color: #9FCBC0 !important;
+    font-weight: 800 !important;
+    font-size: 1.1rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Total Price Highlight */
+.col-md-8 p:has(strong:contains("Tổng tiền")) {
+    background: linear-gradient(135deg, #9FCBC0, #CCFFE4);
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #9FCBC0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 20px 0;
+}
+
+/* Action Buttons */
+.text-center.mt-4 {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 2px solid #9FCBC0;
+}
+
+.btn {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 15px 30px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.btn-outline-success {
+    background-color: #F5F5F5;
+    color: #000000;
+    border: 3px solid #9FCBC0;
+}
+
+.btn-outline-success:hover {
+    background: linear-gradient(135deg, #9FCBC0, #7FB3A5);
+    color: #000000;
+    border-color: #9FCBC0;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(159, 203, 192, 0.4);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #9FCBC0, #7FB3A5);
+    color: #000000;
+    border: 3px solid #9FCBC0;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #7FB3A5, #9FCBC0);
+    color: #000000;
+    border-color: #7FB3A5;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(159, 203, 192, 0.4);
+}
+
+.btn:active {
+    transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@@media (max-width: 768px) {
+    .container {
+        padding: 25px;
+        margin: 10px;
+    }
+
+    .alert.alert-success {
+        padding: 20px;
+    }
+
+    .alert.alert-success h2 {
+        font-size: 2rem;
+    }
+
+    .row.mb-4 {
+        padding: 20px;
+    }
+
+    .col-md-4 {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .col-md-4 img {
+        max-height: 200px;
+        max-width: 200px;
+    }
+
+    .col-md-8 h3 {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .col-md-8 h5 {
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .col-md-8 p {
+        font-size: 1rem;
+    }
+
+    .col-md-8 p strong {
+        min-width: 120px;
+    }
+
+    .text-center.mt-4 {
+        padding: 20px;
+    }
+
+    .btn {
+        font-size: 1rem;
+        padding: 12px 25px;
+        margin: 5px;
+        display: block;
+        width: 100%;
+        max-width: 250px;
+        margin: 10px auto;
+    }
+}
+
+@@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+        margin: 5px;
+    }
+
+    .alert.alert-success h2 {
+        font-size: 1.8rem;
+    }
+
+    .alert.alert-success p {
+        font-size: 1rem;
+    }
+
+    .col-md-8 h3 {
+        font-size: 1.5rem;
+    }
+
+    .col-md-8 p {
+        font-size: 0.9rem;
+    }
+
+    .col-md-8 p strong {
+        min-width: 100px;
+        font-size: 0.9rem;
+    }
+
+    .badge.bg-success {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+}
+
+/* Animation for content */
+@@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.row.mb-4 {
+    animation: fadeInUp 0.8s ease-out 0.5s both;
+}
+
+.text-center.mt-4 {
+    animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+/* Print Styles */
+@@media print {
+    body {
+        background-color: white;
+    }
+
+    .container {
+        background-color: white;
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+
+    .alert.alert-success {
+        background: #f8f9fa;
+        color: #000;
+    }
+
+    .btn {
+        display: none;
+    }
+
+    .col-md-4 img {
+        max-height: 150px;
+    }
+}
+
+/* Accessibility */
+.btn:focus {
+    outline: 3px solid rgba(159, 203, 192, 0.5);
+    outline-offset: 2px;
+}
+
+/* Success checkmark animation */
+.alert.alert-success::before {
+    content: "✓";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: linear-gradient(135deg, #9FCBC0, #7FB3A5);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #000000;
+    box-shadow: 0 4px 15px rgba(159, 203, 192, 0.3);
+    animation: checkmarkPop 1s ease-out 0.5s both;
+}
+
+@@keyframes checkmarkPop {
+    0% { transform: scale(0) rotate(180deg); opacity: 0; }
+    80% { transform: scale(1.2) rotate(360deg); opacity: 1; }
+    100% { transform: scale(1) rotate(360deg); opacity: 1; }
+}
+
+.alert.alert-success {
+    position: relative;
+    overflow: visible;
+}
+</style>
+
 
 <div class="container mt-4">
     <div class="alert alert-success text-center" role="alert">

@@ -4,6 +4,680 @@
     ViewData["Title"] = "Chi tiết phòng";
 }
 
+<style>
+/* Reset và Base Styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #CCFFE4 0%, #F5F5F5 100%);
+    min-height: 100vh;
+    color: #000000;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    position: relative;
+}
+
+/* Subtle background pattern */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(159, 203, 192, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(204, 255, 228, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Container chính */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 8px 16px rgba(0, 0, 0, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Container glow effect */
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(159, 203, 192, 0.5), transparent);
+}
+
+/* Tiêu đề */
+h2 {
+    color: #ffffff;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 35px;
+    text-align: center;
+    padding: 25px 30px;
+    background: linear-gradient(135deg, #000000 0%, #2c2c2c 50%, #000000 100%);
+    border-radius: 15px;
+    margin-top: 0;
+    box-shadow: 
+        0 8px 20px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+h2::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+/* Row containers */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 15px;
+    padding: 20px 25px;
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        0 2px 4px rgba(0, 0, 0, 0.04);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(159, 203, 192, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.row::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #9FCBC0, #7BB3A8);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.row:hover::before {
+    opacity: 1;
+}
+
+.row:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.1),
+        0 4px 10px rgba(0, 0, 0, 0.06);
+    border-color: rgba(159, 203, 192, 0.3);
+}
+
+.mb-2 {
+    margin-bottom: 15px;
+}
+
+/* Definition terms và descriptions */
+dt {
+    font-weight: 700;
+    color: #000000;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+}
+
+dt::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, #9FCBC0, #7BB3A8);
+    border-radius: 2px;
+}
+
+dd {
+    color: #2c2c2c;
+    font-size: 1.05rem;
+    margin-bottom: 0;
+    margin-left: 0;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+/* Bootstrap columns */
+.col-sm-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+    padding-right: 20px;
+}
+
+.col-sm-9 {
+    flex: 0 0 75%;
+    max-width: 75%;
+    padding-left: 20px;
+}
+
+/* Flexbox containers */
+.d-flex {
+    display: flex;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+/* Cinema Screen */
+.cinema-screen {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 50%, #1a1a1a 100%);
+    color: #ffffff;
+    text-align: center;
+    padding: 15px 20px;
+    border-radius: 25px;
+    margin-bottom: 35px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    box-shadow: 
+        0 8px 20px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 2px;
+}
+
+.cinema-screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+    animation: screenGlow 3s ease-in-out infinite;
+}
+
+@@keyframes screenGlow {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+/* Seat Grid Layout */
+.seat-grid-container {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 20px;
+    padding: 30px;
+    margin-top: 20px;
+    box-shadow: 
+        inset 0 2px 10px rgba(0, 0, 0, 0.05),
+        0 4px 15px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(159, 203, 192, 0.2);
+    position: relative;
+}
+
+.seat-grid-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #9FCBC0, transparent);
+    border-radius: 2px;
+}
+
+.seat-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+
+.seat-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    animation-fill-mode: both;
+}
+
+.seat-row:nth-child(1) { animation-delay: 0.1s; }
+.seat-row:nth-child(2) { animation-delay: 0.15s; }
+.seat-row:nth-child(3) { animation-delay: 0.2s; }
+.seat-row:nth-child(4) { animation-delay: 0.25s; }
+.seat-row:nth-child(5) { animation-delay: 0.3s; }
+.seat-row:nth-child(6) { animation-delay: 0.35s; }
+.seat-row:nth-child(7) { animation-delay: 0.4s; }
+.seat-row:nth-child(8) { animation-delay: 0.45s; }
+
+.row-label {
+    font-weight: 800;
+    color: #000000;
+    font-size: 1.1rem;
+    min-width: 35px;
+    text-align: center;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+    padding: 10px 8px;
+    border: 2px solid #9FCBC0;
+    box-shadow: 0 2px 8px rgba(159, 203, 192, 0.2);
+    transition: all 0.3s ease;
+}
+
+.row-label:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(159, 203, 192, 0.3);
+}
+
+.seat-item {
+    width: 50px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #9FCBC0 0%, #8BB5AC 100%);
+    color: #000000;
+    border: 2px solid #7BB3A8;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 4px 8px rgba(159, 203, 192, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.seat-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s ease;
+}
+
+.seat-item:hover::before {
+    left: 100%;
+}
+
+.seat-item:hover {
+    background: linear-gradient(135deg, #7BB3A8 0%, #6BA098 100%);
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 
+        0 8px 20px rgba(159, 203, 192, 0.4),
+        inset 0 2px 0 rgba(255, 255, 255, 0.3);
+}
+
+.seat-item.available {
+    background: linear-gradient(135deg, #9FCBC0 0%, #8BB5AC 100%);
+    border-color: #7BB3A8;
+}
+
+.seat-item.occupied {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    border-color: #b21e2f;
+    color: #ffffff;
+    cursor: not-allowed;
+}
+
+.seat-item.occupied:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #c82333 0%, #b21e2f 100%);
+}
+
+.seat-item.selected {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    border-color: #155724;
+    color: #ffffff;
+    animation: pulse 2s infinite;
+}
+
+@@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+}
+
+/* Seat Legend */
+.seat-legend {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+    padding: 15px;
+    background: rgba(248, 249, 250, 0.5);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c2c2c;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.legend-item:hover {
+    background: rgba(159, 203, 192, 0.1);
+    transform: translateY(-2px);
+}
+
+.legend-color {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 2px solid #333;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.legend-available { 
+    background: linear-gradient(135deg, #9FCBC0 0%, #8BB5AC 100%);
+    border-color: #7BB3A8;
+}
+
+.legend-occupied { 
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    border-color: #b21e2f;
+}
+
+.legend-selected { 
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    border-color: #155724;
+}
+
+/* Badge styling cho ghế (fallback) */
+.badge {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border-radius: 25px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.bg-primary {
+    background: linear-gradient(135deg, #9FCBC0 0%, #8BB5AC 100%) !important;
+    color: #000000 !important;
+    border: 2px solid #7BB3A8;
+    box-shadow: 0 4px 10px rgba(159, 203, 192, 0.3);
+}
+
+.badge:hover {
+    background: linear-gradient(135deg, #7BB3A8 0%, #6BA098 100%) !important;
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 6px 20px rgba(159, 203, 192, 0.4);
+}
+
+/* Spacing cho badges */
+.m-1 {
+    margin: 6px;
+}
+
+.px-3 {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.py-2 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* Text muted */
+.text-muted {
+    color: #6c757d;
+    font-style: italic;
+    font-size: 1rem;
+}
+
+/* Button styling */
+.btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-block;
+    margin-top: 25px;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #F5F5F5 0%, #e9ecef 100%);
+    color: #000000;
+    border: 2px solid #9FCBC0;
+    box-shadow: 0 4px 15px rgba(159, 203, 192, 0.2);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #9FCBC0 0%, #8BB5AC 100%);
+    border-color: #7BB3A8;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(159, 203, 192, 0.3);
+    text-decoration: none;
+    color: #000000;
+}
+
+/* Margin top */
+.mt-3 {
+    margin-top: 25px;
+}
+
+/* Status styling */
+.status-active {
+    color: #28a745;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(40, 167, 69, 0.3);
+}
+
+.status-inactive {
+    color: #dc3545;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(220, 53, 69, 0.3);
+}
+
+@@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+
+    .container {
+        padding: 25px;
+        border-radius: 15px;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+        padding: 20px;
+    }
+
+    .col-sm-3,
+    .col-sm-9 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .row {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    dt {
+        margin-bottom: 8px;
+        font-size: 1.2rem;
+    }
+
+    dd {
+        margin-bottom: 15px;
+        padding-left: 15px;
+        border-left: 4px solid #9FCBC0;
+        border-radius: 0 4px 4px 0;
+        background: rgba(159, 203, 192, 0.05);
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    .seat-item {
+        width: 40px;
+        height: 35px;
+        font-size: 0.8rem;
+    }
+
+    .seat-row {
+        gap: 8px;
+    }
+
+    .row-label {
+        min-width: 30px;
+        font-size: 1rem;
+        padding: 8px 6px;
+    }
+
+    .seat-legend {
+        gap: 20px;
+    }
+
+    .legend-item {
+        font-size: 0.9rem;
+    }
+
+    .btn {
+        width: 100%;
+        margin-top: 25px;
+    }
+}
+
+@@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        padding: 15px;
+    }
+
+    .row {
+        padding: 15px;
+    }
+
+    .seat-item {
+        width: 35px;
+        height: 30px;
+        font-size: 0.7rem;
+    }
+
+    .seat-row {
+        gap: 6px;
+    }
+
+    .row-label {
+        min-width: 25px;
+        font-size: 0.9rem;
+        padding: 6px 4px;
+    }
+
+    .seat-grid-container {
+        padding: 20px;
+    }
+
+    .legend-item {
+        font-size: 0.85rem;
+        gap: 8px;
+    }
+
+    .legend-color {
+        width: 20px;
+        height: 20px;
+    }
+}
+</style>
+
 <h2 class="mb-4">Chi tiết phòng chiếu</h2>
 
 <div class="row mb-2">
@@ -29,22 +703,82 @@
 </div>
 
 <div class="row mb-2">
-    <dt class="col-sm-3">Danh sách ghế</dt>
+    <dt class="col-sm-3">Sơ đồ ghế</dt>
     <dd class="col-sm-9">
-        <div class="d-flex flex-wrap">
-            @if (Model.Seats != null && Model.Seats.Any())
-            {
-                foreach (var seat in Model.Seats.Distinct()) // tránh trùng lặp như "A1" nhiều lần
-                {
-                    <span class="badge bg-primary m-1 px-3 py-2">@seat</span>
-                }
-            }
-            else
-            {
-                <span class="text-muted">Không có ghế nào.</span>
-            }
-        </div>
+        @if (Model.Seats != null && Model.Seats.Any())
+        {
+            <div class="seat-grid-container">
+                <!-- Cinema Screen -->
+                <div class="cinema-screen">
+                    🎬 MÀN HÌNH 🎬
+                </div>
+
+                <!-- Seat Grid -->
+                <div class="seat-grid">
+                    @{
+                        // Group seats by row (assuming seat format like "A1", "A2", "B1", etc.)
+                        var seatsByRow = Model.Seats.Distinct()
+                            .GroupBy(seat => seat.Substring(0, 1))
+                            .OrderBy(g => g.Key)
+                            .ToList();
+                    }
+
+                    @foreach (var rowGroup in seatsByRow)
+                    {
+                        <div class="seat-row">
+                            <div class="row-label">@rowGroup.Key</div>
+                            @foreach (var seat in rowGroup.OrderBy(s => s))
+                            {
+                                <div class="seat-item available" title="Ghế @seat">
+                                    @seat.Substring(1)
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <!-- Seat Legend -->
+                <div class="seat-legend">
+                    <div class="legend-item">
+                        <div class="legend-color legend-available"></div>
+                        <span>Ghế trống</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-occupied"></div>
+                        <span>Ghế đã đặt</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-selected"></div>
+                        <span>Ghế đã chọn</span>
+                    </div>
+                </div>
+                <a href="/Booking/AdminRoom/Index" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Trở về
+                </a>
+            </div>
+        }
+        else
+        {
+            <span class="text-muted">Không có ghế nào.</span>
+        }
     </dd>
 </div>
 
-<a asp-action="RoomList" class="btn btn-secondary mt-3">Quay lại danh sách</a>
+<script>
+    // Add interactivity to seats
+    document.addEventListener('DOMContentLoaded', function() {
+        const seats = document.querySelectorAll('.seat-item');
+        
+        seats.forEach(seat => {
+            seat.addEventListener('click', function() {
+                if (this.classList.contains('available')) {
+                    this.classList.remove('available');
+                    this.classList.add('selected');
+                } else if (this.classList.contains('selected')) {
+                    this.classList.remove('selected');
+                    this.classList.add('available');
+                }
+            });
+        });
+    });
+</script>
