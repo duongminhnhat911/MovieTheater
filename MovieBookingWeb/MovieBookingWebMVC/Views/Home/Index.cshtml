@@ -68,18 +68,18 @@
     .search-input {
         background: rgba(30, 41, 59, 0.8);
         border: 1px solid rgba(220, 38, 38, 0.3);
-border-radius: 25px;
+        border-radius: 25px;
         padding: 10px 20px 10px 45px;
         color: var(--text-primary);
         width: 250px;
         transition: all 0.3s ease;
     }
 
-    .search-input:focus {
-        outline: none;
-        border-color: var(--primary-red);
-        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-    }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
 
     .search-icon {
         position: absolute;
@@ -109,9 +109,9 @@ border-radius: 25px;
         transition: transform 0.3s ease;
     }
 
-    .user-avatar:hover {
-        transform: scale(1.1);
-    }
+        .user-avatar:hover {
+            transform: scale(1.1);
+        }
 
     /* Hero Carousel Section */
     .hero-carousel {
@@ -140,20 +140,20 @@ border-radius: 25px;
         transition: opacity 1s ease-in-out;
     }
 
-    .carousel-slide.active {
-        opacity: 1;
-    }
+        .carousel-slide.active {
+            opacity: 1;
+        }
 
-    .carousel-slide::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(45deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.6));
-        backdrop-filter: blur(2px);
-    }
+        .carousel-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.6));
+            backdrop-filter: blur(2px);
+        }
 
     .hero-content {
         position: relative;
@@ -169,6 +169,7 @@ border-radius: 25px;
             opacity: 0;
             transform: translateY(50px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -218,20 +219,20 @@ border-radius: 25px;
         overflow: hidden;
     }
 
-    .btn-hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: left 0.5s ease;
-    }
+        .btn-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
 
-    .btn-hero:hover::before {
-        left: 100%;
-    }
+        .btn-hero:hover::before {
+            left: 100%;
+        }
 
     .btn-trailer {
         background: var(--gradient-primary);
@@ -239,10 +240,10 @@ border-radius: 25px;
         box-shadow: var(--shadow-glow);
     }
 
-    .btn-trailer:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 25px 50px rgba(220, 38, 38, 0.4);
-    }
+        .btn-trailer:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 50px rgba(220, 38, 38, 0.4);
+        }
 
     .btn-book {
         background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
@@ -250,10 +251,10 @@ border-radius: 25px;
         box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
     }
 
-    .btn-book:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(59, 130, 246, 0.4);
-    }
+        .btn-book:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.4);
+        }
 
     .hero-rating {
         display: flex;
@@ -294,10 +295,10 @@ border-radius: 25px;
         z-index: 10;
     }
 
-    .carousel-nav:hover {
-        background: rgba(220, 38, 38, 0.4);
-        transform: translateY(-50%) scale(1.1);
-    }
+        .carousel-nav:hover {
+            background: rgba(220, 38, 38, 0.4);
+            transform: translateY(-50%) scale(1.1);
+        }
 
     .carousel-prev {
         left: 30px;
@@ -325,10 +326,10 @@ border-radius: 25px;
         transition: all 0.3s ease;
     }
 
-    .carousel-dot.active {
-        background: var(--primary-red);
-        transform: scale(1.2);
-    }
+        .carousel-dot.active {
+            background: var(--primary-red);
+            transform: scale(1.2);
+        }
 
     /* Stats Section */
     .stats-section {
@@ -422,13 +423,13 @@ border-radius: 25px;
         font-weight: 500;
     }
 
-    .filter-btn:hover,
-    .filter-btn.active {
-        background: var(--gradient-primary);
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
-    }
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
+        }
 
     .movie-grid {
         display: grid;
@@ -438,7 +439,6 @@ border-radius: 25px;
     }
 
     .movie-card {
-        width: calc(25% - 15px);
         background: #353638;
         border-radius: 0.4rem;
         overflow: hidden;
@@ -448,28 +448,28 @@ border-radius: 25px;
         vertical-align: top;
     }
 
-    .movie-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(45deg, rgba(220, 38, 38, 0.1), rgba(245, 158, 11, 0.1));
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        pointer-events: none;
-    }
+        .movie-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(220, 38, 38, 0.1), rgba(245, 158, 11, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
 
-    .movie-card:hover::before {
-        opacity: 1;
-    }
+        .movie-card:hover::before {
+            opacity: 1;
+        }
 
-    .movie-card:hover {
-        transform: translateY(-10px);
-        box-shadow: var(--shadow-glow);
-        border-color: var(--primary-red);
-    }
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-glow);
+            border-color: var(--primary-red);
+        }
 
     .movie-poster {
         position: relative;
@@ -610,10 +610,10 @@ border-radius: 25px;
         box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
     }
 
-    .btn-watch:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-    }
+        .btn-watch:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
 
     .btn-booking {
         background: var(--gradient-primary);
@@ -621,10 +621,10 @@ border-radius: 25px;
         box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
     }
 
-    .btn-booking:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
-    }
+        .btn-booking:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+        }
 
     /* Coming Soon Section */
     .coming-soon-section {
@@ -633,12 +633,12 @@ border-radius: 25px;
         border-bottom: 1px solid rgba(220, 38, 38, 0.2);
     }
 
-    .coming-soon-section .section-title {
-        background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
+        .coming-soon-section .section-title {
+            background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
     /* Newsletter Section */
     .newsletter-section {
@@ -678,9 +678,9 @@ border-radius: 25px;
         backdrop-filter: blur(10px);
     }
 
-    .newsletter-input::placeholder {
-        color: rgba(255, 255, 255, 0.7);
-    }
+        .newsletter-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
 
     .newsletter-btn {
         padding: 15px 30px;
@@ -693,10 +693,10 @@ border-radius: 25px;
         transition: all 0.3s ease;
     }
 
-    .newsletter-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
-    }
+        .newsletter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+        }
 
     /* Modal */
     .modal {
@@ -714,23 +714,23 @@ border-radius: 25px;
         overflow-y: auto;
     }
 
-    .modal.show {
-        display: flex;
-    }
+        .modal.show {
+            display: flex;
+        }
 
-.modal-content {
-    background: var(--dark-card);
-    border: 1px solid rgba(220, 38, 38, 0.3);
-    border-radius: 20px;
-    padding: 0;
-    max-width: 900px;
-    width: 90%;
-    max-height: 90vh;      
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-}
+    .modal-content {
+        background: var(--dark-card);
+        border: 1px solid rgba(220, 38, 38, 0.3);
+        border-radius: 20px;
+        padding: 0;
+        max-width: 900px;
+        width: 90%;
+        max-height: 90vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
 
     .modal-header {
         display: flex;
@@ -762,11 +762,11 @@ border-radius: 25px;
         height: 500px;
     }
 
-    .modal-body iframe {
-        width: 100%;
-        height: 500px;
-        border: none;
-    }
+        .modal-body iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
     /* Loading Animation */
     .loading {
         opacity: 0;
@@ -796,8 +796,12 @@ border-radius: 25px;
                         <a href="@film.TrailerLink" class="btn-hero btn-trailer" onclick="openTrailer(event, '@film.TrailerLink')">
                             <i class="fas fa-play"></i> Xem trailer
                         </a>
-                        <a href="@film.BookingLink" class="btn-hero btn-book">
-                            <i class="fas fa-ticket-alt"></i> Đặt vé ngay
+                        <a asp-area="Booking"
+                           asp-controller="Booking"
+                           asp-action="Showtimes"
+                           asp-route-movieId="@film.Id"
+                           class="btn-hero btn-book">
+                            <i class="fas fa-ticket-alt"></i> Đặt vé
                         </a>
                     </div>
                     <div class="hero-rating">
@@ -823,7 +827,7 @@ border-radius: 25px;
         <div class="carousel-nav carousel-next" onclick="changeSlide(1)">
             <i class="fas fa-chevron-right"></i>
         </div>
-        
+
         <div class="carousel-dots">
             @for (int i = 0; i < Model.Carousel.Count; i++)
             {
@@ -860,7 +864,7 @@ border-radius: 25px;
 </section>
 
 <!-- Now Showing Section -->
-<section class="movie-section">
+<section class="movie-section" style="background-color: #0f172a">
     <div class="container">
         <div class="section-header">
             <h2 class="section-title">PHIM ĐANG CHIẾU</h2>
@@ -877,7 +881,7 @@ border-radius: 25px;
                                 <i class="fas fa-play"></i>
                             </div>
                         </div>
-                        
+
                         @if (film.Format != null && film.Format.Any())
                         {
                             <div class="movie-formats">
@@ -887,7 +891,7 @@ border-radius: 25px;
                                 }
                             </div>
                         }
-                        
+
                         <div class="movie-rating">
                             <i class="fas fa-star"></i>
                             <span>8.5</span>
@@ -896,7 +900,7 @@ border-radius: 25px;
                     <div class="movie-info">
                         <h3 class="movie-title">@film.Title</h3>
                         <p class="movie-tagline">@film.Tagline</p>
-                        
+
                         <div class="movie-details">
                             <div class="movie-detail">
                                 <i class="fas fa-clock me-2"></i>
@@ -911,12 +915,16 @@ border-radius: 25px;
                                 <span>@film.RatingCode</span>
                             </div>
                         </div>
-                        
+
                         <div class="movie-actions">
                             <a href="@film.TrailerLink" class="btn-movie btn-watch" onclick="openTrailer(event, '@film.TrailerLink')">
                                 <i class="fas fa-play"></i> Trailer
                             </a>
-                            <a href="@film.BookingLink" class="btn-movie btn-booking">
+                            <a asp-area="Booking"
+                               asp-controller="Booking"
+                               asp-action="Showtimes"
+                               asp-route-movieId="@film.Id"
+                               class="btn-hero btn-book">
                                 <i class="fas fa-ticket-alt"></i> Đặt vé
                             </a>
                         </div>
@@ -945,7 +953,7 @@ border-radius: 25px;
                                 <i class="fas fa-play"></i>
                             </div>
                         </div>
-                        
+
                         @if (film.Format != null && film.Format.Any())
                         {
                             <div class="movie-formats">
@@ -954,18 +962,18 @@ border-radius: 25px;
                                     <span class="format-badge">@fmt</span>
                                 }
                             </div>
-}
-                        
+                        }
+
                         <div class="movie-rating">
                             <i class="fas fa-calendar"></i>
                             <span>15/12</span>
                         </div>
                     </div>
-                    
+
                     <div class="movie-info">
                         <h3 class="movie-title">@film.Title</h3>
                         <p class="movie-tagline">@film.Tagline</p>
-                        
+
                         <div class="movie-details">
                             <div class="movie-detail">
                                 <i class="fas fa-clock me-2"></i>
@@ -980,7 +988,7 @@ border-radius: 25px;
                                 <span>T18</span>
                             </div>
                         </div>
-                        
+
                         <div class="movie-actions">
                             <a href="@film.TrailerLink" class="btn-movie btn-watch" onclick="openTrailer(event, '@film.TrailerLink')">
                                 <i class="fas fa-play"></i> Trailer
@@ -1038,7 +1046,7 @@ border-radius: 25px;
         slides.forEach((slide, i) => {
             slide.classList.toggle('active', i === index);
         });
-        
+
         dots.forEach((dot, i) => {
             dot.classList.toggle('active', i === index);
         });
@@ -1140,7 +1148,7 @@ border-radius: 25px;
     window.addEventListener('scroll', function() {
         const scrolled = window.pageYOffset;
         const heroSection = document.querySelector('.hero-carousel');
-        
+
         if (heroSection) {
             const rate = scrolled * -0.3;
             heroSection.style.transform = `translateY(${rate}px)`;
@@ -1165,7 +1173,7 @@ border-radius: 25px;
             const suffix = counter.textContent.replace(/[0-9]/g, '');
             let current = 0;
             const increment = target / 100;
-            
+
             const updateCounter = () => {
                 if (current < target) {
                     current += increment;
@@ -1175,7 +1183,7 @@ border-radius: 25px;
                     counter.textContent = target + suffix;
                 }
             };
-            
+
             updateCounter();
         });
     }

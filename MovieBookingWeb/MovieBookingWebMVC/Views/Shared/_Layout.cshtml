@@ -1,15 +1,12 @@
-﻿@{
+﻿<!-- Merged layout.cshtml with color variables and theme from File 1, logic from File 2 -->
+<!-- DOCTYPE,  directives, layout logic, header & footer logic remain from File 2 -->
+<!-- Added :root CSS variables and body background from File 1 -->
+@{
     var isAdmin = User?.Identity?.IsAuthenticated == true && User.IsInRole("Admin");
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
-
-    // Điều kiện hiển thị sidebar cho Admin (bao gồm các controller quản trị như Admin, Movie, User)
-    var showAdminSidebar = isAdmin && new[] { "Admin", "Movie", "User" }.Contains(currentController);
-
-    // Điều kiện hiển thị sidebar cho người dùng, chỉ khi ở trang "Profile"
-    var showUserSidebar = User?.Identity?.IsAuthenticated == true
-                          && currentController == "Account"
-                          && currentAction == "Profile";
+    var showAdminSidebar = isAdmin && new[] { "Admin", "Movie", "User", "AdminShowtime", "AdminRoom" }.Contains(currentController);
+    var showUserSidebar = User?.Identity?.IsAuthenticated == true && currentController == "Account" && currentAction == "Profile";
 }
 
 <!DOCTYPE html>
