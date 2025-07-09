@@ -1,6 +1,7 @@
 ﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModel.BookingViewModel
 @{
     ViewData["Title"] = "Đặt vé - " + Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -9,7 +10,6 @@
     /* Modern Movie Booking Page Styles */
 
     body {
-        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
         min-height: 100vh;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         font-feature-settings: 'cv05', 'cv11';
@@ -31,7 +31,7 @@
 
     /* Header Section */
     .movie-header {
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        background: linear-gradient(to bottom, black 0%, #222 50%, #444 100%);
         color: white;
         padding: 30px 40px;
         text-align: center;
@@ -59,6 +59,8 @@
         grid-template-columns: 400px 1fr;
         gap: 40px;
         padding: 40px;
+        background: #CCFFE4;
+        background-image: radial-gradient(circle at 20% 20%, rgba(159, 203, 192, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(245, 245, 245, 0.2) 0%, transparent 50%);
     }
 
     /* Poster Section */
@@ -151,7 +153,6 @@
         .info-card .label {
             font-size: 0.9rem;
             color: #666;
-            margin-bottom: 5px;
             text-transform: uppercase;
             font-weight: 600;
             letter-spacing: 0.05em;
@@ -227,12 +228,13 @@
         line-height: 1.8;
         text-align: justify;
         background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
-        padding: 10 15px;
         border-radius: 12px;
         margin-bottom: 15px;
         border-left: 4px solid #667eea;
         font-weight: 400;
         letter-spacing: -0.005em;
+        margin-left: 10px;
+        padding: 15px;
     }
 
     /* Responsive Design */
@@ -325,7 +327,7 @@
     <div class="movie-container">
         <!-- Header -->
         <div class="movie-header">
-            <h1>@Model.Title</h1>
+            <h1>Thông tin phim</h1>
             <div class="subtitle">Thông tin chi tiết về bộ phim</div>
         </div>
 
@@ -377,7 +379,7 @@
 
                 <!-- Movie Details -->
                 <div class="detail-section">
-                    <h3><i class="fas fa-info-circle"></i>Thông tin sản xuất</h3>
+                    <h3><i class="fas fa-info-circle me-2"></i>Thông tin sản xuất</h3>
                     <ul class="detail-list">
                         <li>
                             <strong>Nhà sản xuất:</strong>
@@ -396,7 +398,7 @@
 
                 <!-- Movie Description -->
                 <div class="detail-section">
-                    <h3><i class="fas fa-book-open"></i>Nội dung phim</h3>
+                    <h3><i class="fas fa-book-open me-2"></i>Nội dung phim</h3>
                     <div class="description-text">
                         @Model.Description
                     </div>
