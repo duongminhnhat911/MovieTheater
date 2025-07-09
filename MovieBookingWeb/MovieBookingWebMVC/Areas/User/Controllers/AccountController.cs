@@ -49,7 +49,8 @@ namespace MovieBookingWebMVC.Areas.User.Controllers
             var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Role, user.Role)
+            new Claim(ClaimTypes.Role, user.Role),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // 👈 thêm dòng này
         };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -59,9 +60,9 @@ namespace MovieBookingWebMVC.Areas.User.Controllers
 
             return user.Role switch
             {
-                "Admin" => RedirectToAction("ViewMovie", "Movie", new { area = "Movie" }),  // Chuyển hướng vào Area Movie
+                "Admin" => RedirectToAction("ViewMovie", "Movie", new { area = "Movie" }),
                 "Employee" => RedirectToAction("Dashboard", "Employee"),
-                _ => RedirectToAction("Profile", "Account")
+                _ => RedirectToAction("Index", "Home", new { area = "" })
             };
         }
 
@@ -136,7 +137,7 @@ namespace MovieBookingWebMVC.Areas.User.Controllers
 
         [AllowAnonymous]
         public IActionResult AccessDenied() => View();
-        
+
         [Authorize]
         [HttpGet]
         public IActionResult ChangePassword()

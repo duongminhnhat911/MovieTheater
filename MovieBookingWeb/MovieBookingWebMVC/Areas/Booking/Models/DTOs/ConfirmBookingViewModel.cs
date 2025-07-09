@@ -7,6 +7,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Models.ViewModels
     {
         public int OrderId { get; set; }
         public int UserId { get; set; }
+        public string username { get; set; }
         public DateOnly BookingDate { get; set; }
         public int TotalPrice { get; set; }
         public bool Status { get; set; }

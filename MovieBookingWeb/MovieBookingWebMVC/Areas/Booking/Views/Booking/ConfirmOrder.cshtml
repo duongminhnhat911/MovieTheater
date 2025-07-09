@@ -70,15 +70,15 @@
             position: relative;
         }
 
-        .booking-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--teal-primary);
-        }
+            .booking-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: var(--teal-primary);
+            }
 
         .movie-section {
             padding: 2.5rem;
@@ -96,9 +96,9 @@
             border: 2px solid var(--teal-primary);
         }
 
-        .movie-poster:hover {
-            transform: scale(1.02);
-        }
+            .movie-poster:hover {
+                transform: scale(1.02);
+            }
 
         .movie-info {
             padding-left: 2rem;
@@ -133,47 +133,47 @@
             border: 1px solid var(--teal-primary);
         }
 
-        .details-table th {
-            background: var(--teal-primary);
-            color: var(--primary-black);
-            font-weight: 600;
-            padding: 1.2rem 1.5rem;
-            border: none;
-            font-size: 1rem;
-            position: relative;
-        }
+            .details-table th {
+                background: var(--teal-primary);
+                color: var(--primary-black);
+                font-weight: 600;
+                padding: 1.2rem 1.5rem;
+                border: none;
+                font-size: 1rem;
+                position: relative;
+            }
 
-        .details-table th::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--primary-black);
-        }
+                .details-table th::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    bottom: 0;
+                    width: 4px;
+                    background: var(--primary-black);
+                }
 
-        .details-table td {
-            padding: 1.2rem 1.5rem;
-            border: none;
-            border-bottom: 1px solid var(--gray-light);
-            font-size: 1rem;
-            color: var(--primary-black);
-            position: relative;
-        }
+            .details-table td {
+                padding: 1.2rem 1.5rem;
+                border: none;
+                border-bottom: 1px solid var(--gray-light);
+                font-size: 1rem;
+                color: var(--primary-black);
+                position: relative;
+            }
 
-        .details-table tr:last-child td {
-            border-bottom: none;
-        }
+            .details-table tr:last-child td {
+                border-bottom: none;
+            }
 
-        .details-table tr:nth-child(even) {
-            background: var(--gray-light);
-        }
+            .details-table tr:nth-child(even) {
+                background: var(--gray-light);
+            }
 
-        .details-table tr:hover {
-            background: var(--mint-light) !important;
-            transition: background-color 0.3s ease;
-        }
+            .details-table tr:hover {
+                background: var(--mint-light) !important;
+                transition: background-color 0.3s ease;
+            }
 
         .order-id {
             font-family: 'Courier New', monospace;
@@ -204,11 +204,11 @@
             border: 1px solid var(--primary-black);
         }
 
-        .seat-badge:hover {
-            transform: translateY(-2px);
-            background: var(--primary-black);
-            color: var(--white);
-        }
+            .seat-badge:hover {
+                transform: translateY(-2px);
+                background: var(--primary-black);
+                color: var(--white);
+            }
 
         .total-price {
             font-size: 1.4rem;
@@ -267,12 +267,12 @@
             box-shadow: 0 4px 12px var(--shadow-color);
         }
 
-        .btn-back:hover {
-            background: var(--teal-primary);
-            color: var(--primary-black);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px var(--shadow-color);
-        }
+            .btn-back:hover {
+                background: var(--teal-primary);
+                color: var(--primary-black);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px var(--shadow-color);
+            }
 
         .btn-confirm {
             background: var(--teal-primary);
@@ -288,20 +288,20 @@
             overflow: hidden;
         }
 
-        .btn-confirm:disabled {
-            background: var(--gray-light);
-            border-color: var(--gray-light);
-            color: var(--primary-black);
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
+            .btn-confirm:disabled {
+                background: var(--gray-light);
+                border-color: var(--gray-light);
+                color: var(--primary-black);
+                cursor: not-allowed;
+                opacity: 0.6;
+            }
 
-        .btn-confirm:not(:disabled):hover {
-            background: var(--primary-black);
-            color: var(--white);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px var(--shadow-color);
-        }
+            .btn-confirm:not(:disabled):hover {
+                background: var(--primary-black);
+                color: var(--white);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px var(--shadow-color);
+            }
 
         .info-icon {
             color: var(--primary-black);
@@ -323,9 +323,17 @@
         }
 
         @@keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         .booking-summary {
@@ -352,16 +360,16 @@
             border-bottom: 1px solid var(--gray-light);
         }
 
-        .summary-item:last-child {
-            border-bottom: none;
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--primary-black);
-            background: var(--mint-light);
-            padding: 0.8rem 1rem;
-            border-radius: var(--border-radius);
-            margin: 0.5rem -0.5rem 0;
-        }
+            .summary-item:last-child {
+                border-bottom: none;
+                font-weight: 700;
+                font-size: 1.1rem;
+                color: var(--primary-black);
+                background: var(--mint-light);
+                padding: 0.8rem 1rem;
+                border-radius: var(--border-radius);
+                margin: 0.5rem -0.5rem 0;
+            }
 
         .text-success {
             color: var(--teal-primary) !important;
@@ -478,10 +486,15 @@
                     <tr>
                         <th>
                             <i class="fas fa-user info-icon"></i>
-                            Người đặt (User ID)
+                            Người đặt
                         </th>
-                        <td>@Model.UserId</td>
+                        <td>
+                            <span class="order-id">
+                                @User.Identity.Name (@Model.UserId)
+                            </span>
+                        </td>
                     </tr>
+
                     <tr>
                         <th>
                             <i class="fas fa-door-open info-icon"></i>

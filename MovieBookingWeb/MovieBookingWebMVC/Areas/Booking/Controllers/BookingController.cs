@@ -2,9 +2,11 @@
 using MovieBookingWebMVC.Areas.Booking.Services;
 using MovieBookingWebMVC.Areas.Movie.Services;
 using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
+using System.Net.Http;
 using MovieBookingWebMVC.Areas.Booking.Models.ViewModels;
 using Newtonsoft.Json;
-using MovieBookingWebMVC.Areas.Booking.Models.ViewModel;
+using System.Text;
+using System.Security.Claims;
 
 namespace MovieBookingWebMVC.Areas.Booking.Controllers
 {
@@ -54,7 +56,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
 
             var groupedByMovie = selectedShowtimes.GroupBy(s => s.MovieId);
             var result = new List<MovieWithShowtimeDTO>();
-             
+
             foreach (var group in groupedByMovie)
             {
                 var movieId = group.Key;
@@ -259,7 +261,19 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
                 return RedirectToAction("SelectSeat", new { scheduleId = showtimeId });
             }
 
-            var userId = 2; // Hardcoded (nên thay bằng lấy từ User.Identity)
+            if (!User.Identity.IsAuthenticated)
+            {
+                TempData["ErrorMessage"] = "Vui lòng đăng nhập trước khi đặt vé.";
+                return RedirectToAction("Login", "Account", new { area = "User" });
+            }
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            {
+                TempData["ErrorMessage"] = "Không thể xác định người dùng.";
+                return RedirectToAction("Login", "Account", new { area = "User" });
+            }// Hardcoded (nên thay bằng lấy từ User.Identity)
+            var username = User.FindFirst(ClaimTypes.Name)?.Value;
 
             var request = new CreatePaymentRequestDto
             {
@@ -379,7 +393,14 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
                 return RedirectToAction("SelectSeat", new { scheduleId = showtimeId });
             }
 
-            var userId = 2; // Giả lập user
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            {
+                TempData["ErrorMessage"] = "Không thể xác định người dùng.";
+                return RedirectToAction("Login", "Account", new { area = "User" });
+            }
+            var username = User.FindFirst(ClaimTypes.Name)?.Value;
+
 
             var request = new CreatePaymentRequestDto
             {
@@ -411,7 +432,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
         public async Task<IActionResult> Booked(int orderId)
         {
             _logger.LogInformation("Booked page accessed for OrderId: {OrderId}", orderId);
-            
+
             var viewModel = await _bookingApiService.MarkOrderAsBookedAsync(orderId);
             if (viewModel == null)
             {
@@ -420,39 +441,6 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             }
 
             return View("Booked", viewModel);
-        }
-
-        public async Task<IActionResult> Index(int id)
-        {
-            try
-            {
-                var film = await _movieApiService.GetMovie(id);
-                if (film == null) return NotFound();
-
-                var viewModel = new BookingViewModel
-                {
-                    Title = film.Title,
-                    Image = film.Image,
-                    Genres = film.Genres,
-                    Duration = film.Duration,
-                    Rating = film.Rating,
-                    Subtitle = film.Subtitle,
-                    Director = film.Director,
-                    Format = film.Format,
-                    ReleaseDate = film.ReleaseDate,
-                    Description = film.Description,
-                    ProductionCompany = film.ProductionCompany
-
-                    
-                };
-                return View(viewModel);
-            }
-            catch (HttpRequestException ex)
-            {
-                // Log the exception
-                TempData["Error"] = "Không thể tải thông tin chi tiết phim. Vui lòng thử lại sau.";
-                return RedirectToAction("Index", "Home");
-            }
         }
     }
 }
