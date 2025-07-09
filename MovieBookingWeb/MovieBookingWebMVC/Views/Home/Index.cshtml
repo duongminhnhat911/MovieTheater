@@ -95,6 +95,16 @@
         gap: 1rem;
     }
 
+    .carousel-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        pointer-events: none; /* Ngăn click vào iframe ảnh hưởng */
+    }
+
     .user-avatar {
         width: 40px;
         height: 40px;
@@ -145,23 +155,21 @@
         }
 
         .carousel-slide::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.6));
-            backdrop-filter: blur(2px);
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: none;
         }
 
     .hero-content {
-        position: relative;
+        position: absolute;
+        bottom: 50px;
+        left: 50px;
         z-index: 2;
-        text-align: center;
-        max-width: 900px;
-        padding: 0 20px;
+        text-align: left;
+        max-width: 600px;
         animation: fadeInUp 1s ease-out;
+        padding: 20px;
+        background: transparent; /* <--- làm trong suốt */
+        border-radius: 12px;
     }
 
     @@keyframes fadeInUp {
@@ -432,20 +440,19 @@
         }
 
     .movie-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: 30px;
-        margin-top: 40px;
     }
 
     .movie-card {
+        display: flex;
+        flex-direction: column;
+        width: 23%;
         background: #353638;
         border-radius: 0.4rem;
         overflow: hidden;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s;
-        display: inline-block;
-        vertical-align: top;
     }
 
         .movie-card::before {
@@ -552,7 +559,14 @@
     }
 
     .movie-info {
-        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; /* Fills remaining space */
+        padding: 16px;
+    }
+
+    .movie-content-top {
+        flex-grow: 1;
     }
 
     .movie-title {
@@ -560,6 +574,17 @@
         font-weight: 700;
         margin-bottom: 10px;
         color: var(--text-primary);
+    }
+
+    .movie-title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: white;
+        margin: 0 0 8px 0;
+        word-wrap: break-word; /* Cho phép xuống hàng */
+        overflow-wrap: break-word;
+        white-space: normal; /* Cho phép nhiều dòng */
+        line-height: 1.4;
     }
 
         .movie-title a {
@@ -575,7 +600,7 @@
 
     .movie-details {
         gap: 15px;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         font-size: 0.9rem;
         color: var(--text-secondary);
     }
@@ -587,6 +612,7 @@
     }
 
     .movie-actions {
+        margin-top: auto;
         display: flex;
         gap: 12px;
         flex-wrap: wrap;
@@ -793,7 +819,13 @@
         @for (int i = 0; i < Model.Carousel!.Count; i++)
         {
             var film = Model.Carousel[i];
-            <div class="carousel-slide @(i == 0 ? "active" : "")" style="background-image: url('@film.CarouselImage')">
+            <div class="carousel-slide @(i == 0 ? "active" : "")">
+                <iframe class="carousel-video"
+                        src="@GetEmbedUrl(film.TrailerLink)"
+                        frameborder="0"
+                        allow="autoplay; fullscreen"
+                        allowfullscreen>
+                </iframe>
                 <div class="hero-content">
                     
                     <h1 class="movie-title">
@@ -910,11 +942,12 @@
                     </a>
 
                     <div class="movie-info">
+                        <div class="movie-content-top">
                         <h3 class="movie-title">
                             <a href="/Booking/Booking/Index/@film.Id">@film.Title</a>
                         </h3>
                         <p class="movie-tagline">@film.Tagline</p>
-
+                        </div>
                         <div class="movie-details">
                             <div class="movie-detail">
                                 <i class="fas fa-clock me-2"></i>
@@ -931,14 +964,14 @@
                         </div>
 
                         <div class="movie-actions">
-                            <a href="@film.TrailerLink" class="btn-movie btn-watch" onclick="openTrailer(event, '@film.TrailerLink')">
+                            <a href="@film.TrailerLink" class="btn-movie btn-trailer" onclick="openTrailer(event, '@film.TrailerLink')">
                                 <i class="fas fa-play"></i> Trailer
                             </a>
                             <a asp-area="Booking"
                                asp-controller="Booking"
                                asp-action="Showtimes"
                                asp-route-movieId="@film.Id"
-                               class="btn-hero btn-book">
+                               class="btn-movie btn-book">
                                 <i class="fas fa-ticket-alt"></i> Đặt vé
                             </a>
                         </div>
@@ -985,7 +1018,9 @@
                     </div>
 
                     <div class="movie-info">
-                        <h3 class="movie-title">@film.Title</h3>
+                        <h3 class="movie-title">
+                            <a href="/Booking/Booking/Index/@film.Id">@film.Title</a>
+                        </h3>
                         <p class="movie-tagline">@film.Tagline</p>
 
                         <div class="movie-details">
@@ -1223,4 +1258,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+}
+@functions {
+    public string GetEmbedUrl(string trailerUrl)
+    {
+        if (string.IsNullOrEmpty(trailerUrl)) return "";
+        string videoId = trailerUrl.Contains("watch?v=")
+            ? trailerUrl.Split("watch?v=")[1].Split('&')[0]
+            : trailerUrl.Split('/').Last();
+
+        return $"https://www.youtube.com/embed/{videoId}?autoplay=1&mute=1&loop=1&playlist={videoId}&controls=0&showinfo=0&rel=0";
+    }
 }
