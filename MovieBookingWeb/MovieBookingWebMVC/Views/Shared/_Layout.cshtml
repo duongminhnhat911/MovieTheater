@@ -872,9 +872,9 @@
             forms.forEach(form => {
                 form.addEventListener('submit', function(e) {
                     const submitBtn = this.querySelector('button[type="submit"]');
-                    if (submitBtn) {
-                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang xử lý...';
-                        submitBtn.disabled = true;
+                    // if (submitBtn) {
+                    //     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang xử lý...';
+                    //     submitBtn.disabled = true;
 
                         // Re-enable after 3 seconds (adjust as needed)
                         setTimeout(() => {

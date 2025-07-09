@@ -2,10 +2,9 @@
 using MovieBookingWebMVC.Areas.Booking.Services;
 using MovieBookingWebMVC.Areas.Movie.Services;
 using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
-using System.Net.Http;
 using MovieBookingWebMVC.Areas.Booking.Models.ViewModels;
 using Newtonsoft.Json;
-using System.Text;
+using MovieBookingWebMVC.Areas.Booking.Models.ViewModel;
 
 namespace MovieBookingWebMVC.Areas.Booking.Controllers
 {
@@ -421,6 +420,39 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             }
 
             return View("Booked", viewModel);
+        }
+
+        public async Task<IActionResult> Index(int id)
+        {
+            try
+            {
+                var film = await _movieApiService.GetMovie(id);
+                if (film == null) return NotFound();
+
+                var viewModel = new BookingViewModel
+                {
+                    Title = film.Title,
+                    Image = film.Image,
+                    Genres = film.Genres,
+                    Duration = film.Duration,
+                    Rating = film.Rating,
+                    Subtitle = film.Subtitle,
+                    Director = film.Director,
+                    Format = film.Format,
+                    ReleaseDate = film.ReleaseDate,
+                    Description = film.Description,
+                    ProductionCompany = film.ProductionCompany
+
+                    
+                };
+                return View(viewModel);
+            }
+            catch (HttpRequestException ex)
+            {
+                // Log the exception
+                TempData["Error"] = "Không thể tải thông tin chi tiết phim. Vui lòng thử lại sau.";
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }

@@ -1,0 +1,255 @@
+﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModel.BookingViewModel
+@{
+    ViewData["Title"] = "Đặt vé - " + Model.Title;
+}
+
+<style>
+    /* Movie Booking Page Styles - Exact Screenshot Layout */
+
+    .container-sm {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #ffffff;
+    }
+
+    .row {
+        margin: 0;
+        gap: 40px;
+    }
+
+    /* Movie poster section */
+    .web-movie-box {
+        background: transparent;
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: none;
+    }
+
+        .web-movie-box img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+    /* Format tags on poster */
+    .type-movie {
+        background: #ff6b35;
+        color: white;
+        padding: 4px 12px;
+        margin: 8px 4px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    /* Movie info section */
+    .movie-section {
+        background: transparent;
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+        height: auto;
+    }
+
+        /* Movie title */
+        .movie-section h1 {
+            color: #000;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            line-height: 1.2;
+        }
+
+    /* Movie info list - styled like screenshot */
+    .movie-info ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 40px 0;
+    }
+
+        .movie-info ul li {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            color: #333;
+            font-size: 16px;
+            border-bottom: none;
+            margin-bottom: 8px;
+        }
+
+            .movie-info ul li:last-child {
+                border-bottom: none;
+            }
+
+            .movie-info ul li i {
+                color: #333;
+                width: 24px;
+                margin-right: 12px;
+                font-size: 16px;
+            }
+
+    /* Movie description sections */
+    .movie-desc, .movie-content {
+        margin-bottom: 40px;
+    }
+
+        .movie-desc h3, .movie-content h3 {
+            color: #000;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .movie-desc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .movie-desc ul li {
+                color: #333;
+                font-size: 16px;
+                line-height: 1.8;
+                margin-bottom: 12px;
+                display: flex;
+                align-items: flex-start;
+            }
+
+                .movie-desc ul li strong {
+                    color: #000;
+                    font-weight: 600;
+                    display: inline-block;
+                    width: 120px;
+                    flex-shrink: 0;
+                }
+
+        .movie-content p {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.8;
+            margin: 0;
+            text-align: justify;
+        }
+
+    /* Responsive design */
+    @@media (max-width: 768px) {
+        .container-sm
+
+    {
+        padding: 15px;
+    }
+
+    .row {
+        gap: 20px;
+    }
+
+    .movie-section {
+        margin-top: 20px;
+    }
+
+        .movie-section h1 {
+            font-size: 2rem;
+        }
+
+    .movie-info ul li {
+        font-size: 15px;
+    }
+
+    .movie-desc ul li strong {
+        width: 100px;
+    }
+
+    }
+
+    @@media (max-width: 576px) {
+        .container-sm
+
+    {
+        padding: 10px;
+    }
+
+    .movie-section h1 {
+        font-size: 1.8rem;
+    }
+
+    .movie-info ul li {
+        font-size: 14px;
+    }
+
+    .movie-desc h3, .movie-content h3 {
+        font-size: 1.3rem;
+    }
+
+    .movie-desc ul li {
+        font-size: 14px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .movie-desc ul li strong {
+            width: 100%;
+            margin-bottom: 4px;
+        }
+
+    .movie-content p {
+        font-size: 14px;
+    }
+
+    }
+</style>
+
+<div class="container-sm">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="web-movie-box position-relative">
+                <img src="@Model.Image" class="img-fluid rounded" alt="@Model.Title" />
+                @if (Model.Format != null && Model.Format.Any())
+                {
+                    <div class="d-flex position-absolute top-0 start-0">
+                        @foreach (var fmt in Model.Format)
+                        {
+                            <div class="type-movie">
+                                <span class="txt">@fmt</span>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="movie-section">
+                <div class="movie-info">
+                    <h1 class="fw-bold">@Model.Title</h1>
+                    <ul>
+                        <li><i class="fas fa-film me-2"></i>@(Model.Genres != null ? string.Join(", ", Model.Genres) : "")</li>
+                        <li><i class="far fa-clock me-2"></i>@Model.Duration phút</li>
+                        <li style="text-transform: uppercase; font-weight: bold;">
+                            <i class="fas fa-certificate me-2"></i>@Model.Rating
+                        </li>
+                        <li><i class="fas fa-language me-2"></i>@Model.Subtitle</li>
+                    </ul>
+                </div>
+                <div class="movie-desc">
+                    <h3 class="fw-bold">Thông tin phim</h3>
+                    <ul>
+                        <li><strong>Nhà sản xuất:</strong> @Model.ProductionCompany</li>
+                        <li><strong>Đạo diễn:</strong> @Model.Director</li>
+                        <li><strong>Khởi chiếu:</strong> @Model.ReleaseDate?.ToString("dd/MM/yyyy")</li>
+                    </ul>
+                </div>
+                <div class="movie-content">
+                    <h3 class="fw-bold">Nội dung</h3>
+                    <p>@Model.Description</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/booking.js"></script>
+}

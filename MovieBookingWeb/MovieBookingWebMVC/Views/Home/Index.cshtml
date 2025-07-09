@@ -493,6 +493,7 @@
         transition: opacity 0.3s ease;
     }
 
+
     .movie-card:hover .movie-overlay {
         opacity: 1;
     }
@@ -502,7 +503,7 @@
         height: 80px;
         border-radius: 50%;
         background: var(--gradient-primary);
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         color: white;
@@ -560,6 +561,10 @@
         margin-bottom: 10px;
         color: var(--text-primary);
     }
+
+        .movie-title a {
+            text-decoration: none; /* Bỏ gạch chân */
+        }
 
     .movie-tagline {
         font-size: 0.95rem;
@@ -790,7 +795,10 @@
             var film = Model.Carousel[i];
             <div class="carousel-slide @(i == 0 ? "active" : "")" style="background-image: url('@film.CarouselImage')">
                 <div class="hero-content">
-                    <h1>@film.Title</h1>
+                    
+                    <h1 class="movie-title">
+                        <a href="/Booking/Booking/Index/@film.Id">@film.Title</a>
+                    </h1>
                     <p>@film.Tagline</p>
                     <div class="hero-buttons">
                         <a href="@film.TrailerLink" class="btn-hero btn-trailer" onclick="openTrailer(event, '@film.TrailerLink')">
@@ -875,30 +883,36 @@
             @foreach (var film in Model.NowShowing!)
             {
                 <div class="movie-card loading" data-category="action">
-                    <div class="movie-poster" style="background-image: url('@film.Image')">
-                        <div class="movie-overlay">
-                            <div class="play-btn" onclick="openTrailer(event, '@film.TrailerLink')">
-                                <i class="fas fa-play"></i>
+
+                    <a href="/Booking/Booking/Index/@film.Id" style="text-decoration: none;">
+                        <div class="movie-poster" style="background-image: url('@film.Image')">
+                            <div class="movie-overlay">
+                                <div class="play-btn">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                            </div>
+
+                            @if (film.Format != null && film.Format.Any())
+                            {
+                                <div class="movie-formats">
+                                    @foreach (var fmt in film.Format)
+                                    {
+                                        <span class="format-badge">@fmt</span>
+                                    }
+                                </div>
+                            }
+
+                            <div class="movie-rating">
+                                <i class="fas fa-star"></i>
+                                <span>8.5</span>
                             </div>
                         </div>
+                    </a>
 
-                        @if (film.Format != null && film.Format.Any())
-                        {
-                            <div class="movie-formats">
-                                @foreach (var fmt in film.Format)
-                                {
-                                    <span class="format-badge">@fmt</span>
-                                }
-                            </div>
-                        }
-
-                        <div class="movie-rating">
-                            <i class="fas fa-star"></i>
-                            <span>8.5</span>
-                        </div>
-                    </div>
                     <div class="movie-info">
-                        <h3 class="movie-title">@film.Title</h3>
+                        <h3 class="movie-title">
+                            <a href="/Booking/Booking/Index/@film.Id">@film.Title</a>
+                        </h3>
                         <p class="movie-tagline">@film.Tagline</p>
 
                         <div class="movie-details">
@@ -1190,7 +1204,7 @@
 
     // Trigger counter animation when stats section is visible
     const statsObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
+        entries.forEach((entry) => {movie-title
             if (entry.isIntersecting) {
                 animateCounters();
                 statsObserver.unobserve(entry.target);
