@@ -1,0 +1,416 @@
+﻿@model List<MovieBookingWebMVC.Areas.User.Models.DTOs.GetListUserDto>
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+    int currentPage = ViewBag.CurrentPage as int? ?? 1;
+    int totalPages = ViewBag.TotalPages as int? ?? 1;
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .admin-container {
+        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+        background-color: #CCFFE4;
+        border-radius: 12px;
+        padding: 2rem;
+        margin: 1rem auto;
+        max-width: 1200px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .admin-title {
+        color: #000000;
+        font-weight: bold;
+        font-size: 2.2rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .admin-table {
+        background-color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+        .admin-table thead {
+            background-color: #9FCBC0;
+        }
+
+            .admin-table thead th {
+                color: #000000;
+                font-weight: bold;
+                padding: 1rem 0.75rem;
+                text-align: center;
+                border: none;
+                font-size: 0.95rem;
+            }
+
+        .admin-table tbody td {
+            padding: 1rem 0.75rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #F5F5F5;
+            color: #000000;
+        }
+
+        .admin-table tbody tr:hover {
+            background-color: #F5F5F5;
+            transition: background-color 0.3s ease;
+        }
+
+        .admin-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    .status-active {
+        color: #28a745;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .status-locked {
+        color: #dc3545;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .btn-admin {
+        background-color: #9FCBC0;
+        border: none;
+        color: #000000;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin: 0 0.25rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .btn-admin:hover {
+            background-color: #8BC1B7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            color: #000000;
+        }
+
+        .btn-admin.btn-danger {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+            .btn-admin.btn-danger:hover {
+                background-color: #c82333;
+                color: #fff;
+            }
+
+        .btn-admin.btn-success {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+            .btn-admin.btn-success:hover {
+                background-color: #218838;
+                color: #fff;
+            }
+
+        .btn-admin.btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+            .btn-admin.btn-secondary:hover {
+                background-color: #5a6268;
+                color: #fff;
+            }
+
+    .custom-alert {
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        font-weight: 500;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border-left: 4px solid #28a745;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border-left: 4px solid #dc3545;
+    }
+
+    .alert-info {
+        background-color: #CCFFE4;
+        color: #000000;
+        border-left: 4px solid #9FCBC0;
+        font-weight: bold;
+    }
+
+    .pagination {
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+        .pagination .page-link {
+            background-color: #fff;
+            border: 1px solid #9FCBC0;
+            color: #000000;
+            padding: 0.75rem 1rem;
+            margin: 0 0.25rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+            .pagination .page-link:hover {
+                background-color: #9FCBC0;
+                border-color: #9FCBC0;
+                color: #000000;
+                transform: translateY(-1px);
+            }
+
+        .pagination .page-item.active .page-link {
+            background-color: #9FCBC0;
+            border-color: #9FCBC0;
+            color: #000000;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+    .user-id {
+        background-color: #9FCBC0;
+        color: #000000;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #000000;
+    }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #9FCBC0;
+            margin-bottom: 1rem;
+        }
+
+    @@media (max-width: 768px) {
+        .admin-container
+
+    {
+        margin: 0.5rem;
+        padding: 1rem;
+    }
+
+    .admin-title {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .admin-table {
+        font-size: 0.85rem;
+    }
+
+        .admin-table thead th,
+        .admin-table tbody td {
+            padding: 0.75rem 0.5rem;
+        }
+
+    .btn-admin {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        margin: 0.1rem;
+    }
+
+    }
+
+    @@media (max-width: 576px) {
+        .admin-table thead th:nth-child(3), .admin-table tbody td:nth-child(3), .admin-table thead th:nth-child(4), .admin-table tbody td:nth-child(4)
+
+    {
+        display: none;
+    }
+
+    .admin-title {
+        font-size: 1.5rem;
+    }
+
+    }
+</style>
+
+<div class="admin-container">
+    <h2 class="admin-title">
+        <i class="fas fa-users-cog"></i> Quản Lý Thành Viên
+    </h2>
+
+    @if (@TempData["Success"] != null)
+    {
+        <div id="alertSuccess" class="alert alert-success text-center custom-alert mt-2 mb-3"
+             style="width: 320px; margin: 0 auto; padding: 0.75rem 1rem;">
+            <i class="fa-solid fa-check-circle"></i> @TempData["Success"]
+        </div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div id="alertDanger" class="alert alert-danger text-center custom-alert mt-2 mb-3"
+             style="width: 320px; margin: 0 auto; padding: 0.75rem 1rem;">
+            <i class="fa-solid fa-exclamation-circle"></i> @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)))
+    </div>
+        }
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="fas fa-users-slash"></i>
+            <div class="alert alert-info" style="max-width: 400px; margin: 0 auto; padding: 1.5rem;">
+                <strong>Danh sách trống!</strong><br>
+                Hiện tại chưa có thành viên nào trong hệ thống.
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table admin-table">
+                <thead>
+                    <tr>
+                        <th style="width: 8%;">
+                            <i class="fas fa-hashtag"></i> ID
+                        </th>
+                        <th style="width: 20%;">
+                            <i class="fas fa-user"></i> Tên đăng nhập
+                        </th>
+                        <th style="width: 24%;">
+                            <i class="fas fa-id-card"></i> Họ và tên
+                        </th>
+                        <th style="width: 20%;">
+                            <i class="fas fa-envelope"></i> Email
+                        </th>
+                        <th style="width: 10%;">
+                            <i class="fas fa-user-tag"></i> Role
+                        </th>
+                        <th style="width: 12%;">
+                            <i class="fas fa-toggle-on"></i> Trạng thái
+                        </th>
+                        <th style="width: 16%;">
+                            <i class="fas fa-cogs"></i> Thao tác
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                <span class="user-id">@user.Id</span>
+                            </td>
+                            <td>
+                                <strong>@user.Username</strong>
+                            </td>
+                            <td>@user.FullName</td>
+                            <td>
+                                <small class="text-muted">@user.Email</small>
+                            </td>
+                            <td>
+                                <span class="badge" style="background-color: #9FCBC0; color: #000000;">
+                                    @user.Role
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                @if (user.IsLocked)
+                                {
+                                    <span class="status-locked">
+                                        <i class="fas fa-lock"></i> Đã khóa
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-active">
+                                        <i class="fas fa-check-circle"></i> Hoạt động
+                                    </span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group">
+                                    <form asp-controller="Admin" asp-action="EditAccount" asp-route-id="@user.Id" method="post" style="display:inline;" onsubmit="return confirm('Bạn có muốn chỉnh sửa thông tin người dùng này không?');">
+                                        <button type="submit" class="btn btn-admin btn-danger" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i> Sửa
+                                        </button>
+                                    </form>
+                                    <form asp-controller="Admin" asp-action="DeleteAccount" asp-route-id="@user.Id" method="post" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn @(user.IsLocked ? "mở khóa" : "khóa") tài khoản này không?');">
+                                        <button type="submit" class="btn btn-admin @(user.IsLocked ? "btn-success" : "btn-secondary")" title="@(user.IsLocked ? "Mở khóa tài khoản" : "Khóa tài khoản")">
+                                            <i class="fas @(user.IsLocked ? "fa-unlock" : "fa-lock")"></i>
+                                            @(user.IsLocked ? "Mở khóa" : "Khóa")
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (totalPages > 1)
+        {
+            <nav aria-label="Phân trang danh sách thành viên">
+                <ul class="pagination">
+                    @if (currentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="ViewAccounts" asp-route-pageNumber="@(currentPage - 1)" aria-label="Trang trước">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                    }
+
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")" aria-current="@(i == currentPage ? "page" : "")">
+                            <a class="page-link" asp-action="ViewAccounts" asp-route-pageNumber="@i">@i</a>
+                        </li>
+                    }
+
+                    @if (currentPage < totalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="ViewAccounts" asp-route-pageNumber="@(currentPage + 1)" aria-label="Trang sau">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    }
+</div>
+
+<script>
+    // Auto hide alerts after 5 seconds
+    setTimeout(function() {
+        const alerts = document.querySelectorAll('#alertSuccess, #alertDanger');
+        alerts.forEach(alert => {
+            if (alert) {
+                alert.style.transition = 'opacity 0.5s ease';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
+            }
+        });
+    }, 5000);
+</script>

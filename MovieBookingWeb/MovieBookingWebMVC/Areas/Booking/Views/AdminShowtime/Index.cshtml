@@ -1,0 +1,41 @@
+﻿@model IEnumerable<MovieBookingWebMVC.Areas.Booking.Models.ViewModel.ShowtimeViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Quản lý suất chiếu";
+}
+
+<h2 class="text-center fw-bold mb-4">Quản lý suất chiếu</h2>
+
+<div class="mb-3 text-end">
+    <a href="/Booking/AdminShowtime/Create" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Thêm suất chiếu
+    </a>
+</div>
+
+<table class="table table-bordered table-hover table-striped">
+    <thead class="table-dark text-center align-middle">
+        <tr>
+            <th style="width: 5%;">ID</th>
+            <th style="width: 10%;">Mã phim</th>
+            <th style="width: 20%;">Tên phim</th>
+            <th style="width: 15%;">Phòng chiếu</th>
+            <th style="width: 15%;">Ngày chiếu</th>
+            <th style="width: 15%;">Giờ bắt đầu</th>
+            <th style="width: 15%;">Giờ kết thúc</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="align-middle text-center">
+                <td class="fw-bold">@item.Id</td>
+                <td>@item.MovieId</td>
+                <td class="text-start">@item.MovieName</td>
+                <td>@item.Room</td>
+                <td>@item.ShowDate.ToString("dd/MM/yyyy")</td>
+                <td>@item.FromTime</td>
+                <td>@item.ToTime</td>
+            </tr>
+        }
+    </tbody>
+</table>

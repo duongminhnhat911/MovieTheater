@@ -1,0 +1,408 @@
+﻿@using MovieBookingWebMVC.Areas.Booking.Models.DTOs
+@model List<RoomDto>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Quản lý phòng chiếu ";
+}
+<style>
+
+
+    /* Header Styles */
+    h2 {
+        color: #000000;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        text-align: center;
+        font-size: 2.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        position: relative;
+    }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: #9FCBC0;
+            border-radius: 2px;
+        }
+
+    /* Test Link Styles */
+    .text-primary {
+        display: inline-block;
+        margin-bottom: 1rem;
+        padding: 0.5rem 1rem;
+        background: rgba(159, 203, 192, 0.2);
+        border-radius: 8px;
+        text-decoration: none;
+        color: #000000 !important;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .text-primary:hover {
+            background: #9FCBC0;
+            color: #000000 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(159, 203, 192, 0.3);
+        }
+
+    /* Button Styles */
+    .btn-success {
+        background: #9FCBC0 !important;
+        border: none !important;
+        color: #000000 !important;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(159, 203, 192, 0.3);
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-success:hover {
+            background: #8BB8AC !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(159, 203, 192, 0.4);
+            color: #000000 !important;
+        }
+
+        .btn-success:active {
+            transform: translateY(0);
+        }
+
+        .btn-success:focus {
+            box-shadow: 0 0 0 0.2rem rgba(159, 203, 192, 0.5);
+        }
+
+    /* Table Styles */
+    .table {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        border: none !important;
+        margin-bottom: 2rem;
+    }
+
+    .table-bordered {
+        border: none !important;
+    }
+
+    .table thead {
+        background: #9FCBC0;
+        color: #000000;
+    }
+
+    .table-light {
+        background: #9FCBC0 !important;
+        color: #000000 !important;
+    }
+
+    .table thead th {
+        border: none !important;
+        padding: 1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.9rem;
+        color: #000000;
+    }
+
+    .table tbody td {
+        border: none !important;
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid rgba(159, 203, 192, 0.2) !important;
+    }
+
+    .table tbody tr {
+        transition: all 0.3s ease;
+    }
+
+        .table tbody tr:hover {
+            background: rgba(204, 255, 228, 0.5) !important;
+            transform: translateX(5px);
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none !important;
+        }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background: rgba(245, 245, 245, 0.3);
+    }
+
+    .table-striped tbody tr:nth-of-type(even) {
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Action Button Styles */
+    .btn-info {
+        background: #9FCBC0 !important;
+        border: none !important;
+        color: #000000 !important;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(159, 203, 192, 0.3);
+        text-decoration: none;
+    }
+
+        .btn-info:hover {
+            background: #8BB8AC !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(159, 203, 192, 0.4);
+            color: #000000 !important;
+        }
+
+        .btn-info:focus {
+            box-shadow: 0 0 0 0.2rem rgba(159, 203, 192, 0.5);
+        }
+
+    .btn-warning {
+        background: #9FCBC0 !important;
+        border: none !important;
+        color: #000000 !important;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(159, 203, 192, 0.3);
+        text-decoration: none;
+    }
+
+        .btn-warning:hover {
+            background: #8BB8AC !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(159, 203, 192, 0.4);
+            color: #000000 !important;
+        }
+
+        .btn-warning:focus {
+            box-shadow: 0 0 0 0.2rem rgba(159, 203, 192, 0.5);
+        }
+
+    .btn-sm {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    /* Spacing */
+    .mb-3 {
+        margin-bottom: 1.5rem !important;
+    }
+
+    .me-1 {
+        margin-right: 0.5rem !important;
+    }
+
+    /* Alert Styles */
+    .alert-warning {
+        background: rgba(204, 255, 228, 0.8) !important;
+        border: 1px solid #9FCBC0 !important;
+        color: #000000 !important;
+        border-radius: 10px;
+        padding: 1.5rem;
+        text-align: center;
+        font-weight: 500;
+        box-shadow: 0 5px 15px rgba(159, 203, 192, 0.2);
+    }
+
+    /* Icons */
+    .fas {
+        margin-right: 0.5rem;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        body {
+            padding: 1rem;
+        }
+
+        .container, .container-fluid {
+            padding: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        .table {
+            font-size: 0.9rem;
+        }
+
+            .table thead th,
+            .table tbody td {
+                padding: 0.75rem 0.5rem;
+            }
+
+        .btn-sm {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.6rem;
+        }
+
+        .me-1 {
+            margin-right: 0.25rem !important;
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .table-responsive {
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+
+        .btn-success {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .btn-sm {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .table thead th,
+        .table tbody td {
+            padding: 0.5rem 0.3rem;
+            font-size: 0.8rem;
+        }
+    }
+
+    /* Animation for page load */
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .container, .container-fluid {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    /* Hover effects for table rows */
+    .table tbody tr {
+        cursor: pointer;
+    }
+
+    /* Custom scrollbar */
+    .table-responsive::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .table-responsive::-webkit-scrollbar-track {
+        background: #F5F5F5;
+        border-radius: 4px;
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: #9FCBC0;
+        border-radius: 4px;
+    }
+
+        .table-responsive::-webkit-scrollbar-thumb:hover {
+            background: #8BB8AC;
+        }
+
+    /* Loading animation for buttons */
+    .btn:active {
+        transform: scale(0.98);
+    }
+
+    /* Additional button states */
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    /* Focus states for accessibility */
+    .btn:focus,
+    .text-primary:focus {
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba(159, 203, 192, 0.5);
+    }
+
+    /* Table responsive wrapper */
+    .table-responsive {
+        border-radius: 12px;
+        overflow-x: auto;
+    }
+
+    /* Ensure buttons don't break on small screens */
+    td .btn {
+        white-space: nowrap;
+        min-width: auto;
+    }
+
+    /* Fix for Bootstrap overrides */
+    .table > :not(caption) > * > * {
+        padding: 1rem;
+        color: #000000;
+    }
+
+    .table > thead > tr > th {
+        background: #9FCBC0 !important;
+        color: #000000 !important;
+    }
+</style>
+<h2>@ViewData["Title"]</h2>
+
+<!-- 🔎 Link test trực tiếp -->
+<a href="/Booking/AdminRoom/CreateRoom" class="btn btn-success mb-3">
+    <i class="fas fa-plus-circle"></i> Thêm phòng mới
+</a>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>Tên phòng</th>
+                <th>Số ghế</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var room in Model)
+            {
+                <tr>
+                    <td>@room.Id</td>
+                    <td>@room.RoomName</td>
+                    <td>@room.RoomQuantity</td>
+                    <td>@room.Status</td>
+                    <td>
+                        <a href="/Booking/AdminRoom/DetailsRoom/@room.Id" class="btn btn-info btn-sm me-1">
+                            <i class="fas fa-eye"></i> Chi tiết
+                        </a>
+
+                        <a href="/Booking/AdminRoom/EditRoom/@room.Id" class="btn btn-warning btn-sm me-1">
+                            <i class="fas fa-edit"></i> Sửa
+                        </a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">Không có phòng chiếu nào được tìm thấy.</div>
+}
