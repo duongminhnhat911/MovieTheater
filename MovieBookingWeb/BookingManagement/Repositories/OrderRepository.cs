@@ -32,5 +32,16 @@ namespace BookingManagement.Repositories
             _db.OrderDetails.Add(detail);
             await _db.SaveChangesAsync();
         }
+
+        public async Task UpdatePromotionAsync(Promotion promo)
+        {
+            _db.Promotions.Update(promo);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task<Promotion?> GetPromotionByCodeAsync(string code)
+        {
+            return await _db.Promotions.FirstOrDefaultAsync(p => p.PromotionCode == code);
+        }
     }
 }

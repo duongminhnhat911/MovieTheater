@@ -55,13 +55,22 @@ namespace BookingManagement.Controllers
             if (!success) return NotFound();
             return Ok("Đơn hàng đã bị khóa.");
         }
+
         [HttpPost("payment")]
         public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentRequestDto request)
         {
-            var result = await _service.CreatePaymentAsync(request);
-            if (result == null)
-                return NotFound("Suất chiếu không tồn tại");
-            return Ok(result);
+            try
+            {
+                var result = await _service.CreatePaymentAsync(request);
+                if (result == null)
+                    return NotFound("Suất chiếu không tồn tại");
+
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
     }
 }

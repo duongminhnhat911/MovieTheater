@@ -11,5 +11,8 @@ namespace BookingManagement.Repositories
         Task SaveChangesAsync();
         Task CreateOrderAsync(Order order);
         Task AddOrderDetailAsync(OrderDetail detail);
+        Task UpdatePromotionAsync(Promotion promo);
+
+        Task<Promotion?> GetPromotionByCodeAsync(string code);
     }
 }

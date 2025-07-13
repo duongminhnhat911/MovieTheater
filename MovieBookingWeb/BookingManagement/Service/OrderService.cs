@@ -11,7 +11,7 @@ namespace BookingManagement.Service
         private readonly ISeatShowtimeRepository _seatShowtimeRepo;
         private readonly ISeatRepository _seatRepo;
 
-        public OrderService(IOrderRepository repo,IShowtimeRepository showtimeRepository, ISeatShowtimeRepository seatShowtimeRepo, ISeatRepository seatRepository)
+        public OrderService(IOrderRepository repo, IShowtimeRepository showtimeRepository, ISeatShowtimeRepository seatShowtimeRepo, ISeatRepository seatRepository)
         {
             _repo = repo;
             _showtimeRepository = showtimeRepository;
@@ -61,15 +61,43 @@ namespace BookingManagement.Service
             var total = request.SeatIds.Count * ticketPrice;
 
             var showtime = await _showtimeRepository.GetShowtimeByIdAsync(request.ShowtimeId);
-            if (showtime == null)
-                return null;
+            if (showtime == null) return null;
+
+            Promotion? promo = null;
+            int? promoId = null;
+
+            // Xử lý Promotion nếu có
+            if (!string.IsNullOrWhiteSpace(request.PromotionCode))
+            {
+                promo = await _repo.GetPromotionByCodeAsync(request.PromotionCode.Trim());
+                if (promo == null)
+                    throw new InvalidOperationException("Mã khuyến mãi không tồn tại.");
+
+                var now = DateTime.UtcNow;
+                if (!promo.IsActive || promo.Quantity <= 0 || now < promo.StartDate || now > promo.EndDate)
+                    throw new InvalidOperationException("Mã khuyến mãi không còn hiệu lực.");
+
+                // Áp dụng giảm giá
+                if (promo.DiscountAmount.HasValue)
+                    total -= promo.DiscountAmount.Value;
+                else if (promo.DiscountPercent.HasValue)
+                    total -= (total * promo.DiscountPercent.Value) / 100;
+
+                promoId = promo.Id;
+
+                // Giảm số lượng mã
+                promo.Quantity -= 1;
+            }
+
+            if (total < 0) total = 0;
 
             var order = new Order
             {
                 UserId = request.UserId,
                 BookingDate = DateOnly.FromDateTime(DateTime.Now),
                 TotalPrice = total,
-                Status = false
+                Status = false,
+                PromotionId = promoId
             };
 
             await _repo.CreateOrderAsync(order);

@@ -15,6 +15,7 @@ namespace BookingManagement
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<SeatShowtime> SeatShowtimes { get; set; }
+        public DbSet<Promotion> Promotions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -40,6 +41,11 @@ namespace BookingManagement
                 .HasOne(ss => ss.Showtime)
                 .WithMany()
                 .HasForeignKey(ss => ss.ShowtimeId);
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Promotion)
+                .WithMany(p => p.Orders)
+                .HasForeignKey(o => o.PromotionId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
