@@ -49,5 +49,30 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
 
             return RedirectToAction("ListPromotions");
         }
+        // GET: Booking/AdminPromotion/Create
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Booking/AdminPromotion/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreatePromotionViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var result = await _promotionService.CreatePromotionAsync(model);
+            if (!result)
+            {
+                ModelState.AddModelError("", "Không thể tạo khuyến mãi.");
+                return View(model);
+            }
+
+            return RedirectToAction("ListPromotions");
+        }
+
     }
 }

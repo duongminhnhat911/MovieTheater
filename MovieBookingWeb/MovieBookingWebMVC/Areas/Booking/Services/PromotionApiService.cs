@@ -1,4 +1,5 @@
-﻿using MovieBookingWebMVC.Areas.Booking.Models.ViewModel;
+﻿using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
+using MovieBookingWebMVC.Areas.Booking.Models.ViewModel;
 
 namespace MovieBookingWebMVC.Areas.Booking.Services
 {
@@ -31,5 +32,23 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
             var response = await _httpClient.PutAsJsonAsync($"/api/Promotion/{id}", model);
             return response.IsSuccessStatusCode;
         }
+        // PromotionApiService.cs
+        public async Task<bool> CreatePromotionAsync(CreatePromotionViewModel model)
+        {
+            var dto = new CreatePromotionDto
+            {
+                PromotionCode = model.PromotionCode,
+                Description = model.Description,
+                DiscountAmount = model.DiscountAmount,
+                DiscountPercent = model.DiscountPercent,
+                Quantity = model.Quantity,
+                StartDate = model.StartDate,
+                EndDate = model.EndDate
+            };
+
+            var response = await _httpClient.PostAsJsonAsync("api/promotion", dto);
+            return response.IsSuccessStatusCode;
+        }
+
     }
 }
