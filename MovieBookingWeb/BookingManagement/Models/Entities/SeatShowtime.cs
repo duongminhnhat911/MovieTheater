@@ -13,7 +13,7 @@ namespace BookingManagement.Models.Entities
         public SeatStatus Status { get; set; } = SeatStatus.Available;
 
         //RealTime
-        //public int? HeldByUserId { get; set; }
-        //public DateTime? HeldUntil { get; set; }
+        public int? HeldByUserId { get; set; }
+        public DateTime? HeldUntil { get; set; }
     }
 }

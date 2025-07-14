@@ -1,16 +1,23 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using BookingManagement;
-using BookingManagement.Service;
-using BookingManagement.Repositories;
-using BookingManagement.Service.VnPay;
-using VNPAY.NET;
+using BookingManagement.BackgroundServices;
+using BookingManagement.Models.Entities;
 using BookingManagement.Models.VnPayModels;
+using BookingManagement.Repositories;
+using BookingManagement.Service;
+using BookingManagement.Service.VnPay;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using VNPAY.NET;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // 👉 1. Add services to the container (trước khi builder.Build())
 builder.Services.AddControllers();
+builder.Services.AddSignalR()
+ .AddHubOptions<SeatHub>(options =>
+  {
+      options.EnableDetailedErrors = true;
+  });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
@@ -27,6 +34,8 @@ builder.Services.AddScoped<IShowtimeRepository, ShowtimeRepository>();
 builder.Services.AddScoped<IShowtimeService, ShowtimeService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddHostedService<SeatHoldCleanupService>();
+
 
 builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
 builder.Services.AddScoped<IPromotionService, PromotionService>();
@@ -70,14 +79,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 var app = builder.Build();
 
-//Apply database migration (nếu chưa có database thì EF sẽ tạo và seed luôn)
+// -------------------- 3. MIGRATION (tùy chọn) --------------------
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
     dbContext.Database.Migrate();
 }
 
-
+// -------------------- 4. MIDDLEWARE PIPELINE --------------------
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -86,10 +95,18 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// ❗ Đúng thứ tự: Static Files → Routing → CORS → Auth → Controllers → SignalR
+app.UseStaticFiles(); // Cho phép dùng file HTML test
+app.UseRouting();
+
 app.UseCors("AllowMVC");
 
+app.UseAuthentication(); // nếu có
 app.UseAuthorization();
 
+// 👉 Map Controller và Hub
 app.MapControllers();
+app.MapHub<SeatHub>("/seatHub").RequireCors("AllowMVC");
 
+// -------------------- 5. CHẠY APP --------------------
 app.Run();

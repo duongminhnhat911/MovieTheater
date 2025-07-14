@@ -12,5 +12,7 @@ namespace BookingManagement.Service
         Task<SeatShowtime?> UpdateStatusAsync(int showtimeId, int seatId, SeatStatus status);
         Task<bool> DeleteAsync(int showtimeId, int seatId);
         Task<SeatShowtimeDto?> GetSeatsByShowtimeAsync(int showtimeId);
+        Task UpdateEntityAsync(SeatShowtime entity);
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BookingManagement.Models.DTOs;
+using BookingManagement.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookingManagement.Service

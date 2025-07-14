@@ -62,5 +62,6 @@ namespace BookingManagement.Repositories
                 .Where(ss => ss.ShowtimeId == showtimeId)
                 .ToDictionaryAsync(ss => ss.SeatId, ss => ss.Status);
         }
+        public DbSet<SeatShowtime> SeatShowtimes => _db.SeatShowtimes;  // 👈 THÊM DÒNG NÀY
     }
 }

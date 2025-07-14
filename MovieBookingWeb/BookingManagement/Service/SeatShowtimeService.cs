@@ -1,8 +1,8 @@
-﻿using BookingManagement.Models.Entities.Enums;
+﻿using BookingManagement.Models.DTOs;
 using BookingManagement.Models.Entities;
+using BookingManagement.Models.Entities.Enums;
 using BookingManagement.Repositories;
-using BookingManagement.Models.DTOs;
-
+using Microsoft.EntityFrameworkCore;
 namespace BookingManagement.Service
 {
     // Services/SeatShowtimeService.cs
@@ -76,6 +76,11 @@ namespace BookingManagement.Service
                 ShowtimeId = showtimeId,
                 Seats = seatDtos
             };
+        }
+        public async Task UpdateEntityAsync(SeatShowtime entity)
+        {
+            _repo.SeatShowtimes.Update(entity);
+            await _repo.SaveChangesAsync();
         }
     }
 }

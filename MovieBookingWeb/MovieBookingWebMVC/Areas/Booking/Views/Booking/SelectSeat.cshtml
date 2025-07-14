@@ -5,6 +5,7 @@
 @{
     ViewData["Title"] = "Chọn ghế";
     var movie = Model.Movie;
+    var userId = ViewBag.UserId ?? 0;
 }
 
 <!DOCTYPE html>
@@ -16,6 +17,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     <style>
         :root {
             --primary-black: #000000;
@@ -25,6 +27,7 @@
             --accent-gold: #ffd700;
             --success-green: #28a745;
             --danger-red: #dc3545;
+            --held: #facc15;
         }
 
         body {
@@ -365,11 +368,35 @@
                 margin: 1rem;
             }
         }
+
+        .seat-checkbox:disabled.held + .seat-label {
+            background: var(--held);
+            border-color: #eab308;
+            color: #000;
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+
+        .seat-checkbox:disabled.booked + .seat-label,
+        .seat-checkbox.booked + .seat-label {
+            background: var(--danger-red);
+            border-color: var(--danger-red);
+            color: white;
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+
+        .countdown-timer {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--danger-red);
+            text-align: center;
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="booking-container">
-        <!-- Header Section -->
         <div class="booking-header">
             <div class="row align-items-center">
                 <div class="col-md-3">
@@ -420,16 +447,13 @@
             </div>
         </div>
 
-        <!-- Booking Content -->
         <div class="booking-content">
-            <!-- Cinema Screen -->
             <div class="cinema-screen">
                 <div class="screen-text">
                     <i class="fas fa-film"></i> MÀN HÌNH CHIẾU
                 </div>
             </div>
 
-            <!-- Seat Legend -->
             <div class="seat-legend">
                 <div class="legend-item">
                     <div class="legend-seat legend-available"></div>
@@ -443,10 +467,15 @@
                     <div class="legend-seat legend-occupied"></div>
                     <span>Đã có người</span>
                 </div>
+                <div class="legend-item">
+                    <div class="legend-seat" style="background: var(--held); border-color: #eab308;"></div>
+                    <span>Đang giữ</span>
+                </div>
             </div>
 
-            <!-- Seat Selection Form -->
-            <form asp-action="SelectSeat" asp-controller="Booking" asp-area="Booking" method="post">
+            <div class="countdown-timer" id="countdown">Thời gian giữ ghế: 03:00</div>
+
+            <form id="seatForm" asp-action="SelectSeat" asp-controller="Booking" asp-area="Booking" method="post">
                 <input type="hidden" name="showtimeId" value="@Model.ShowtimeId" />
 
                 <div class="seat-section">
@@ -459,13 +488,16 @@
                                 <div class="seat-container">
                                     @foreach (var seat in row.OrderBy(s => s.Column))
                                     {
-                                        var isDisabled = seat.Status != "Available";
+                                        var isHeld = seat.Status == "Held";
+                                        var isOccupied = seat.Status == "Occupied";
+                                        var isDisabled = isHeld || isOccupied;
                                         <div class="seat-item">
                                             <input type="checkbox"
-                                                   class="seat-checkbox"
+                                                   class="seat-checkbox @(isHeld ? "held" : "")"
                                                    name="seatIds"
                                                    value="@seat.SeatId"
                                                    id="seat-@seat.SeatId"
+                                                   data-status="@seat.Status"
                                             @(isDisabled ? "disabled" : "") />
                                             <label class="seat-label" for="seat-@seat.SeatId">
                                                 @seat.Column
@@ -498,28 +530,122 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.querySelector("form").addEventListener("submit", function (e) {
-            const checkedSeats = Array.from(document.querySelectorAll("input[name='seatIds']:checked"))
-                                      .map(cb => cb.value);
-            if (checkedSeats.length === 0) {
-                e.preventDefault();
-                alert("Vui lòng chọn ít nhất một ghế để tiếp tục.");
+        const userId = @userId;
+        const showtimeId = @Model.ShowtimeId;
+        const connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7116/seatHub").build();
+
+        connection.on("SeatLocked", (seatId, uid) => {
+            if (uid !== userId) {
+                const input = document.getElementById(`seat-${seatId}`);
+                if (input) {
+                    input.disabled = true;
+                    input.classList.add("held");
+                }
             }
         });
 
-        // Add seat selection animation
-        document.querySelectorAll('.seat-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const label = this.nextElementSibling;
+        connection.on("SeatUnlocked", (seatId) => {
+            const input = document.getElementById(`seat-${seatId}`);
+            if (input) {
+                input.disabled = false;
+                input.classList.remove("held");
+                input.checked = false;
+            }
+
+            if (document.querySelectorAll("input[name='seatIds']:checked").length === 0) {
+                clearInterval(interval);
+                countdownStarted = false;
+                countdown = 180;
+                document.getElementById('countdown').style.display = 'none';
+            }
+        });
+
+        connection.start().then(() => {
+            connection.invoke("JoinShowtimeGroup", showtimeId);
+        });
+
+        let countdownStarted = false;
+        let countdown = 180;
+        let interval;
+
+        function startCountdown() {
+            if (countdownStarted) return;
+            countdownStarted = true;
+            document.getElementById('countdown').style.display = 'block';
+            interval = setInterval(async () => {
+                countdown--;
+                const minutes = Math.floor(countdown / 60);
+                const seconds = countdown % 60;
+                countdownElement.textContent = `Thời gian giữ ghế: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    countdownStarted = false;
+                    countdown = 180;
+                    document.getElementById('countdown').style.display = 'none';
+                    alert('Thời gian giữ ghế đã hết. Hệ thống sẽ bỏ giữ các ghế đã chọn.');
+                    const checkedSeats = Array.from(document.querySelectorAll("input[name='seatIds']:checked"));
+                    for (let cb of checkedSeats) {
+                        const seatId = parseInt(cb.value);
+                        await fetch("https://localhost:7116/api/realtime/seatshowtime/unlock", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ showtimeId, seatId, userId })
+                        });
+                        cb.checked = false;
+                    }
+                }
+            }, 1000);
+        }
+
+        document.querySelectorAll(".seat-checkbox").forEach(cb => {
+            const seatStatus = cb.getAttribute("data-status");
+            if (seatStatus === "Booked") {
+                cb.disabled = true;
+                cb.classList.add("booked");
+            }
+        });
+
+        document.querySelectorAll(".seat-checkbox:not(:disabled)").forEach(cb => {
+            cb.addEventListener("change", async function () {
+                const seatId = parseInt(this.value);
                 if (this.checked) {
-                    label.style.transform = 'scale(1.1)';
-                    setTimeout(() => {
-                        label.style.transform = 'scale(1.1)';
-                    }, 150);
+                    const response = await fetch("https://localhost:7116/api/realtime/seatshowtime/lock", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ showtimeId, seatId, userId })
+                    });
+                    if (!response.ok) {
+                        this.checked = false;
+                        alert("Không thể giữ ghế. Ghế có thể đã bị người khác chọn.");
+                    } else {
+                        startCountdown();
+                    }
+                } else {
+                    await fetch("https://localhost:7116/api/realtime/seatshowtime/unlock", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ showtimeId, seatId, userId })
+                    });
                 }
             });
+        });
+
+        const countdownElement = document.getElementById('countdown');
+
+        document.getElementById("seatForm").addEventListener("submit", function (e) {
+            const checkedSeats = Array.from(document.querySelectorAll("input[name='seatIds']:checked"));
+            if (checkedSeats.length === 0) {
+                e.preventDefault();
+                alert("Vui lòng chọn ít nhất một ghế để tiếp tục.");
+            } else if (checkedSeats.length > 10) {
+                e.preventDefault();
+                alert("Chỉ được chọn tối đa 10 ghế.");
+            }
         });
     </script>
 </body>

@@ -1,5 +1,6 @@
 ﻿using BookingManagement.Models.Entities;
 using BookingManagement.Models.Entities.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookingManagement.Repositories
 {
@@ -12,5 +13,7 @@ namespace BookingManagement.Repositories
         void Remove(SeatShowtime seatShowtime);
         Task HoldSeatAsync(int seatId, int showtimeId);
         Task<Dictionary<int, SeatStatus>> GetSeatStatusesAsync(int showtimeId);
+        DbSet<SeatShowtime> SeatShowtimes { get; }  // 👈 THÊM DÒNG NÀY
+
     }
 }
