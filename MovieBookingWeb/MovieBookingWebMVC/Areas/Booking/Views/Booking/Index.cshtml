@@ -2,13 +2,17 @@
 @{
     ViewData["Title"] = "Đặt vé - " + Model.Title;
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var trailerUrl = "https://www.youtube.com/embed/TcMBFSGVi1c"; // Link trailer YouTube nhúng
 }
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
     /* Modern Movie Booking Page Styles */
-
+    :root {
+        --accent-blue: #3B82F6;
+        --accent-purple: #8B5CF6;
+    }
     body {
         min-height: 100vh;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -110,6 +114,38 @@
         backdrop-filter: blur(10px);
     }
 
+    .booking-button {
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+
+    .btn-movie {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        justify-content: center;
+        min-width: 120px;
+    }
+
+    .btn-book {
+        background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
+        color: white;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+
+        .btn-book:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+            color: white;
+        }
     /* Movie Info Section */
     .movie-title {
         font-size: 2.2rem;
@@ -120,6 +156,31 @@
         line-height: 1.2;
         letter-spacing: -0.025em;
     }
+
+    .trailer-wrapper {
+        width: 100%;
+        padding: 40px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        box-sizing: border-box;
+        background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+    }
+
+    .iframe-container {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%; /* Tỷ lệ 16:9 */
+        overflow: hidden;
+        border-radius: 10px;
+    }
+
+        .iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
 
     /* Quick Info Cards */
     .quick-info {
@@ -260,16 +321,13 @@
     }
 
     @@media (max-width: 768px) {
-        .movie-container
-
-    {
-        margin: 20px;
-        border-radius: 15px;
-    }
+        .movie-container {
+            margin: 20px;
+            border-radius: 15px;
+        }
 
     .movie-header {
         padding: 20px;
-
     }
 
         .movie-header h1 {
@@ -330,7 +388,14 @@
             <h1>Thông tin phim</h1>
             <div class="subtitle">Thông tin chi tiết về bộ phim</div>
         </div>
-
+        <!-- 🔽 Trailer Section -->
+        <div class="trailer-section">
+            <div class="trailer-wrapper">
+                <div class="iframe-container">
+                    <iframe src="@trailerUrl" title="Trailer phim" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
         <!-- Main Content -->
         <div class="movie-content">
             <!-- Poster Section -->
@@ -346,6 +411,11 @@
                             }
                         </div>
                     }
+                </div>
+                <div class="booking-button">
+                    <button class="btn-movie btn-book" id="bookNowBtn">
+                        <i class="fas fa-ticket-alt"></i> Đặt vé
+                    </button>
                 </div>
             </div>
 
