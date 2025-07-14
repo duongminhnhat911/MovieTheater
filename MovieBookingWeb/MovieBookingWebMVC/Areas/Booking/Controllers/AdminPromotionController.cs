@@ -74,5 +74,21 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             return RedirectToAction("ListPromotions");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var success = await _promotionService.DeletePromotionAsync(id);
+            if (success)
+            {
+                TempData["SuccessMessage"] = $"Đã xóa thành công khuyến mãi ID = {id}";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $"❌ Xóa thất bại! Không tìm thấy khuyến mãi ID = {id}";
+            }
+
+            return RedirectToAction(nameof(ListPromotions));
+        }
     }
 }

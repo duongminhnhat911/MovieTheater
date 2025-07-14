@@ -1,5 +1,18 @@
 ﻿@model List<MovieBookingWebMVC.Areas.Booking.Models.ViewModel.PromotionListViewModel>
-
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="alertSuccess" class="alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-4" role="alert" style="z-index: 1050; min-width: 250px;">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div id="alertError" class="alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 m-4" role="alert" style="z-index: 1050; min-width: 250px;">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Danh sách khuyến mãi";
@@ -53,8 +66,15 @@
                     <td>
                         <a class="btn btn-sm btn-warning" href="/Booking/AdminPromotion/Edit/@promo.Id">
                             <i class="fas fa-edit"></i> Sửa
-                        </a>
+                        </a>                   
+                        <form asp-area="Booking" asp-controller="AdminPromotion" asp-action="Delete" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa khuyến mãi này?');" style="display:inline;">
+                            <input type="hidden" name="id" value="@promo.Id" />
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash-alt"></i> Xóa
+                            </button>
+                        </form>                   
                     </td>
+                    
                 </tr>
                 i++;
             }

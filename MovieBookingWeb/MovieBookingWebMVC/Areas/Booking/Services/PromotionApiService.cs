@@ -50,5 +50,18 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
             return response.IsSuccessStatusCode;
         }
 
+        public async Task<bool> DeletePromotionAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"/api/Promotion/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            var error = await response.Content.ReadAsStringAsync();        
+            return false;
+        }
+
     }
 }

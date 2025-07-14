@@ -9,5 +9,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
         Task<PromotionListViewModel?> GetPromotionByIdAsync(int id);
         // IPromotionApiService.cs
         Task<bool> CreatePromotionAsync(CreatePromotionViewModel model);
+
+        Task<bool> DeletePromotionAsync(int id); // Thêm phương thức xóa khuyến mãi
     }
 }
