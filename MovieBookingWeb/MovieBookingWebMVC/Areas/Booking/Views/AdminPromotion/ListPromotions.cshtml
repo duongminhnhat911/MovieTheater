@@ -1,4 +1,5 @@
 ﻿@model List<MovieBookingWebMVC.Areas.Booking.Models.ViewModel.PromotionListViewModel>
+
 @if (TempData["SuccessMessage"] != null)
 {
     <div id="alertSuccess" class="alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-4" role="alert" style="z-index: 1050; min-width: 250px;">
@@ -13,77 +14,495 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Danh sách khuyến mãi";
 }
 
-<h2>Danh sách khuyến mãi</h2>
-<a asp-area="Booking" asp-controller="AdminPromotion" asp-action="Create" class="btn btn-primary mb-3">
-    <i class="fas fa-plus"></i> Tạo khuyến mãi mới
-</a>
+<style>
+    :root {
+        --primary-black: #000000;
+        --mint-light: #CCFFE4;
+        --teal-green: #9FCBC0;
+        --light-gray: #F5F5F5;
+        --white: #ffffff;
+        --success-green: #28a745;
+        --warning-orange: #ffc107;
+        --danger-red: #dc3545;
+        --shadow-light: rgba(0, 0, 0, 0.1);
+        --shadow-medium: rgba(0, 0, 0, 0.15);
+    }
 
-<table class="table table-striped table-bordered">
-    <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Mã</th>
-            <th>Mô tả</th>
-            <th>Giảm (%)</th>
-            <th>Giảm (VNĐ)</th>
-            <th>Số lượng</th>
-            <th>Bắt đầu</th>
-            <th>Kết thúc</th>
-            <th>Trạng thái</th>
-            <th>Tác vụ</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Any())
-        {
-            int i = 1;
-            foreach (var promo in Model)
+    body {
+        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+    }
+
+    .main-container {
+        background: var(--white);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px var(--shadow-light);
+        margin: 2rem 1rem;
+        max-width: 1400px;
+        overflow: hidden;
+    }
+
+    .header-section {
+        background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
+        color: var(--white);
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(204, 255, 228, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+    @@keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .header-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .content-section {
+        padding: 2rem;
+        background: var(--mint-light);
+        background-image: radial-gradient(circle at 20% 20%, rgba(159, 203, 192, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(245, 245, 245, 0.2) 0%, transparent 50%);
+    }
+
+    .success-alert {
+        background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 15px;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        animation: slideInDown 0.5s ease-out;
+    }
+
+    @@keyframes slideInDown {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .add-promotion-btn {
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        border: none;
+        color: var(--white);
+        padding: 0.75rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 15px rgba(159, 203, 192, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .add-promotion-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .add-promotion-btn:hover::before {
+            left: 100%;
+        }
+
+        .add-promotion-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(159, 203, 192, 0.6);
+            color: var(--white);
+        }
+
+    .promotion-table {
+        background: var(--white);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px var(--shadow-light);
+        margin-top: 2rem;
+    }
+
+    .table-header th {
+        background: var(--primary-black);
+        color: var(--white);
+        padding: 1.2rem 1rem;
+        font-weight: 600;
+        text-align: center;
+        border: none;
+        position: relative;
+    }
+
+        .table-header th::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--teal-green);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .table-header th:hover::after {
+            width: 80%;
+        }
+
+    .table tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid rgba(159, 203, 192, 0.2);
+    }
+
+        .table tbody tr:hover {
+            background: linear-gradient(135deg, var(--mint-light) 0%, rgba(159, 203, 192, 0.1) 100%);
+            transform: translateX(5px);
+        }
+
+    .table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        border: none;
+        position: relative;
+    }
+
+    .promotion-id {
+        background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
+        color: var(--white);
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        display: inline-block;
+        min-width: 40px;
+        text-align: center;
+    }
+
+    .promotion-code {
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        color: var(--white);
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-block;
+        letter-spacing: 0.5px;
+    }
+
+    .promotion-description {
+        font-weight: 600;
+        color: var(--primary-black);
+        line-height: 1.4;
+    }
+
+    .discount-info {
+        background: var(--light-gray);
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 600;
+        color: var(--primary-black);
+        display: inline-block;
+        margin: 0.1rem;
+    }
+
+    .quantity-info {
+        background: var(--light-gray);
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 600;
+        color: var(--primary-black);
+        display: inline-block;
+    }
+
+    .date-info {
+        font-size: 0.9rem;
+        color: var(--primary-black);
+        font-weight: 500;
+        display: block;
+        margin: 0.1rem 0;
+    }
+
+    .promotion-status {
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: inline-block;
+        min-width: 70px;
+        text-align: center;
+    }
+
+        .promotion-status.active {
+            background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
+            color: var(--white);
+        }
+
+        .promotion-status.inactive {
+            background: linear-gradient(135deg, var(--warning-orange) 0%, #fd7e14 100%);
+            color: var(--white);
+        }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-action {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .btn-edit {
+        background: linear-gradient(135deg, var(--warning-orange) 0%, #fd7e14 100%);
+        color: var(--white);
+    }
+
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.5);
+            color: var(--white);
+        }
+
+    .btn-delete {
+        background: linear-gradient(135deg, var(--danger-red) 0%, #c82333 100%);
+        color: var(--white);
+    }
+
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.5);
+            color: var(--white);
+        }
+
+    .alert-warning {
+        background: linear-gradient(135deg, rgba(204, 255, 228, 0.8) 0%, rgba(159, 203, 192, 0.3) 100%);
+        border: 1px solid var(--teal-green);
+        color: var(--primary-black);
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(159, 203, 192, 0.2);
+    }
+
+    @@media (max-width: 768px) {
+        .main-container {
+            margin: 1rem;
+            border-radius: 15px;
+        }
+
+        .header-title {
+            font-size: 2rem;
+        }
+
+        .content-section {
+            padding: 1rem;
+        }
+
+        .table-responsive {
+            font-size: 0.85rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 0.4rem 0.8rem;
+        }
+    }
+</style>
+
+<div class="main-container">
+    <div class="header-section">
+        <h1 class="header-title">
+            <i class="fas fa-tags me-2"></i>
+            Danh sách khuyến mãi
+        </h1>
+    </div>
+
+    <div class="content-section">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a asp-area="Booking" asp-controller="AdminPromotion" asp-action="Create" class="add-promotion-btn">
+                <i class="fas fa-plus"></i>
+                Tạo khuyến mãi mới
+            </a>
+            @if (Model != null && Model.Count > 0)
             {
-                <tr>
-                    <td>@i</td>
-                    <td>@promo.PromotionCode</td>
-                    <td>@promo.Description</td>
-                    <td>@(promo.DiscountPercent ?? 0)%</td>
-                    <td>@(promo.DiscountAmount?.ToString("N0") ?? "-")</td>
-                    <td>@promo.Quantity</td>
-                    <td>@promo.StartDate.ToString("dd/MM/yyyy")</td>
-                    <td>@promo.EndDate.ToString("dd/MM/yyyy")</td>
-                    <td>
-                        @if (promo.IsActive && promo.EndDate >= DateTime.Now)
-                        {
-                            <span class="badge bg-success">Còn hiệu lực</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-secondary">Hết hạn</span>
-                        }
-                    </td>
-                    <td>
-                        <a class="btn btn-sm btn-warning" href="/Booking/AdminPromotion/Edit/@promo.Id">
-                            <i class="fas fa-edit"></i> Sửa
-                        </a>                   
-                        <form asp-area="Booking" asp-controller="AdminPromotion" asp-action="Delete" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa khuyến mãi này?');" style="display:inline;">
-                            <input type="hidden" name="id" value="@promo.Id" />
-                            <button type="submit" class="btn btn-sm btn-danger">
-                                <i class="fas fa-trash-alt"></i> Xóa
-                            </button>
-                        </form>                   
-                    </td>
-                    
-                </tr>
-                i++;
+                <div class="text-muted">
+                    <i class="fas fa-database"></i>
+                    Tổng cộng: <strong>@Model.Count</strong> khuyến mãi
+                </div>
             }
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="promotion-table">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead class="table-header">
+                            <tr>
+                                <th style="width: 3%;">ID</th>
+                                <th style="width: 15%;">Mã</th>
+                                <th style="width: 20%;">Mô tả</th>
+                                <th style="width: 3%;">Giảm (%)</th>
+                                <th style="width: 10%;">Giảm (VNĐ)</th>
+                                <th style="width: 8%;">Số lượng</th>
+                                <th style="width: 12%;">Thời gian</th>
+                                <th style="width: 17%;">Trạng thái</th>
+                                <th style="width: 12%;">Tác vụ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 1;
+                            }
+                            @foreach (var promo in Model)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <span class="promotion-id">@i</span>
+                                    </td>
+                                    <td>
+                                        <span class="promotion-code">@promo.PromotionCode</span>
+                                    </td>
+                                    <td>
+                                        <div class="promotion-description">@promo.Description</div>
+                                    </td>
+                                    <td class="text-center">
+                                        @if (promo.DiscountPercent.HasValue && promo.DiscountPercent > 0)
+                                        {
+                                            <span class="discount-info">@promo.DiscountPercent%</span>
+                                        }
+                                        @if ((!promo.DiscountPercent.HasValue || promo.DiscountPercent == 0) && (!promo.DiscountAmount.HasValue || promo.DiscountAmount == 0))
+                                        {
+                                            <span class="discount-info">-</span>
+                                        }
+                                    </td>
+
+                                    <td class="text-center">
+                                        <span class="discount-info">@promo.DiscountAmount.Value.ToString("N0")</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="quantity-info">@promo.Quantity</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="date-info">@promo.StartDate.ToString("dd/MM/yyyy")</span>
+                                        <span class="date-info">@promo.EndDate.ToString("dd/MM/yyyy")</span>
+                                    </td>
+                                    <td class="text-center">
+                                        @if (promo.IsActive && promo.EndDate >= DateTime.Now)
+                                        {
+                                            <span class="promotion-status active">Còn hiệu lực</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="promotion-status inactive">Hết hạn</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a class="btn-action btn-edit" href="/Booking/AdminPromotion/Edit/@promo.Id">
+                                                <i class="fas fa-edit"></i>
+                                                Sửa
+                                            </a>
+                                            <form asp-area="Booking" asp-controller="AdminPromotion" asp-action="Delete" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa khuyến mãi này?');" style="display:inline;">
+                                                <input type="hidden" name="id" value="@promo.Id" />
+                                                <button type="submit" class="btn-action btn-delete">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                    Xóa
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         }
         else
         {
-            <tr>
-                <td colspan="9" class="text-center text-muted">Không có khuyến mãi nào.</td>
-            </tr>
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Không có khuyến mãi nào.
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+</div>
+
+<script>
+    // Add loading state for buttons
+    document.querySelectorAll('.btn-action').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            if (this.classList.contains('btn-edit')) {
+                const icon = this.querySelector('i');
+                const originalClass = icon.className;
+
+                icon.className = 'fas fa-spinner fa-spin';
+
+                setTimeout(() => {
+                    icon.className = originalClass;
+                }, 1000);
+            }
+        });
+    });
+</script>

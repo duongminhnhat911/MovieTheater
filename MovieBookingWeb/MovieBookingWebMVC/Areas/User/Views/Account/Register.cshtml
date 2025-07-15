@@ -4,201 +4,400 @@
 }
 
 <style>
-    /* Custom styles for Register page */
-    .register-container {
+    .box-radio {
+        position: relative;
+        cursor: pointer;
+        border: 2px solid #ccc;
+        border-radius: 12px;
+        padding: 10px 15px; /* giống .form-control */
+        user-select: none;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+        font-weight: 500;
+        color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 42px; /* đồng bộ chiều cao */
+    }
+
+        .box-radio input[type="radio"] {
+            display: none;
+        }
+
+            .box-radio input[type="radio"]:checked + span {
+                color: #fff;
+                font-weight: 600;
+                z-index: 1;
+            }
+
+                .box-radio input[type="radio"]:checked + span::before {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background-color: #0d6efd;
+                    border-radius: 8px;
+                    z-index: -1;
+                }
+
+        .box-radio:hover {
+            border-color: #0d6efd;
+            background-color: #e9f2ff;
+        }
+
+    :root {
+        --primary-black: #000000;
+        --mint-light: #CCFFE4;
+        --teal-green: #9FCBC0;
+        --light-gray: #F5F5F5;
+        --white: #ffffff;
+        --success-green: #28a745;
+        --warning-orange: #ffc107;
+        --danger-red: #dc3545;
+        --shadow-light: rgba(0, 0, 0, 0.1);
+        --shadow-medium: rgba(0, 0, 0, 0.15);
+    }
+
+    body {
         background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-        border-radius: 15px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
         padding: 2rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .register-container {
+        background: var(--white);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px var(--shadow-light);
         max-width: 800px;
-        margin: 2rem auto;
+        width: 100%;
+        overflow: hidden;
+        animation: slideInUp 0.6s ease-out;
+    }
+
+    @@keyframes slideInUp {
+        from {
+            transform: translateY(30px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .header-section {
+        background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
+        color: var(--white);
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(204, 255, 228, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+    @@keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
     }
 
     .register-title {
-        color: #000000;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 1.5rem;
-        font-size: 2rem;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .content-section {
+        padding-left: 2rem;
+        padding-right: 2rem;
+        padding-top: 1.5rem;
+        padding-bottom: 2rem;
+        background: var(--mint-light);
+        background-image: radial-gradient(circle at 20% 20%, rgba(159, 203, 192, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(245, 245, 245, 0.2) 0%, transparent 50%);
     }
 
     .register-subtitle {
-        color: #000000;
         text-align: center;
-        margin-bottom: 2rem;
-        font-size: 0.95rem;
+        margin-bottom: 1rem;
+        color: var(--primary-black);
     }
 
-    .form-label {
-        color: #000000;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
-
-    .form-control {
-        border: 2px solid #9FCBC0;
-        border-radius: 8px;
-        padding: 0.75rem;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-    }
-
-        .form-control:focus {
-            border-color: #9FCBC0;
-            box-shadow: 0 0 0 0.2rem rgba(159, 203, 192, 0.25);
-        }
-
-        .form-control:hover {
-            border-color: #9FCBC0;
-            background-color: #F5F5F5;
-        }
-
-    .btn-register {
-        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-        border: none;
-        border-radius: 8px;
-        padding: 0.75rem;
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #000000;
-        transition: all 0.3s ease;
-        width: 100%;
-    }
-
-        .btn-register:hover {
-            background-color: #F5F5F5;
-            border: 2px solid #9FCBC0;
-            color: #000000;
-            transform: translateY(-2px);
+        .register-subtitle p {
+            margin: 0.5rem 0;
+            font-size: 1rem;
+            line-height: 1.5;
         }
 
     .login-link {
-        color: #9FCBC0;
+        color: var(--primary-black);
         text-decoration: none;
         font-weight: 600;
-        transition: color 0.3s ease;
+        transition: all 0.3s ease;
+        border-bottom: 2px solid transparent;
     }
 
         .login-link:hover {
-            color: #000000;
-            text-decoration: underline;
+            color: var(--teal-green);
+            border-bottom-color: var(--teal-green);
+            text-decoration: none;
         }
 
-    .alert-danger-custom {
-        background-color: #F5F5F5;
-        border: 2px solid #dc3545;
-        border-radius: 8px;
-        color: #000000;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        font-size: 0.9rem;
-        text-align: center;
+    .form-label {
+        color: var(--primary-black);
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
-    .text-danger {
-        color: #dc3545 !important;
-        font-size: 0.85rem;
-        margin-top: 0.25rem;
+    .register-page .form-control {
+        border: 2px solid var(--teal-green);
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--primary-black);
+        margin-bottom: 0.5rem;
     }
 
-    .page-background {
-        background-color: #F5F5F5;
-        min-height: 100vh;
-        padding: 2rem 0;
+    .form-control:focus {
+        border-color: var(--primary-black);
+        box-shadow: 0 0 0 0.2rem rgba(159, 203, 192, 0.25);
+        background: rgba(255, 255, 255, 1);
+        outline: none;
+    }
+
+    .form-control::placeholder {
+        color: #888;
+        opacity: 1;
     }
 
     .gender-section {
-        background-color: #F5F5F5;
-        border-radius: 8px;
-        padding: 1rem;
-        border: 2px solid #9FCBC0;
+        display: flex;
+        gap: 1rem;
         margin-top: 0.5rem;
     }
 
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
     .form-check-input {
-        border: 2px solid #9FCBC0;
-        margin-right: 0.5rem;
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid var(--teal-green);
+        border-radius: 50%;
+        background: var(--white);
+        cursor: pointer;
+        transition: all 0.3s ease;
     }
 
         .form-check-input:checked {
-            background-color: #9FCBC0;
-            border-color: #9FCBC0;
+            background: var(--teal-green);
+            border-color: var(--teal-green);
+        }
+
+        .form-check-input:focus {
+            box-shadow: 0 0 0 0.2rem rgba(159, 203, 192, 0.25);
         }
 
     .form-check-label {
-        color: #000000;
+        color: var(--primary-black);
         font-weight: 500;
-        margin-left: 0.5rem;
+        cursor: pointer;
     }
 
-    .form-check {
-        margin-bottom: 0.5rem;
-        display: flex;
-        align-items: center;
+    .btn-register {
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--white);
+        width: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(159, 203, 192, 0.3);
+        position: relative;
+        overflow: hidden;
+        margin-top: 1rem;
     }
 
-    .form-section {
+        .btn-register::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-register:hover::before {
+            left: 100%;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(159, 203, 192, 0.5);
+            background: linear-gradient(135deg, #8BC1B8 0%, #6fa8c8 100%);
+            color: var(--white);
+        }
+
+        .btn-register:active {
+            transform: translateY(0);
+        }
+
+    .alert-danger-custom {
+        background: rgba(248, 113, 113, 0.1);
+        border: 1px solid rgba(248, 113, 113, 0.3);
+        color: #dc2626;
+        border-radius: 12px;
+        padding: 1rem;
         margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+        animation: slideInDown 0.5s ease-out;
     }
 
-    .form-row {
-        display: flex;
-        gap: 1rem;
-        margin-bottom: 1rem;
+    @@keyframes slideInDown {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
 
-    .form-col {
-        flex: 1;
+    .text-danger {
+        color: var(--danger-red);
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    .row {
+        margin: 0 -0.5rem;
+    }
+
+    .col-md-6, .col-md-12 {
+        padding: 0 0.5rem;
+    }
+
+    .d-grid {
+        display: grid;
+    }
+
+    .g-3 {
+        --bs-gutter-x: 1rem;
+        --bs-gutter-y: 1rem;
     }
 
     /* Responsive design */
     @@media (max-width: 768px) {
-        .register-container
+        .container {
+            padding: 1rem;
+        }
 
-    {
-        margin: 1rem;
-        padding: 1.5rem;
-        max-width: 95%;
+        .register-container {
+            border-radius: 15px;
+        }
+
+        .register-title {
+            font-size: 2rem;
+        }
+
+        .content-section {
+            padding: 1.5rem;
+        }
+
+        .col-md-6, .col-md-12 {
+            width: 100%;
+        }
+
+        .gender-section {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
     }
 
-    .register-title {
-        font-size: 1.75rem;
+    /* Loading animation for button */
+    .btn-register.loading {
+        pointer-events: none;
+        opacity: 0.8;
     }
 
-    .register-subtitle {
-        font-size: 0.9rem;
-    }
+        .btn-register.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--white);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
 
-    .form-row {
-        flex-direction: column;
-        gap: 0;
-    }
+    @@keyframes spin {
+        0% {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
 
-    .col-md-6 {
-        margin-bottom: 1rem;
-    }
-
-    }
-
-    @@media (max-width: 576px) {
-        .register-container
-
-    {
-        padding: 1rem;
-    }
-
-    .register-title {
-        font-size: 1.5rem;
-    }
-
+        100% {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
     }
 </style>
 
-<div class="page-background">
-    <div class="container">
-        <div class="register-container">
-            <h2 class="register-title">Đăng ký tài khoản</h2>
+<div class="container register-page">
+    <div class="register-container">
+        <div class="header-section">
+            <h2 class="register-title">
+                <i class="fas fa-user-plus me-2"></i>
+                Đăng ký tài khoản
+            </h2>
+        </div>
 
+        <div class="content-section">
             <div class="register-subtitle">
                 <p class="mb-2">Để có thể sử dụng các dịch vụ của chúng tôi, bạn phải có tài khoản</p>
                 <p class="fw-bold">
@@ -209,87 +408,175 @@
 
             @if (!ViewData.ModelState.IsValid)
             {
-                <div class="alert-danger-custom">
-                    ❌ @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values
-                                    .SelectMany(v => v.Errors)
-                                    .Select(e => e.ErrorMessage)))
+            <div class="alert-danger-custom">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values
+                                .SelectMany(v => v.Errors)
+                                .Select(e => e.ErrorMessage)))
             </div>
                         }
 
-            <form asp-action="Register" method="post" novalidate>
+            <form asp-action="Register" method="post" novalidate id="registerForm">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label">Tên tài khoản</label>
+                        <label class="form-label">
+                            <i class="fas fa-user"></i>
+                            Tên tài khoản
+                        </label>
                         <input asp-for="Username" class="form-control" placeholder="Nhập tên tài khoản" />
                         <span asp-validation-for="Username" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Họ và tên</label>
+                        <label class="form-label">
+                            <i class="fas fa-id-card"></i>
+                            Họ và tên
+                        </label>
                         <input asp-for="FullName" class="form-control" placeholder="Nhập họ và tên" />
                         <span asp-validation-for="FullName" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Mật khẩu</label>
+                        <label class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Mật khẩu
+                        </label>
                         <input asp-for="Password" type="password" class="form-control" placeholder="Nhập mật khẩu" />
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Xác nhận mật khẩu</label>
+                        <label class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Xác nhận mật khẩu
+                        </label>
                         <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Xác nhận mật khẩu" />
                         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Ngày sinh</label>
+                        <label class="form-label">
+                            <i class="fas fa-calendar-alt"></i>
+                            Ngày sinh
+                        </label>
                         <input asp-for="BirthDate" type="date" class="form-control" />
                         <span asp-validation-for="BirthDate" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Giới tính</label>
-                        <div class="gender-section">
-                            <div class="form-check">
-                                <input asp-for="Gender" class="form-check-input" type="radio" value="Nam" />
-                                <label class="form-check-label">Nam</label>
-                            </div>
-                            <div class="form-check">
-                                <input asp-for="Gender" class="form-check-input" type="radio" value="Nữ" />
-                                <label class="form-check-label">Nữ</label>
-                            </div>
-                            <div class="form-check">
-                                <input asp-for="Gender" class="form-check-input" type="radio" value="Khác" />
-                                <label class="form-check-label">Khác</label>
-                            </div>
+                        <label class="form-label">
+                            <i class="fas fa-venus-mars"></i>
+                            Giới tính
+                        </label>
+                        <div class="gender-section d-flex gap-3">
+                            <label class="box-radio flex-fill text-center">
+                                <input asp-for="Gender" type="radio" value="Nam" />
+                                <span>Nam</span>
+                            </label>
+                            <label class="box-radio flex-fill text-center">
+                                <input asp-for="Gender" type="radio" value="Nữ" />
+                                <span>Nữ</span>
+                            </label>
+                            <label class="box-radio flex-fill text-center">
+                                <input asp-for="Gender" type="radio" value="Khác" />
+                                <span>Khác</span>
+                            </label>
                         </div>
                         <span asp-validation-for="Gender" class="text-danger"></span>
                     </div>
                     <div class="col-md-12">
-                        <label class="form-label">Email</label>
+                        <label class="form-label">
+                            <i class="fas fa-envelope"></i>
+                            Email
+                        </label>
                         <input asp-for="Email" type="email" class="form-control" placeholder="Nhập email" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Số CCCD</label>
+                        <label class="form-label">
+                            <i class="fas fa-id-card-alt"></i>
+                            Số CCCD
+                        </label>
                         <input asp-for="IdCard" class="form-control" placeholder="Nhập số căn cước công dân" />
                         <span asp-validation-for="IdCard" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Số điện thoại</label>
+                        <label class="form-label">
+                            <i class="fas fa-phone"></i>
+                            Số điện thoại
+                        </label>
                         <input asp-for="PhoneNumber" class="form-control" placeholder="Nhập số điện thoại" />
                         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
                     <div class="col-md-12">
-                        <label class="form-label">Địa chỉ nhà</label>
+                        <label class="form-label">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Địa chỉ nhà
+                        </label>
                         <input asp-for="Address" class="form-control" placeholder="Nhập địa chỉ" />
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
                 </div>
 
-                <div class="mt-4 d-grid">
-                    <button type="submit" class="btn btn-register">Tạo tài khoản</button>
+                <div class="d-grid" style="margin-top: 0.5rem;">
+                    <button type="submit" class="btn btn-register" id="registerBtn">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Tạo tài khoản
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const registerForm = document.getElementById('registerForm');
+        const registerBtn = document.getElementById('registerBtn');
+
+        // Add loading state to button on form submit
+        registerForm.addEventListener('submit', function() {
+            registerBtn.classList.add('loading');
+            registerBtn.innerHTML = '<span>Đang tạo tài khoản...</span>';
+        });
+
+        // Add focus effects to inputs
+        const inputs = document.querySelectorAll('.form-control');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.borderColor = 'var(--primary-black)';
+            });
+
+            input.addEventListener('blur', function() {
+                this.style.borderColor = 'var(--teal-green)';
+            });
+        });
+
+        // Auto-hide error alerts
+        const errorAlert = document.querySelector('.alert-danger-custom');
+        if (errorAlert) {
+            setTimeout(() => {
+                errorAlert.style.transition = "opacity 0.5s ease";
+                errorAlert.style.opacity = "0";
+                setTimeout(() => {
+                    errorAlert.remove();
+                }, 500);
+            }, 5000);
+        }
+
+        // Radio button styling
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Remove active state from all radio buttons with same name
+                const sameNameRadios = document.querySelectorAll(`input[name="${this.name}"]`);
+                sameNameRadios.forEach(r => {
+                    r.parentElement.style.color = 'var(--primary-black)';
+                });
+
+                // Add active state to selected radio
+                if (this.checked) {
+                    this.parentElement.style.color = 'var(--teal-green)';
+                }
+            });
+        });
+    });
+</script>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

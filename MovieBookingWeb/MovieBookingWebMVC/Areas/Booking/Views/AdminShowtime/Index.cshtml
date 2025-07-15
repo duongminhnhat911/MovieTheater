@@ -4,38 +4,440 @@
     ViewBag.Title = "Quản lý suất chiếu";
 }
 
-<h2 class="text-center fw-bold mb-4">Quản lý suất chiếu</h2>
+<style>
+    :root {
+        --primary-black: #000000;
+        --mint-light: #CCFFE4;
+        --teal-green: #9FCBC0;
+        --light-gray: #F5F5F5;
+        --white: #ffffff;
+        --success-green: #28a745;
+        --warning-orange: #ffc107;
+        --danger-red: #dc3545;
+        --shadow-light: rgba(0, 0, 0, 0.1);
+        --shadow-medium: rgba(0, 0, 0, 0.15);
+    }
 
-<div class="mb-3 text-end">
-    <a href="/Booking/AdminShowtime/Create" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Thêm suất chiếu
-    </a>
+    body {
+        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+    }
+
+    .main-container {
+        background: var(--white);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px var(--shadow-light);
+        margin: 2rem 1rem;
+        max-width: 1400px;
+        overflow: hidden;
+    }
+
+    .header-section {
+        background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
+        color: var(--white);
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(204, 255, 228, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+    @@keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .header-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .content-section {
+        padding: 2rem;
+        background: var(--mint-light);
+        background-image: radial-gradient(circle at 20% 20%, rgba(159, 203, 192, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(245, 245, 245, 0.2) 0%, transparent 50%);
+    }
+
+    .success-alert {
+        background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 15px;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        animation: slideInDown 0.5s ease-out;
+    }
+
+    @@keyframes slideInDown {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .add-showtime-btn {
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        border: none;
+        color: var(--white);
+        padding: 0.75rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 15px rgba(159, 203, 192, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .add-showtime-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .add-showtime-btn:hover::before {
+            left: 100%;
+        }
+
+        .add-showtime-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(159, 203, 192, 0.6);
+            color: var(--white);
+        }
+
+    .showtime-table {
+        background: var(--white);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px var(--shadow-light);
+        margin-top: 2rem;
+    }
+
+    .table-header th {
+        background: var(--primary-black);
+        color: var(--white);
+        padding: 1.2rem 1rem;
+        font-weight: 600;
+        text-align: center;
+        border: none;
+        position: relative;
+    }
+
+        .table-header th::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--teal-green);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .table-header th:hover::after {
+            width: 80%;
+        }
+
+    .table tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid rgba(159, 203, 192, 0.2);
+    }
+
+        .table tbody tr:hover {
+            background: linear-gradient(135deg, var(--mint-light) 0%, rgba(159, 203, 192, 0.1) 100%);
+            transform: translateX(5px);
+        }
+
+    .table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        border: none;
+        position: relative;
+    }
+
+    .showtime-id {
+        background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
+        color: var(--white);
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        display: inline-block;
+        min-width: 40px;
+        text-align: center;
+    }
+
+    .movie-id-badge {
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        color: var(--white);
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-block;
+        min-width: 40px;
+        text-align: center;
+    }
+
+    .movie-title {
+        font-weight: 600;
+        color: var(--primary-black);
+        line-height: 1.4;
+    }
+
+    .room-badge {
+        background: var(--light-gray);
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 600;
+        color: var(--primary-black);
+        display: inline-block;
+        border: 2px solid var(--teal-green);
+    }
+
+    .show-date {
+        font-family: 'Courier New', monospace;
+        font-weight: 600;
+        color: var(--primary-black);
+        padding: 0.3rem 0.8rem;
+        border-radius: 10px;
+        display: inline-block;
+    }
+
+    .time-badge {
+        background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
+        color: var(--white);
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: inline-block;
+        min-width: 70px;
+        text-align: center;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-action {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .btn-edit {
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        color: var(--white);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(159, 203, 192, 0.5);
+            color: var(--white);
+        }
+
+    .btn-delete {
+        background: linear-gradient(135deg, var(--danger-red) 0%, #c82333 100%);
+        color: var(--white);
+    }
+
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.5);
+        }
+
+    .btn-view {
+        background: linear-gradient(135deg, var(--warning-orange) 0%, #fd7e14 100%);
+        color: var(--white);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+        .btn-view:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.5);
+            color: var(--white);
+        }
+
+    @@media (max-width: 768px) {
+        .main-container {
+            margin: 1rem;
+            border-radius: 15px;
+        }
+
+        .header-title {
+            font-size: 2rem;
+        }
+
+        .content-section {
+            padding: 1rem;
+        }
+
+        .table-responsive {
+            font-size: 0.85rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 0.4rem 0.8rem;
+        }
+    }
+</style>
+
+<div class="main-container">
+    <div class="header-section">
+        <h1 class="header-title">
+            <i class="fas fa-calendar-alt me-2"></i>
+            Quản lý suất chiếu
+        </h1>
+    </div>
+
+    <div class="content-section">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert success-alert text-center mb-4" id="alertSuccess">
+                @TempData["Success"]
+            </div>
+        }
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="/Booking/AdminShowtime/Create" class="add-showtime-btn">
+                <i class="fas fa-plus"></i>
+                Thêm suất chiếu
+            </a>
+            <div class="text-muted">
+                <i class="fas fa-clock"></i>
+                Tổng cộng: <strong>@Model.Count()</strong> suất chiếu
+            </div>
+        </div>
+
+        <div class="showtime-table">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead class="table-header">
+                        <tr>
+                            <th style="width: 3%;">ID</th>
+                            <th style="width: 10%;">Mã phim</th>
+                            <th style="width: 23%;">Tên phim</th>
+                            <th style="width: 25%;">Phòng chiếu</th>
+                            <th style="width: 15%;">Ngày chiếu</th>
+                            <th style="width: 12%;">Giờ bắt đầu</th>
+                            <th style="width: 12%;">Giờ kết thúc</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    <span class="showtime-id">@item.Id</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="movie-id-badge">@item.MovieId</span>
+                                </td>
+                                <td>
+                                    <div class="movie-title">@item.MovieName</div>
+                                </td>
+                                <td class="text-center">
+                                    <span class="room-badge">@item.Room</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="show-date">@item.ShowDate.ToString("dd/MM/yyyy")</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="time-badge">@item.FromTime</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="time-badge">@item.ToTime</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
-<table class="table table-bordered table-hover table-striped">
-    <thead class="table-dark text-center align-middle">
-        <tr>
-            <th style="width: 5%;">ID</th>
-            <th style="width: 10%;">Mã phim</th>
-            <th style="width: 20%;">Tên phim</th>
-            <th style="width: 15%;">Phòng chiếu</th>
-            <th style="width: 15%;">Ngày chiếu</th>
-            <th style="width: 15%;">Giờ bắt đầu</th>
-            <th style="width: 15%;">Giờ kết thúc</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr class="align-middle text-center">
-                <td class="fw-bold">@item.Id</td>
-                <td>@item.MovieId</td>
-                <td class="text-start">@item.MovieName</td>
-                <td>@item.Room</td>
-                <td>@item.ShowDate.ToString("dd/MM/yyyy")</td>
-                <td>@item.FromTime</td>
-                <td>@item.ToTime</td>
-            </tr>
+<script>
+    // Auto-hide success alert after 5 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alertSuccess = document.getElementById('alertSuccess');
+        if (alertSuccess) {
+            setTimeout(() => {
+                alertSuccess.style.transition = 'opacity 0.5s ease-out';
+                alertSuccess.style.opacity = '0';
+                setTimeout(() => {
+                    alertSuccess.remove();
+                }, 500);
+            }, 5000);
         }
-    </tbody>
-</table>
+    });
+
+    // Add loading state for delete buttons
+    document.querySelectorAll('form[onsubmit*="confirm"]').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const button = this.querySelector('button[type="submit"]');
+            if (button) {
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xóa...';
+                button.disabled = true;
+            }
+        });
+    });
+</script>

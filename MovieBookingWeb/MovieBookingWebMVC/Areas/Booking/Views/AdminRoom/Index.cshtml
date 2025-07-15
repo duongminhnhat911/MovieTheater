@@ -3,406 +3,442 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Quản lý phòng chiếu ";
+    ViewBag.Title = "Danh sách phòng chiếu ";
 }
+
 <style>
-
-
-    /* Header Styles */
-    h2 {
-        color: #000000;
-        font-weight: 700;
-        margin-bottom: 2rem;
-        text-align: center;
-        font-size: 2.5rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        position: relative;
+    :root {
+        --primary-black: #000000;
+        --mint-light: #CCFFE4;
+        --teal-green: #9FCBC0;
+        --light-gray: #F5F5F5;
+        --white: #ffffff;
+        --success-green: #28a745;
+        --warning-orange: #ffc107;
+        --danger-red: #dc3545;
+        --shadow-light: rgba(0, 0, 0, 0.1);
+        --shadow-medium: rgba(0, 0, 0, 0.15);
     }
 
-        h2::after {
+    body {
+        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+    }
+
+    .main-container {
+        background: var(--white);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px var(--shadow-light);
+        margin: 2rem 1rem;
+        max-width: 1400px;
+        overflow: hidden;
+    }
+
+    .header-section {
+        background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
+        color: var(--white);
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .header-section::before {
             content: '';
             position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: #9FCBC0;
-            border-radius: 2px;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(204, 255, 228, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
         }
 
-    /* Test Link Styles */
-    .text-primary {
-        display: inline-block;
-        margin-bottom: 1rem;
-        padding: 0.5rem 1rem;
-        background: rgba(159, 203, 192, 0.2);
-        border-radius: 8px;
-        text-decoration: none;
-        color: #000000 !important;
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-
-        .text-primary:hover {
-            background: #9FCBC0;
-            color: #000000 !important;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(159, 203, 192, 0.3);
+    @@keyframes rotate {
+        0% {
+            transform: rotate(0deg);
         }
 
-    /* Button Styles */
-    .btn-success {
-        background: #9FCBC0 !important;
-        border: none !important;
-        color: #000000 !important;
-        font-weight: 600;
-        padding: 0.75rem 1.5rem;
-        border-radius: 10px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(159, 203, 192, 0.3);
-        text-decoration: none;
-        display: inline-block;
-    }
-
-        .btn-success:hover {
-            background: #8BB8AC !important;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(159, 203, 192, 0.4);
-            color: #000000 !important;
+        100% {
+            transform: rotate(360deg);
         }
-
-        .btn-success:active {
-            transform: translateY(0);
-        }
-
-        .btn-success:focus {
-            box-shadow: 0 0 0 0.2rem rgba(159, 203, 192, 0.5);
-        }
-
-    /* Table Styles */
-    .table {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        border: none !important;
-        margin-bottom: 2rem;
     }
 
-    .table-bordered {
-        border: none !important;
-    }
-
-    .table thead {
-        background: #9FCBC0;
-        color: #000000;
-    }
-
-    .table-light {
-        background: #9FCBC0 !important;
-        color: #000000 !important;
-    }
-
-    .table thead th {
-        border: none !important;
-        padding: 1rem;
+    .header-title {
+        font-size: 2.5rem;
         font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-size: 0.9rem;
-        color: #000000;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
-    .table tbody td {
-        border: none !important;
-        padding: 1rem;
-        vertical-align: middle;
-        border-bottom: 1px solid rgba(159, 203, 192, 0.2) !important;
+    .content-section {
+        padding: 2rem;
+        background: var(--mint-light);
+        background-image: radial-gradient(circle at 20% 20%, rgba(159, 203, 192, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(245, 245, 245, 0.2) 0%, transparent 50%);
     }
 
-    .table tbody tr {
-        transition: all 0.3s ease;
+    .success-alert {
+        background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 15px;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        animation: slideInDown 0.5s ease-out;
     }
 
-        .table tbody tr:hover {
-            background: rgba(204, 255, 228, 0.5) !important;
-            transform: translateX(5px);
-        }
-
-        .table tbody tr:last-child td {
-            border-bottom: none !important;
-        }
-
-    .table-striped tbody tr:nth-of-type(odd) {
-        background: rgba(245, 245, 245, 0.3);
-    }
-
-    .table-striped tbody tr:nth-of-type(even) {
-        background: rgba(255, 255, 255, 0.5);
-    }
-
-    /* Action Button Styles */
-    .btn-info {
-        background: #9FCBC0 !important;
-        border: none !important;
-        color: #000000 !important;
-        font-weight: 500;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 10px rgba(159, 203, 192, 0.3);
-        text-decoration: none;
-    }
-
-        .btn-info:hover {
-            background: #8BB8AC !important;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(159, 203, 192, 0.4);
-            color: #000000 !important;
-        }
-
-        .btn-info:focus {
-            box-shadow: 0 0 0 0.2rem rgba(159, 203, 192, 0.5);
-        }
-
-    .btn-warning {
-        background: #9FCBC0 !important;
-        border: none !important;
-        color: #000000 !important;
-        font-weight: 500;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 10px rgba(159, 203, 192, 0.3);
-        text-decoration: none;
-    }
-
-        .btn-warning:hover {
-            background: #8BB8AC !important;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(159, 203, 192, 0.4);
-            color: #000000 !important;
-        }
-
-        .btn-warning:focus {
-            box-shadow: 0 0 0 0.2rem rgba(159, 203, 192, 0.5);
-        }
-
-    .btn-sm {
-        font-size: 0.85rem;
-        padding: 0.4rem 0.8rem;
-    }
-
-    /* Spacing */
-    .mb-3 {
-        margin-bottom: 1.5rem !important;
-    }
-
-    .me-1 {
-        margin-right: 0.5rem !important;
-    }
-
-    /* Alert Styles */
-    .alert-warning {
-        background: rgba(204, 255, 228, 0.8) !important;
-        border: 1px solid #9FCBC0 !important;
-        color: #000000 !important;
-        border-radius: 10px;
-        padding: 1.5rem;
-        text-align: center;
-        font-weight: 500;
-        box-shadow: 0 5px 15px rgba(159, 203, 192, 0.2);
-    }
-
-    /* Icons */
-    .fas {
-        margin-right: 0.5rem;
-    }
-
-    /* Responsive Design */
-    @@media (max-width: 768px) {
-        body {
-            padding: 1rem;
-        }
-
-        .container, .container-fluid {
-            padding: 1.5rem;
-        }
-
-        h2 {
-            font-size: 2rem;
-        }
-
-        .table {
-            font-size: 0.9rem;
-        }
-
-            .table thead th,
-            .table tbody td {
-                padding: 0.75rem 0.5rem;
-            }
-
-        .btn-sm {
-            font-size: 0.8rem;
-            padding: 0.3rem 0.6rem;
-        }
-
-        .me-1 {
-            margin-right: 0.25rem !important;
-            margin-bottom: 0.5rem;
-        }
-    }
-
-    @@media (max-width: 576px) {
-        .table-responsive {
-            border-radius: 12px;
-            overflow-x: auto;
-        }
-
-        .btn-success {
-            width: 100%;
-            margin-bottom: 1rem;
-        }
-
-        .btn-sm {
-            font-size: 0.75rem;
-            padding: 0.3rem 0.5rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .table thead th,
-        .table tbody td {
-            padding: 0.5rem 0.3rem;
-            font-size: 0.8rem;
-        }
-    }
-
-    /* Animation for page load */
-    @@keyframes fadeInUp {
+    @@keyframes slideInDown {
         from {
+            transform: translateY(-20px);
             opacity: 0;
-            transform: translateY(30px);
         }
 
         to {
-            opacity: 1;
             transform: translateY(0);
+            opacity: 1;
         }
     }
 
-    .container, .container-fluid {
-        animation: fadeInUp 0.6s ease-out;
+    .add-room-btn {
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        border: none;
+        color: var(--white);
+        padding: 0.75rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 15px rgba(159, 203, 192, 0.4);
+        position: relative;
+        overflow: hidden;
     }
 
-    /* Hover effects for table rows */
+        .add-room-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .add-room-btn:hover::before {
+            left: 100%;
+        }
+
+        .add-room-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(159, 203, 192, 0.6);
+            color: var(--white);
+        }
+
+    .room-table {
+        background: var(--white);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px var(--shadow-light);
+        margin-top: 2rem;
+    }
+
+    .table-header th {
+        background: var(--primary-black);
+        color: var(--white);
+        padding: 1.2rem 1rem;
+        font-weight: 600;
+        text-align: center;
+        border: none;
+        position: relative;
+    }
+
+        .table-header th::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--teal-green);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .table-header th:hover::after {
+            width: 80%;
+        }
+
     .table tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid rgba(159, 203, 192, 0.2);
+    }
+
+        .table tbody tr:hover {
+            background: linear-gradient(135deg, var(--mint-light) 0%, rgba(159, 203, 192, 0.1) 100%);
+            transform: translateX(5px);
+        }
+
+    .table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        border: none;
+        position: relative;
+    }
+
+    .room-id {
+        background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
+        color: var(--white);
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        display: inline-block;
+        min-width: 40px;
+        text-align: center;
+    }
+
+    .room-name {
+        font-weight: 600;
+        color: var(--primary-black);
+        line-height: 1.4;
+    }
+
+    .room-quantity {
+        background: var(--light-gray);
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 600;
+        color: var(--primary-black);
+        display: inline-block;
+    }
+
+    .room-status {
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: inline-block;
+        min-width: 70px;
+        text-align: center;
+    }
+
+        /* Trạng thái: Đang hoạt động */
+        .room-status.active {
+            background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
+            color: var(--white);
+        }
+
+        /* Trạng thái: Tạm ngưng */
+        .room-status.inactive {
+            background: linear-gradient(135deg, var(--warning-orange) 0%, #fd7e14 100%);
+            color: var(--white);
+        }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-action {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
         cursor: pointer;
     }
 
-    /* Custom scrollbar */
-    .table-responsive::-webkit-scrollbar {
-        height: 8px;
+    .btn-details {
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        color: var(--white);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
     }
 
-    .table-responsive::-webkit-scrollbar-track {
-        background: #F5F5F5;
-        border-radius: 4px;
-    }
-
-    .table-responsive::-webkit-scrollbar-thumb {
-        background: #9FCBC0;
-        border-radius: 4px;
-    }
-
-        .table-responsive::-webkit-scrollbar-thumb:hover {
-            background: #8BB8AC;
+        .btn-details:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(159, 203, 192, 0.5);
+            color: var(--white);
         }
 
-    /* Loading animation for buttons */
-    .btn:active {
-        transform: scale(0.98);
+    .btn-edit {
+        background: linear-gradient(135deg, var(--warning-orange) 0%, #fd7e14 100%);
+        color: var(--white);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
     }
 
-    /* Additional button states */
-    .btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.5);
+            color: var(--white);
+        }
+
+    .alert-warning {
+        background: linear-gradient(135deg, rgba(204, 255, 228, 0.8) 0%, rgba(159, 203, 192, 0.3) 100%);
+        border: 1px solid var(--teal-green);
+        color: var(--primary-black);
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(159, 203, 192, 0.2);
     }
 
-    /* Focus states for accessibility */
-    .btn:focus,
-    .text-primary:focus {
-        outline: none;
-        box-shadow: 0 0 0 0.2rem rgba(159, 203, 192, 0.5);
-    }
+    @@media (max-width: 768px) {
+        .main-container {
+            margin: 1rem;
+            border-radius: 15px;
+        }
 
-    /* Table responsive wrapper */
-    .table-responsive {
-        border-radius: 12px;
-        overflow-x: auto;
-    }
+        .header-title {
+            font-size: 2rem;
+        }
 
-    /* Ensure buttons don't break on small screens */
-    td .btn {
-        white-space: nowrap;
-        min-width: auto;
-    }
+        .content-section {
+            padding: 1rem;
+        }
 
-    /* Fix for Bootstrap overrides */
-    .table > :not(caption) > * > * {
-        padding: 1rem;
-        color: #000000;
-    }
+        .table-responsive {
+            font-size: 0.85rem;
+        }
 
-    .table > thead > tr > th {
-        background: #9FCBC0 !important;
-        color: #000000 !important;
+        .action-buttons {
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 0.4rem 0.8rem;
+        }
     }
 </style>
-<h2>@ViewData["Title"]</h2>
 
-<!-- 🔎 Link test trực tiếp -->
-<a href="/Booking/AdminRoom/CreateRoom" class="btn btn-success mb-3">
-    <i class="fas fa-plus-circle"></i> Thêm phòng mới
-</a>
+<div class="main-container">
+    <div class="header-section">
+        <h1 class="header-title">
+            <i class="fas fa-door-open me-2"></i>
+            Danh sách phòng chiếu
+        </h1>
+    </div>
 
-@if (Model != null && Model.Count > 0)
-{
-    <table class="table table-bordered table-striped">
-        <thead class="table-light">
-            <tr>
-                <th>ID</th>
-                <th>Tên phòng</th>
-                <th>Số ghế</th>
-                <th>Trạng thái</th>
-                <th>Thao tác</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var room in Model)
+    <div class="content-section">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="/Booking/AdminRoom/CreateRoom" class="add-room-btn">
+                <i class="fas fa-plus"></i>
+                Thêm phòng mới
+            </a>
+            @if (Model != null && Model.Count > 0)
             {
-                <tr>
-                    <td>@room.Id</td>
-                    <td>@room.RoomName</td>
-                    <td>@room.RoomQuantity</td>
-                    <td>@room.Status</td>
-                    <td>
-                        <a href="/Booking/AdminRoom/DetailsRoom/@room.Id" class="btn btn-info btn-sm me-1">
-                            <i class="fas fa-eye"></i> Chi tiết
-                        </a>
-
-                        <a href="/Booking/AdminRoom/EditRoom/@room.Id" class="btn btn-warning btn-sm me-1">
-                            <i class="fas fa-edit"></i> Sửa
-                        </a>
-
-                    </td>
-                </tr>
+                <div class="text-muted">
+                    <i class="fas fa-database"></i>
+                    Tổng cộng: <strong>@Model.Count</strong> phòng
+                </div>
             }
-        </tbody>
-    </table>
-}
-else
-{
-    <div class="alert alert-warning">Không có phòng chiếu nào được tìm thấy.</div>
-}
+        </div>
+
+        @if (Model != null && Model.Count > 0)
+        {
+            <div class="room-table">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead class="table-header">
+                            <tr>
+                                <th style="width: 3%;">
+                                    ID
+                                </th>
+                                <th style="width: 30%;">
+                                    Tên phòng
+                                </th>
+                                <th style="width: 20%;">
+                                    Số ghế
+                                </th>
+                                <th style="width: 27%;">
+                                    Trạng thái
+                                </th>
+                                <th style="width: 20%;">
+                                    Thao tác
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var room in Model)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <span class="room-id">@room.Id</span>
+                                    </td>
+                                    <td>
+                                        <div class="room-name">@room.RoomName</div>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="room-quantity">@room.RoomQuantity ghế</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="room-status @(room.Status ? "active" : "inactive")">
+                                            @(room.Status ? "Đang hoạt động" : "Tạm ngưng")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a href="/Booking/AdminRoom/DetailsRoom/@room.Id" class="btn-action btn-details">
+                                                <i class="fas fa-eye"></i>
+                                                Chi tiết
+                                            </a>
+                                            <a href="/Booking/AdminRoom/EditRoom/@room.Id" class="btn-action btn-edit">
+                                                <i class="fas fa-edit"></i>
+                                                Sửa
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Không có phòng chiếu nào được tìm thấy.
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    // Add loading state for buttons
+    document.querySelectorAll('.btn-action').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            if (this.classList.contains('btn-details') || this.classList.contains('btn-edit')) {
+                const icon = this.querySelector('i');
+                const text = this.querySelector('span') || this.lastChild;
+
+                icon.className = 'fas fa-spinner fa-spin';
+
+                setTimeout(() => {
+                    icon.className = this.classList.contains('btn-details') ? 'fas fa-eye' : 'fas fa-edit';
+                }, 1000);
+            }
+        });
+    });
+</script>

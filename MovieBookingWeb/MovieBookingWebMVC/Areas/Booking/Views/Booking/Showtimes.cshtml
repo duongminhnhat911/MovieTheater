@@ -17,7 +17,7 @@
 
 <style>
     .showtime-container {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
         min-height: 100vh;
         padding: 40px 0;
     }
@@ -32,7 +32,7 @@
     }
 
     .showtime-header {
-        background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+        background: linear-gradient(135deg, #000000 0%, #333333 100%);
         color: white;
         padding: 30px;
         text-align: center;
@@ -52,16 +52,13 @@
         }
 
     @@keyframes shimmer {
-        0%
+        0% {
+            transform: rotate(0deg);
+        }
 
-    {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-
+        100% {
+            transform: rotate(360deg);
+        }
     }
 
     .showtime-title {
@@ -260,29 +257,26 @@
     }
 
     @@media (max-width: 768px) {
-        .showtime-title
+        .showtime-title {
+            font-size: 2rem;
+        }
 
-    {
-        font-size: 2rem;
-    }
+        .date-buttons {
+            gap: 10px;
+        }
 
-    .date-buttons {
-        gap: 10px;
-    }
+        .date-btn {
+            padding: 12px 20px;
+            font-size: 0.9rem;
+        }
 
-    .date-btn {
-        padding: 12px 20px;
-        font-size: 0.9rem;
-    }
+        .schedule-grid {
+            grid-template-columns: 1fr;
+        }
 
-    .schedule-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .schedule-time {
-        font-size: 1.5rem;
-    }
-
+        .schedule-time {
+            font-size: 1.5rem;
+        }
     }
 </style>
 

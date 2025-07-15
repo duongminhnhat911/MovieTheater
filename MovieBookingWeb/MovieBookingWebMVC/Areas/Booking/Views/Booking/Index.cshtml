@@ -13,14 +13,11 @@
         --accent-blue: #3B82F6;
         --accent-purple: #8B5CF6;
     }
+
     body {
         min-height: 100vh;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         font-feature-settings: 'cv05', 'cv11';
-    }
-
-    .container-fluid {
-        padding: 0;
     }
 
     .movie-container {
@@ -254,6 +251,7 @@
     .detail-list {
         list-style: none;
         padding: 0px;
+        margin-bottom: 0.5rem;
     }
 
         .detail-list li {
@@ -296,88 +294,6 @@
         letter-spacing: -0.005em;
         margin-left: 10px;
         padding: 15px;
-    }
-
-    /* Responsive Design */
-    @@media (max-width: 992px) {
-        .movie-content
-
-    {
-        grid-template-columns: 1fr;
-        gap: 30px;
-        padding: 30px;
-    }
-
-    .poster-wrapper {
-        max-width: 400px;
-        margin: 0 auto;
-    }
-
-    .movie-title {
-        font-size: 2rem;
-        text-align: center;
-    }
-
-    }
-
-    @@media (max-width: 768px) {
-        .movie-container {
-            margin: 20px;
-            border-radius: 15px;
-        }
-
-    .movie-header {
-        padding: 20px;
-    }
-
-        .movie-header h1 {
-            font-size: 2rem;
-            margin-top: 0;
-        }
-
-    .movie-content {
-        padding: 20px;
-    }
-
-    .quick-info {
-        grid-template-columns: 1fr;
-    }
-
-    .detail-section {
-        padding: 20px;
-    }
-
-    .detail-list li strong {
-        width: 120px;
-    }
-
-    }
-
-    @@media (max-width: 576px) {
-        .movie-header h1
-
-    {
-        font-size: 1.8rem;
-    }
-
-    .movie-title {
-        font-size: 1.6rem;
-    }
-
-    .detail-section h3 {
-        font-size: 1.4rem;
-    }
-
-    .detail-list li {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-
-        .detail-list li strong {
-            width: 100%;
-        }
-
     }
 </style>
 
