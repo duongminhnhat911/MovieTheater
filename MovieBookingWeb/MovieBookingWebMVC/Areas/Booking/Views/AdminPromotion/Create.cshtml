@@ -1,0 +1,540 @@
+﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModel.CreatePromotionViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Tạo khuyến mãi mới";
+}
+
+<style>
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1050;
+    }
+
+    .modal-content-custom {
+        background: white;
+        border-radius: 15px;
+        width: 500px;
+        max-width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+    }
+
+    .modal-header-custom {
+        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px 15px 0 0;
+        text-align: center;
+        position: relative;
+    }
+
+        .modal-header-custom h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background-color 0.3s;
+    }
+
+        .close-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+    .modal-body-custom {
+        padding: 30px;
+    }
+
+    .form-group-custom {
+        margin-bottom: 20px;
+    }
+
+    .form-label-custom {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .form-control-custom {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 25px;
+        font-size: 14px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        background-color: #f8f9fa;
+    }
+
+        .form-control-custom:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+            background-color: white;
+        }
+
+        .form-control-custom::placeholder {
+            color: #999;
+        }
+
+    .textarea-custom {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .checkbox-custom {
+        width: 20px;
+        height: 20px;
+        accent-color: #4a90e2;
+    }
+
+    .button-container {
+        display: flex;
+        gap: 15px;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #5cb85c, #449d44);
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+        min-width: 120px;
+    }
+
+        .btn-primary-custom:hover {
+            background: linear-gradient(135deg, #449d44, #357a35);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(92, 184, 92, 0.3);
+        }
+
+    .btn-secondary-custom {
+        background: white;
+        color: #666;
+        padding: 12px 30px;
+        border: 2px solid #e0e0e0;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+        min-width: 120px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .btn-secondary-custom:hover {
+            background: #f8f9fa;
+            border-color: #ccc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+    .validation-error {
+        color: #dc3545;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 15px;
+    }
+
+        .form-row .form-group-custom {
+            flex: 1;
+        }
+
+    .button-group {
+        display: flex;
+        gap: 0;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: fit-content;
+        margin: 20px auto;
+    }
+
+    .btn {
+        border: none;
+        padding: 12px 24px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        cursor: pointer;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .btn-create-promotion {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+        .btn-create-promotion:hover {
+            background: linear-gradient(135deg, #218838, #1ab394);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+
+    .btn-cancel {
+        background: linear-gradient(135deg, #6c757d, #5a6268);
+        color: white;
+    }
+
+        .btn-cancel:hover {
+            background: linear-gradient(135deg, #5a6268, #495057);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+
+    .btn i {
+        margin-right: 8px;
+    }
+
+    /* Alternative Style 1 - Rounded corners */
+    .button-group-alt1 {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin: 20px auto;
+    }
+
+        .button-group-alt1 .btn {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+    /* Alternative Style 2 - Outlined */
+    .button-group-alt2 {
+        display: flex;
+        gap: 0;
+        border: 2px solid #28a745;
+        border-radius: 8px;
+        overflow: hidden;
+        width: fit-content;
+        margin: 20px auto;
+    }
+
+        .button-group-alt2 .btn-create-promotion {
+            background: #28a745;
+            color: white;
+            border: none;
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .button-group-alt2 .btn-cancel {
+            background: transparent;
+            color: #28a745;
+            border: none;
+        }
+
+            .button-group-alt2 .btn-cancel:hover {
+                background: #28a745;
+                color: white;
+            }
+
+    /* Alternative Style 3 - Modern flat */
+    .button-group-alt3 {
+        display: inline-flex;
+        background: white;
+        border-radius: 12px;
+        padding: 4px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        gap: 4px;
+        margin: 20px auto;
+    }
+
+        .button-group-alt3 .btn {
+            border-radius: 8px;
+            border: none;
+            padding: 10px 20px;
+            font-weight: 500;
+        }
+
+        .button-group-alt3 .btn-create-promotion {
+            background: #28a745;
+            color: white;
+        }
+
+        .button-group-alt3 .btn-cancel {
+            background: #f8f9fa;
+            color: #6c757d;
+        }
+
+        .button-group-alt3 .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+    .demo-container {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .demo-title {
+        margin: 40px 0 20px;
+        color: #333;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .code-block {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px 0;
+        text-align: left;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        color: #495057;
+    }
+</style>
+
+<div class="main-container">
+    <div class="header-section">
+        <h1 class="header-title">
+            <i class="fas fa-percentage me-3"></i>
+            Tạo khuyến mãi mới
+        </h1>
+    </div>
+
+    <div class="content-section">
+        @if (TempData["Success"] != null)
+        {
+            <div id="alertSuccess" class="alert success-alert text-center mb-4">
+                <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+            </div>
+        }
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+        <div id="alertDanger" class="alert-custom text-center">
+            <i class="fas fa-exclamation-triangle"></i>
+            @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)))
+        </div>
+                }
+
+        <div class="modal-body-custom">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <!-- Promotion Code -->
+                <div class="form-group-custom">
+                    <label asp-for="PromotionCode" class="form-label-custom">Mã khuyến mãi</label>
+                    <input asp-for="PromotionCode" name="PromotionCode" type="text" class="form-control-custom" placeholder="Nhập mã khuyến mãi..." />
+                    <span asp-validation-for="PromotionCode" class="validation-error"></span>
+                </div>
+                
+                <!-- Description -->
+                <div class="form-group-custom">
+                    <label asp-for="Description" class="form-label-custom">Mô tả</label>
+                    <textarea asp-for="Description" name="Description" class="form-control-custom textarea-custom" placeholder="Nhập mô tả khuyến mãi..."></textarea>
+                    <span asp-validation-for="Description" class="validation-error"></span>
+                </div>
+                
+                <!-- Discount Type Selection -->
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Loại giảm giá</label>
+                    <div class="discount-type-container">
+                        <div class="discount-option">
+                            <input type="radio" id="discountAmount" name="discountType" value="amount" class="discount-radio">
+                            <label for="discountAmount" class="discount-label">Giảm theo số tiền</label>
+                        </div>
+                        <div class="discount-option">
+                            <input type="radio" id="discountPercent" name="discountType" value="percent" class="discount-radio">
+                            <label for="discountPercent" class="discount-label">Giảm theo phần trăm</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discount Amount -->
+                <div class="form-group-custom" id="amountGroup" style="display: none;">
+                    <label asp-for="DiscountAmount" class="form-label-custom">Số tiền giảm (VNĐ)</label>
+                    <input asp-for="DiscountAmount" name="DiscountAmount" type="number" class="form-control-custom" min="0" placeholder="Ví dụ: 50000" />
+                    <span asp-validation-for="DiscountAmount" class="validation-error"></span>
+                </div>
+                
+                <!-- Discount Percent -->
+                <div class="form-group-custom" id="percentGroup" style="display: none;">
+                    <label asp-for="DiscountPercent" class="form-label-custom">Phần trăm giảm (%)</label>
+                    <input asp-for="DiscountPercent" name="DiscountPercent" type="number" class="form-control-custom" min="0" max="100" placeholder="Ví dụ: 20" />
+                    <span asp-validation-for="DiscountPercent" class="validation-error"></span>
+                </div>
+                
+                <!-- Quantity -->
+                <div class="form-group-custom">
+                    <label asp-for="Quantity" class="form-label-custom">Số lượng</label>
+                    <input asp-for="Quantity" name="Quantity" type="number" class="form-control-custom" min="1" placeholder="Ví dụ: 100" />
+                    <span asp-validation-for="Quantity" class="validation-error"></span>
+                </div>
+                
+                <!-- Start Date and End Date -->
+                <div class="form-row">
+                    <div class="form-group-custom">
+                        <label asp-for="StartDate" class="form-label-custom">Ngày bắt đầu</label>
+                        <input asp-for="StartDate" name="StartDate" type="datetime-local" class="form-control-custom" />
+                        <span asp-validation-for="StartDate" class="validation-error"></span>
+                    </div>
+                    
+                    <div class="form-group-custom">
+                        <label asp-for="EndDate" class="form-label-custom">Ngày kết thúc</label>
+                        <input asp-for="EndDate" name="EndDate" type="datetime-local" class="form-control-custom" />
+                        <span asp-validation-for="EndDate" class="validation-error"></span>
+                    </div>
+                </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-create-promotion">
+                    <i class="fas fa-plus me-2"></i>
+                    Tạo khuyến mãi
+                </button>
+                <a asp-action="ListPromotions" class="btn btn-cancel">
+                    <i class="fas fa-times me-2"></i>
+                    Hủy
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Initialize form on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').min = today;
+            document.getElementById('endDate').min = today;
+
+            // Update end date minimum when start date changes
+            document.getElementById('startDate').addEventListener('change', function() {
+                document.getElementById('endDate').min = this.value;
+            });
+
+            // Removed the validation that clears fields when the other is filled
+            // Now both discount amount and discount percent can be filled independently
+        });
+
+        // Auto-hide alerts
+        document.addEventListener("DOMContentLoaded", function () {
+            function fadeOutAndRemove(element) {
+                setTimeout(() => {
+                    element.style.transition = "opacity 0.5s ease";
+                    element.style.opacity = "0";
+                    setTimeout(() => {
+                        element.remove();
+                    }, 500);
+                }, 5000);
+            }
+
+            const successAlert = document.getElementById("alertSuccess");
+            const dangerAlert = document.getElementById("alertDanger");
+            if (successAlert) {
+                fadeOutAndRemove(successAlert);
+            }
+            if (dangerAlert) {
+                fadeOutAndRemove(dangerAlert);
+            }
+        });
+
+              document.addEventListener('DOMContentLoaded', function() {
+            const discountAmountRadio = document.getElementById('discountAmount');
+            const discountPercentRadio = document.getElementById('discountPercent');
+            const amountGroup = document.getElementById('amountGroup');
+            const percentGroup = document.getElementById('percentGroup');
+            const discountAmountInput = document.querySelector('input[name="DiscountAmount"]');
+            const discountPercentInput = document.querySelector('input[name="DiscountPercent"]');
+
+            // Function to update display and values
+            function updateDiscountType() {
+                const amountOption = document.querySelector('label[for="discountAmount"]').parentElement;
+                const percentOption = document.querySelector('label[for="discountPercent"]').parentElement;
+
+                // Remove selected class from all options
+                amountOption.classList.remove('selected');
+                percentOption.classList.remove('selected');
+
+                if (discountAmountRadio.checked) {
+                    amountGroup.style.display = 'block';
+                    percentGroup.style.display = 'none';
+                    amountOption.classList.add('selected');
+                    discountPercentInput.value = 0;
+                } else if (discountPercentRadio.checked) {
+                    amountGroup.style.display = 'none';
+                    percentGroup.style.display = 'block';
+                    percentOption.classList.add('selected');
+                    discountAmountInput.value = 0;
+                }
+            }
+
+            // Add event listeners
+            discountAmountRadio.addEventListener('change', updateDiscountType);
+            discountPercentRadio.addEventListener('change', updateDiscountType);
+
+            // Make the entire option clickable
+            document.querySelector('label[for="discountAmount"]').parentElement.addEventListener('click', function() {
+                discountAmountRadio.checked = true;
+                updateDiscountType();
+            });
+
+            document.querySelector('label[for="discountPercent"]').parentElement.addEventListener('click', function() {
+                discountPercentRadio.checked = true;
+                updateDiscountType();
+            });
+
+            // Initialize with default selection (amount)
+            discountAmountRadio.checked = true;
+            updateDiscountType();
+        });
+    </script>
+}

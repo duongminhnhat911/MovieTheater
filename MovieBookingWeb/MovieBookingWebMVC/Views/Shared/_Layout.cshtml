@@ -4,7 +4,7 @@
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
 
     // Điều kiện hiển thị sidebar cho Admin (bao gồm các controller quản trị như Admin, Movie, User)
-    var showAdminSidebar = isAdmin && new[] { "Admin", "Movie", "User", "AdminShowtime", "AdminRoom" }.Contains(currentController);
+    var showAdminSidebar = isAdmin && new[] { "Admin", "Movie", "User", "AdminShowtime", "AdminRoom", "AdminPromotion" }.Contains(currentController);
 
     // Điều kiện hiển thị sidebar cho người dùng, chỉ khi ở trang "Profile"
     var showUserSidebar = User?.Identity?.IsAuthenticated == true
@@ -567,8 +567,8 @@
                            asp-area="Booking" asp-controller="AdminRoom" asp-action="Index">
                             <i class="fas fa-door-open"></i> <span>Danh sách phòng chiếu</span>
                         </a>
-                        <a class="nav-link sidebar-link d-flex align-items-center gap-2 @(currentController == "Admin" && currentAction == "ViewPromotions" ? "active" : "")"
-                           href="#">
+                        <a class="nav-link sidebar-link d-flex align-items-center gap-2 @(currentController == "AdminPromotion" && currentAction == "ListPromotions" ? "active" : "")"
+                           asp-area="Booking" asp-controller="AdminPromotion" asp-action="ListPromotions">
                             <i class="fas fa-gift"></i>
                             <span>Danh sách khuyến mãi</span>
                         </a>
