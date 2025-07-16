@@ -4,6 +4,7 @@ using BookingManagement.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace BookingManagement.Controllers
 {
@@ -13,9 +14,11 @@ namespace BookingManagement.Controllers
     {
         private readonly IOrderService _service;
 
-        public OrderController(IOrderService service)
+        private readonly IOrderService _orderService;
+        public OrderController(IOrderService service, IOrderService orderService)
         {
             _service = service;
+            _orderService = orderService;
         }
 
         [HttpPost]
@@ -71,6 +74,15 @@ namespace BookingManagement.Controllers
             {
                 return BadRequest(new { error = ex.Message });
             }
+        }
+        [HttpGet("history")]
+        public async Task<IActionResult> GetOrderHistory([FromQuery] int userId)
+        {
+
+            var orderHistory = await _orderService.GetOrderHistoryAsync(userId);
+            return Ok(orderHistory);
+
+            return Ok(orderHistory);
         }
     }
 }
