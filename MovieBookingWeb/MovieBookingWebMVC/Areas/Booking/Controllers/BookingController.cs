@@ -381,7 +381,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SelectSeat(int showtimeId, List<int> seatIds)
+        public async Task<IActionResult> SelectSeat(int showtimeId, List<int> seatIds, string? promotionCode)
         {
             if (seatIds == null || !seatIds.Any())
             {
@@ -395,14 +395,13 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
                 TempData["ErrorMessage"] = "Không thể xác định người dùng.";
                 return RedirectToAction("Login", "Account", new { area = "User" });
             }
-            var username = User.FindFirst(ClaimTypes.Name)?.Value;
-
 
             var request = new CreatePaymentRequestDto
             {
                 ShowtimeId = showtimeId,
                 UserId = userId,
-                SeatIds = seatIds
+                SeatIds = seatIds,
+                PromotionCode = promotionCode // ✅ Truyền mã khuyến mãi nếu có
             };
 
             var client = _httpClientFactory.CreateClient("ApiClient_Booking");
@@ -410,6 +409,8 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
+                var error = await response.Content.ReadAsStringAsync();
+                _logger.LogWarning("Create order failed: {Error}", error);
                 TempData["ErrorMessage"] = "Lỗi khi tạo đơn hàng.";
                 return RedirectToAction("SelectSeat", new { scheduleId = showtimeId });
             }
@@ -423,6 +424,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
 
             return RedirectToAction("ConfirmOrder", new { orderId = dto.OrderId });
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Booked(int orderId)

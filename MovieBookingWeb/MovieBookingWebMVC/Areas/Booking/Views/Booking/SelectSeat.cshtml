@@ -518,6 +518,10 @@
                 @if (Model.Seats.Any(s => s.Status == "Available"))
                 {
                     <div class="booking-actions">
+                        <div class="form-group mb-3">
+                            <label for="promotionCode" class="form-label">Mã khuyến mãi</label>
+                            <input type="text" class="form-control" id="promotionCode" name="promotionCode" placeholder="Nhập mã khuyến mãi (nếu có)">
+                        </div>
                         <button type="submit" class="btn btn-book">
                             <i class="fas fa-ticket-alt me-2"></i>
                             Đặt vé ngay
