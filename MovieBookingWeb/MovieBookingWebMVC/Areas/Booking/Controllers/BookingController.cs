@@ -2,7 +2,6 @@
 using MovieBookingWebMVC.Areas.Booking.Services;
 using MovieBookingWebMVC.Areas.Movie.Services;
 using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
-using System.Net.Http;
 using MovieBookingWebMVC.Areas.Booking.Models.ViewModels;
 using Newtonsoft.Json;
 using System.Text;

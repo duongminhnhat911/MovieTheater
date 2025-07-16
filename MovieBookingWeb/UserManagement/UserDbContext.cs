@@ -15,7 +15,7 @@ namespace UserManagement
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Host=localhost;Database=UserDB;Username=postgres;Password=12345");
+                optionsBuilder.UseNpgsql("Host=localhost;Database=UserDB;Username=postgres;Password=123456");
             }
         }
 

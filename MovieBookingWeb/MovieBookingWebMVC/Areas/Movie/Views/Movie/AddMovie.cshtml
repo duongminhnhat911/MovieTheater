@@ -701,7 +701,6 @@
             </button>
         </form>
     </div>
-</div>
 
 <script>
     function toggleCheckbox(element) {
@@ -715,13 +714,8 @@
         checkbox.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
-    function updateCheckboxVisual(element, isChecked) {
-        if (isChecked) {
-            element.classList.add('checked');
-        } else {
-            element.classList.remove('checked');
-        }
-    }
+    <form asp-action="AddMovie" method="post" enctype="multipart/form-data" novalidate>
+        @Html.AntiForgeryToken()
 
     document.addEventListener('DOMContentLoaded', function() {
         const checkboxes = document.querySelectorAll('.checkbox-item input[type="checkbox"]');
