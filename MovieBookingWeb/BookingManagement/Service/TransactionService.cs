@@ -1,4 +1,5 @@
 ﻿using BookingManagement.Models.Entities;
+using BookingManagement.Models.Entities.Enums;
 using BookingManagement.Repositories;
 using VNPAY.NET.Models;
 
@@ -9,11 +10,15 @@ namespace BookingManagement.Service
     {
         private readonly ITransactionRepository _repo;
         private readonly IOrderRepository _OrderRepo;
+        private readonly ISeatShowtimeRepository _seatShowtimeRepo;
+        private readonly IOrderDetailRepository _orderDetailRepo;
 
-        public TransactionService(ITransactionRepository repo, IOrderRepository OrderRepo)
+        public TransactionService(ITransactionRepository repo, IOrderRepository OrderRepo, ISeatShowtimeRepository seatShowtimeRepo, IOrderDetailRepository orderDetailRepo)
         {
             _repo = repo;
             _OrderRepo = OrderRepo;
+            _seatShowtimeRepo = seatShowtimeRepo;
+            _orderDetailRepo = orderDetailRepo;
         }
 
         public async Task<object> CreateTransactionAsync(Transaction dto)
@@ -58,11 +63,9 @@ namespace BookingManagement.Service
         {
             if (!result.IsSuccess) return false;
 
-            // Check xem transaction đã tồn tại chưa
             var existing = await _repo.GetByOrderIdAsync((int)result.PaymentId);
             if (existing != null) return true;
 
-            // Lấy order
             var order = await _OrderRepo.GetByIdAsync((int)result.PaymentId);
             if (order == null) return false;
 
@@ -72,15 +75,25 @@ namespace BookingManagement.Service
                 TransactionDate = DateOnly.FromDateTime(DateTime.Now),
                 Price = order.TotalPrice,
                 Status = true,
-                
             };
 
             await _repo.AddAsync(transaction);
 
-            // Cập nhật trạng thái đơn hàng
+            var orderDetails = await _orderDetailRepo.GetAllWithIncludesAsync();
+            var relatedDetails = orderDetails.Where(d => d.OrderId == order.Id);
+
+            foreach (var detail in relatedDetails)
+            {
+                var seatShowtime = await _seatShowtimeRepo.GetAsync(detail.ShowtimeId, detail.SeatId);
+
+                if (seatShowtime != null)
+                {
+                    seatShowtime.Status = SeatStatus.Booked;
+                }
+            }
+
             order.Status = true;
             await _repo.SaveChangesAsync();
-
             return true;
         }
     }

@@ -326,53 +326,36 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             {
                 _logger.LogInformation("🔄 VNPay return callback received");
 
-                // Log tất cả parameters VNPay trả về
+                // Log tất cả các query string từ VNPay
                 _logger.LogInformation("📋 ALL VNPAY PARAMETERS:");
                 foreach (var param in Request.Query)
                 {
                     _logger.LogInformation("  {Key} = {Value}", param.Key, param.Value);
                 }
 
-                // Lấy các thông tin cần thiết từ VNPay response
-                var responseCode = Request.Query["vnp_ResponseCode"].ToString();
-                var transactionStatus = Request.Query["vnp_TransactionStatus"].ToString();
+                // Gửi lại các tham số này cho API callback
+                var client = _httpClientFactory.CreateClient("ApiClient_Booking");
+                var callbackUrl = $"api/Vnpay/callback{Request.QueryString}"; // tái sử dụng query string từ VNPay
+                var callbackResponse = await client.GetAsync(callbackUrl);
+
+                // Đọc lại orderId để redirect
                 var orderId = Request.Query["vnp_TxnRef"].ToString();
-                var amount = Request.Query["vnp_Amount"].ToString();
                 var transactionNo = Request.Query["vnp_TransactionNo"].ToString();
 
-                // Kiểm tra kết quả thanh toán
-                if (responseCode == "00" && transactionStatus == "00")
+                if (callbackResponse.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation("✅ Payment SUCCESS! Processing order: {OrderId}", orderId);
+                    _logger.LogInformation("✅ Payment SUCCESS! Order: {OrderId}", orderId);
 
-                    // Cập nhật trạng thái đơn hàng thành công
-                    var client = _httpClientFactory.CreateClient("ApiClient_Booking");
-                    var updateResponse = await client.PostAsync($"api/Vnpay/confirm-payment?orderId={orderId}&transactionNo={transactionNo}", null);
-
-                    if (updateResponse.IsSuccessStatusCode)
-                    {
-                        _logger.LogInformation("✅ Order status updated successfully");
-                    }
-                    else
-                    {
-                        _logger.LogWarning("⚠️ Failed to update order status, but payment was successful");
-                    }
-
-                    // Set success message
                     TempData["SuccessMessage"] = "Thanh toán VNPay thành công! Đặt vé hoàn tất.";
                     TempData["BookingCode"] = $"BK{orderId.PadLeft(6, '0')}";
                     TempData["TransactionNo"] = transactionNo;
                     TempData["VNPaySuccess"] = true;
 
-                    // ✅ SỬA: Redirect đến trang Booked thay vì ConfirmOrder
-                    return RedirectToAction("Booked", new { orderId = orderId });
+                    return RedirectToAction("Booked", new { orderId });
                 }
                 else
                 {
-                    _logger.LogWarning("❌ Payment FAILED!");
-                    _logger.LogWarning("  Response Code: {ResponseCode}", responseCode);
-                    _logger.LogWarning("  Transaction Status: {TransactionStatus}", transactionStatus);
-
+                    _logger.LogWarning("❌ Callback failed: {StatusCode}", callbackResponse.StatusCode);
                     TempData["ErrorMessage"] = "Thanh toán không thành công.";
                     return RedirectToAction("MoviesByDate");
                 }
