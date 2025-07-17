@@ -1,0 +1,532 @@
+﻿@using MovieBookingWebMVC.Areas.Booking.Models.DTOs
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model List<MovieWithShowtimeDTO>
+@{
+    var date = (DateTime)ViewBag.SelectedDate;
+    var weekDates = (List<DateTime>)ViewBag.WeekDates;
+    string GetThuVN(DateTime d) => d.DayOfWeek switch
+    {
+        DayOfWeek.Monday => "T2",
+        DayOfWeek.Tuesday => "T3",
+        DayOfWeek.Wednesday => "T4",
+        DayOfWeek.Thursday => "T5",
+        DayOfWeek.Friday => "T6",
+        DayOfWeek.Saturday => "T7",
+        DayOfWeek.Sunday => "CN",
+        _ => ""
+    };
+}
+
+<style>
+    .cinema-container {
+        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+        min-height: 100vh;
+        padding: 30px 0;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .cinema-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 35px;
+    }
+
+    .cinema-header {
+        background: linear-gradient(135deg, #000000 0%, #333333 100%);
+        color: white;
+        padding: 30px 20px;
+        border-radius: 20px 20px 0 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+        .cinema-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 6s infinite linear;
+        }
+
+    @@keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .cinema-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        position: relative;
+        z-index: 1;
+    }
+
+    .cinema-subtitle {
+        font-size: 1.2rem;
+        margin-top: 10px;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
+        margin-bottom: 0;
+    }
+
+    .date-selector-container {
+        background: white;
+        padding: 30px;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+
+    .week-selector {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 25px;
+    }
+
+    .day-btn {
+        background: #f8f9fa;
+        border: 2px solid #e9ecef;
+        color: #6c757d;
+        padding: 15px 20px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        text-align: center;
+        min-width: 80px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .day-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .day-btn:hover::before {
+            left: 100%;
+        }
+
+        .day-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            border-color: #FF6B6B;
+            color: #495057;
+        }
+
+        .day-btn.active {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(255,107,107,0.3);
+        }
+
+    .date-picker-section {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 2px solid #e9ecef;
+    }
+
+    .date-picker-form {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .date-input {
+        padding: 12px 20px;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+        .date-input:focus {
+            outline: none;
+            border-color: #FF6B6B;
+            box-shadow: 0 0 0 3px rgba(255,107,107,0.1);
+        }
+
+    .date-submit-btn {
+        background: linear-gradient(45deg, #45B7D1, #96CEB4);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(69,183,209,0.3);
+    }
+
+        .date-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(69,183,209,0.4);
+        }
+
+    .movies-grid {
+        display: grid;
+        gap: 30px;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+
+    .movie-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+        .movie-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+            .movie-card:hover::before {
+                opacity: 1;
+            }
+
+    .movie-header {
+        display: flex;
+        padding: 25px;
+        gap: 20px;
+        align-items: flex-start;
+    }
+
+    .movie-poster {
+        width: 120px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        transition: transform 0.3s ease;
+    }
+
+    .movie-card:hover .movie-poster {
+        transform: scale(1.05);
+    }
+
+    .movie-info {
+        flex: 1;
+    }
+
+    .movie-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 0 0 10px 0;
+        line-height: 1.3;
+    }
+
+    .movie-subtitle {
+        font-size: 1rem;
+        color: #7f8c8d;
+        margin-bottom: 10px;
+        font-style: italic;
+    }
+
+    .movie-details {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .movie-detail-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    .movie-detail-icon {
+        font-size: 1rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    .movie-detail-text {
+        flex: 1;
+    }
+
+    .movie-detail-label {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .showtimes-section {
+        background: #f8f9fa;
+        padding: 25px;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .showtimes-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .showtimes-title::before {
+            content: '🎬';
+            font-size: 1.1rem;
+        }
+
+    .showtimes-grid {
+        display: grid;
+        gap: 12px;
+    }
+
+    .showtime-item {
+        background: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        border-left: 4px solid #FF6B6B;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .showtime-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-left-color: #4ECDC4;
+        }
+
+    .showtime-time {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1.1rem;
+    }
+
+    .showtime-room {
+        background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .no-movies {
+        text-align: center;
+        padding: 80px 20px;
+        color: #6c757d;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .no-movies-icon {
+        font-size: 4rem;
+        opacity: 0.5;
+    }
+
+    .no-movies-text {
+        font-size: 1.3rem;
+        font-weight: 500;
+    }
+
+    @@media (max-width: 768px) {
+        .cinema-title {
+            font-size: 2rem;
+        }
+
+        .week-selector {
+            gap: 10px;
+        }
+
+        .day-btn {
+            padding: 12px 15px;
+            min-width: 70px;
+            font-size: 0.9rem;
+        }
+
+        .movies-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .movie-header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .movie-poster {
+            width: 100px;
+            height: 150px;
+            align-self: center;
+        }
+
+        .date-picker-form {
+            flex-direction: column;
+        }
+    }
+
+    .booking-btn {
+        background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+        color: white;
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+        .booking-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0.9;
+            color: white;
+        }
+
+</style>
+
+<div class="cinema-container">
+    <div class="cinema-wrapper">
+        <div class="cinema-header">
+            <h2 class="cinema-title">🎬 Lịch chiếu phim</h2>
+            <p class="cinema-subtitle">Ngày @date.ToString("dd/MM/yyyy")</p>
+        </div>
+
+        <div class="date-selector-container">
+            <!-- Chọn ngày theo 7 ngày -->
+            <div class="week-selector">
+                @foreach (var d in weekDates)
+                {
+                    <form method="get" asp-action="MoviesByDate" style="display: inline;">
+                        <input type="hidden" name="date" value="@d.ToString("yyyy-MM-dd")" />
+                        <button type="submit" class="day-btn @(d.Date == date.Date ? "active" : "")">
+                            <div>@d.ToString("dd/MM")</div>
+                            <div style="font-size: 0.8rem; margin-top: 2px;">@GetThuVN(d)</div>
+                        </button>
+                    </form>
+                }
+            </div>
+
+            <!-- Hoặc chọn bằng date picker -->
+            <div class="date-picker-section">
+                <form method="get" asp-action="MoviesByDate" class="date-picker-form">
+                    <label for="date-input" style="font-weight: 600; color: #495057;">📅 Chọn ngày khác:</label>
+                    <input type="date" id="date-input" name="date" value="@date.ToString("yyyy-MM-dd")" class="date-input" />
+                    <button type="submit" class="date-submit-btn">Xem lịch chiếu</button>
+                </form>
+            </div>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="no-movies">
+                <div class="no-movies-icon">🎭</div>
+                <div class="no-movies-text">Không có phim nào chiếu ngày này.</div>
+            </div>
+        }
+        else
+        {
+            <div class="movies-grid">
+                @foreach (var movie in Model)
+                {
+                    <div class="movie-card">
+                        <div class="movie-header">
+                            <img src="@movie.Image" alt="@movie.Title" class="movie-poster" />
+                            <div class="movie-info">
+                                <h3 class="movie-title">@movie.Title</h3>
+                                <p class="movie-subtitle">@movie.Subtitle</p>
+                                <div class="movie-details">
+                                    <div class="movie-detail-item">
+                                        <span class="movie-detail-icon">🎬</span>
+                                        <span class="movie-detail-text">
+                                            <span class="movie-detail-label">Đạo diễn:</span> @movie.Director
+                                        </span>
+                                    </div>
+                                    <div class="movie-detail-item">
+                                        <span class="movie-detail-icon">🎭</span>
+                                        <span class="movie-detail-text">
+                                            <span class="movie-detail-label">Thể loại:</span> @string.Join(", ", movie.Genres)
+                                        </span>
+                                    </div>
+                                    <div class="movie-detail-item">
+                                        <span class="movie-detail-icon">📺</span>
+                                        <span class="movie-detail-text">
+                                            <span class="movie-detail-label">Định dạng:</span> @string.Join(", ", movie.Format)
+                                        </span>
+                                    </div>
+                                    <div class="movie-detail-item">
+                                        <span class="movie-detail-icon">⏱️</span>
+                                        <span class="movie-detail-text">
+                                            <span class="movie-detail-label">Thời lượng:</span> @movie.Duration phút
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="showtimes-section">
+                            <h4 class="showtimes-title">Suất chiếu</h4>
+                            <div class="showtimes-grid">
+                                @foreach (var show in movie.Showtimes)
+                                {
+                                    <div class="showtime-item">
+                                        <span class="showtime-time">@show.FromTime - @show.ToTime</span>
+                                        <span class="showtime-room">@show.Room</span>
+                                        <a href="/Booking/Booking/SelectSeat?scheduleId=@show.Id" class="booking-btn">
+                                            Đặt vé
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

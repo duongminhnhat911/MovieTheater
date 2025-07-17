@@ -1,0 +1,550 @@
+﻿@model List<MovieBookingWebMVC.Areas.Movie.Models.ViewModel.FilmViewModel>
+@{
+    ViewData["Title"] = "Trang quản trị";
+    int currentPage = ViewBag.CurrentPage as int? ?? 1;
+    int totalPages = ViewBag.TotalPages as int? ?? 1;
+}
+
+<style>
+    :root {
+        --primary-black: #000000;
+        --mint-light: #CCFFE4;
+        --teal-green: #9FCBC0;
+        --light-gray: #F5F5F5;
+        --white: #ffffff;
+        --success-green: #28a745;
+        --warning-orange: #ffc107;
+        --danger-red: #dc3545;
+        --shadow-light: rgba(0, 0, 0, 0.1);
+        --shadow-medium: rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+    }
+
+    .main-container {
+        background: var(--white);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px var(--shadow-light);
+        margin: 2rem 1rem;
+        max-width: 1400px;
+        overflow: hidden;
+    }
+
+    .header-section {
+        background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
+        color: var(--white);
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(204, 255, 228, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+    @@keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .header-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .content-section {
+        padding: 2rem;
+        background: var(--mint-light);
+        background-image: radial-gradient(circle at 20% 20%, rgba(159, 203, 192, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(245, 245, 245, 0.2) 0%, transparent 50%);
+    }
+
+    .success-alert {
+        background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 15px;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        animation: slideInDown 0.5s ease-out;
+    }
+
+    @@keyframes slideInDown {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .add-movie-btn {
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        border: none;
+        color: var(--white);
+        padding: 0.75rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 15px rgba(159, 203, 192, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .add-movie-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .add-movie-btn:hover::before {
+            left: 100%;
+        }
+
+        .add-movie-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(159, 203, 192, 0.6);
+            color: var(--white);
+        }
+
+    .movie-table {
+        background: var(--white);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px var(--shadow-light);
+        margin-top: 2rem;
+    }
+
+    .table-header th {
+        background: var(--primary-black);
+        color: var(--white);
+        padding: 1.2rem 1rem;
+        font-weight: 600;
+        text-align: center;
+        border: none;
+        position: relative;
+    }
+
+        .table-header th::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--teal-green);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .table-header th:hover::after {
+            width: 80%;
+        }
+
+    .table tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid rgba(159, 203, 192, 0.2);
+    }
+
+        .table tbody tr:hover {
+            background: linear-gradient(135deg, var(--mint-light) 0%, rgba(159, 203, 192, 0.1) 100%);
+            transform: translateX(5px);
+        }
+
+    .table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        border: none;
+        position: relative;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .status-active {
+        background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
+        color: var(--white);
+    }
+
+    .status-soldout {
+        background: linear-gradient(135deg, var(--warning-orange) 0%, #fd7e14 100%);
+        color: var(--white);
+    }
+
+    .status-deleted {
+        background: linear-gradient(135deg, var(--danger-red) 0%, #e91e63 100%);
+        color: var(--white);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-action {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .btn-edit {
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        color: var(--white);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(159, 203, 192, 0.5);
+            color: var(--white);
+        }
+
+    .btn-delete {
+        background: linear-gradient(135deg, var(--danger-red) 0%, #c82333 100%);
+        color: var(--white);
+    }
+
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.5);
+        }
+
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+        padding: 1rem;
+    }
+
+    .pagination {
+        display: flex;
+        gap: 0.5rem;
+        margin: 0;
+    }
+
+    .page-item .page-link {
+        background: var(--white);
+        border: 2px solid var(--teal-green);
+        color: var(--teal-green);
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        min-width: 40px;
+        text-align: center;
+    }
+
+    .page-item.active .page-link {
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        color: var(--white);
+        border-color: var(--teal-green);
+        box-shadow: 0 4px 15px rgba(159, 203, 192, 0.4);
+    }
+
+    .page-item .page-link:hover {
+        background: var(--teal-green);
+        color: var(--white);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(159, 203, 192, 0.3);
+    }
+
+    .movie-id {
+        background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
+        color: var(--white);
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        display: inline-block;
+        min-width: 40px;
+        text-align: center;
+    }
+
+    .movie-title {
+        font-weight: 600;
+        color: var(--primary-black);
+        line-height: 1.4;
+    }
+
+    .movie-genres {
+        color: #666;
+        font-style: italic;
+        line-height: 1.3;
+    }
+
+    .movie-duration {
+        background: var(--light-gray);
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 600;
+        color: var(--primary-black);
+        display: inline-block;
+    }
+
+    .movie-date {
+        font-family: 'Courier New', monospace;
+        font-weight: 600;
+        color: var(--primary-black);
+    }
+
+    .created-by, .edited-by {
+        background: rgba(159, 203, 192, 0.2);
+        padding: 0.3rem 0.8rem;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        color: var(--primary-black);
+        display: inline-block;
+    }
+
+    @@media (max-width: 768px) {
+        .main-container {
+            margin: 1rem;
+            border-radius: 15px;
+        }
+
+        .header-title {
+            font-size: 2rem;
+        }
+
+        .content-section {
+            padding: 1rem;
+        }
+
+        .table-responsive {
+            font-size: 0.85rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 0.4rem 0.8rem;
+        }
+    }
+</style>
+
+<div class="main-container">
+    <div class="header-section">
+        <h1 class="header-title">
+            <i class="fas fa-film me-2"></i>
+            Quản lý phim
+        </h1>
+    </div>
+
+    <div class="content-section">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert success-alert text-center mb-4" id="alertSuccess">
+                <i class="fas fa-check-circle me-2"></i>
+                @TempData["Success"]
+            </div>
+        }
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a asp-area="Movie" asp-controller="Movie" asp-action="AddMovie" class="add-movie-btn">
+                <i class="fas fa-plus"></i>
+                Thêm phim mới
+            </a>
+            <div class="text-muted">
+                <i class="fas fa-database"></i>
+                Tổng cộng: <strong>@Model.Count</strong> phim
+            </div>
+        </div>
+
+        <div class="movie-table">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead class="table-header">
+                        <tr>
+                            <th style="width: 3%;">
+                                ID
+                            </th>
+                            <th style="width: 19%;">
+                                Tựa phim
+                            </th>
+                            <th style="width: 12%;">
+                                Thể loại
+                            </th>
+                            <th style="width: 13%;">
+                                Thời lượng
+                            </th>
+                            <th style="width: 12%;">
+                                Khởi chiếu
+                            </th>
+                            <th style="width: 16%;">
+                                Trạng thái
+                            </th>
+                            <th style="width: 7%;">
+                                Sửa bởi
+                            </th>
+                            <th style="width: 18%;">
+                                Tác vụ
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var film in Model)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    <span class="movie-id">@film.Id</span>
+                                </td>
+                                <td>
+                                    <div class="movie-title">@film.Title</div>
+                                </td>
+                                <td>
+                                    <div class="movie-genres">
+                                        @(film.Genres != null ? string.Join(", ", film.Genres) : "Chưa phân loại")
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span class="movie-duration">@film.Duration phút</span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="movie-date">@film.ReleaseDate?.ToString("dd/MM/yyyy")</div>
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        var statusClass = film.Status switch
+                                        {
+                                            "Active" => "status-active",
+                                            "SoldOut" => "status-soldout",
+                                            "Deleted" => "status-deleted",
+                                            _ => "status-active"
+                                        };
+                                        var statusDisplay = film.Status switch
+                                        {
+                                            "Active" => "Đang chiếu",
+                                            "SoldOut" => "Hết vé",
+                                            "Deleted" => "Đã xóa",
+                                            _ => "Không xác định"
+                                        };
+                                    }
+                                    <span class="status-badge @statusClass">@statusDisplay</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="edited-by">@film.EditedByUsername</span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a asp-area="Movie" asp-controller="Movie" asp-action="EditMovie"
+                                           asp-route-id="@film.Id" class="btn-action btn-edit">
+                                            <i class="fas fa-edit"></i>
+                                            Sửa
+                                        </a>
+                                        <form asp-area="Movie" asp-controller="Movie" asp-action="DeleteMovie"
+                                              asp-route-id="@film.Id" method="post" style="display:inline;"
+                                              onsubmit="return confirm('Bạn có chắc chắn muốn xóa phim này không?');">
+                                            <button type="submit" class="btn-action btn-delete">
+                                                <i class="fas fa-trash-alt"></i>
+                                                Xóa
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @if (totalPages > 1)
+        {
+            <div class="pagination-container">
+                <nav aria-label="Phân trang">
+                    <ul class="pagination">
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                            <li class="page-item @(i == currentPage ? "active" : "")">
+                                <a class="page-link" asp-action="ViewMovie" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    // Auto-hide success alert after 5 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alertSuccess = document.getElementById('alertSuccess');
+        if (alertSuccess) {
+            setTimeout(() => {
+                alertSuccess.style.transition = 'opacity 0.5s ease-out';
+                alertSuccess.style.opacity = '0';
+                setTimeout(() => {
+                    alertSuccess.remove();
+                }, 500);
+            }, 5000);
+        }
+    });
+
+    // Add loading state for delete buttons
+    document.querySelectorAll('form[onsubmit*="confirm"]').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const button = this.querySelector('button[type="submit"]');
+            if (button) {
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xóa...';
+                button.disabled = true;
+            }
+        });
+    });
+</script>
