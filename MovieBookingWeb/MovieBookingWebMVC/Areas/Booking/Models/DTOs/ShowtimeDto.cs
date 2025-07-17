@@ -23,5 +23,5 @@ namespace MovieBookingWebMVC.Areas.Booking.Models.DTOs
         [JsonIgnore]
         public string RoomName => Room?.RoomName ?? string.Empty;
     }
-   
+
 }

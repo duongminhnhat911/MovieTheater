@@ -1,7 +1,7 @@
 ﻿using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
 using System.Globalization;
 
-namespace MovieBookingWebMVC.Areas.Booking.Models.ViewModels
+namespace MovieBookingWebMVC.Areas.Booking.Models.DTOs
 {
     public class ConfirmBookingViewModel
     {
