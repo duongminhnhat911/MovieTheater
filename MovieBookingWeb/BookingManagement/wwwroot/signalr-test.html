@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>SignalR Realtime Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+</head>
+<body>
+    <h2>🎥 Real-time Seat Lock Monitor</h2>
+    <p id="status">Đang kết nối tới SignalR...</p>
+    <ul id="logs"></ul>
+
+    <script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("https://localhost:7116/seatHub", { withCredentials: true })
+      .build();
+
+    const log = (msg) => {
+      const el = document.createElement("li");
+      el.innerText = msg;
+      document.getElementById("logs").appendChild(el);
+    };
+
+    connection.on("SeatLocked", (seatId, userId) => {
+      log(`🔒 Ghế ${seatId} bị giữ bởi user ${userId}`);
+    });
+
+    connection.on("SeatUnlocked", (seatId) => {
+      log(`🔓 Ghế ${seatId} được mở lại`);
+    });
+
+    async function start() {
+      try {
+        await connection.start();
+        document.getElementById("status").innerText = "✔️ Đã kết nối SignalR";
+
+        const showtimeId = 7; // chỉnh theo ID suất chiếu bạn đang test
+        await connection.invoke("JoinShowtimeGroup", showtimeId);
+        log(`📶 Đã vào group showtime-${showtimeId}`);
+      } catch (err) {
+        document.getElementById("status").innerText = "❌ Kết nối thất bại";
+        console.error(err);
+      }
+    }
+
+    start();
+    </script>
+</body>
+</html>
