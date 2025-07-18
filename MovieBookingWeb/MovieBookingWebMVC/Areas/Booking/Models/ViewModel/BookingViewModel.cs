@@ -16,6 +16,7 @@
         public string? Description { get; set; }
         public string? ProductionCompany { get; set; }
         public List<string>? AvailableDates { get; set; }
+        public string? TrailerUrl { get; set; }
     }
     
 }

@@ -651,7 +651,11 @@
                         </h5>
                         <ul class="list-unstyled">
                             <li><a href="/movies" class="footer-link"><span>Phim đang chiếu</span> <i class="fas fa-external-link-alt"></i></a></li>
-                            <li><a href="/showtimes" class="footer-link"><span>Lịch chiếu</span> <i class="fas fa-external-link-alt"></i></a></li>
+                            <li>
+                                <a asp-area="Booking" asp-controller="Booking" asp-action="MoviesByDate" class="footer-link">
+                                    <span>Lịch chiếu</span> <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </li>
                             <li><a href="/booking" class="footer-link"><span>Đặt vé online</span> <i class="fas fa-external-link-alt"></i></a></li>
                             <li><a href="/promotions" class="footer-link"><span>Khuyến mãi</span> <i class="fas fa-external-link-alt"></i></a></li>
                             <li><a href="/membership" class="footer-link"><span>Thành viên VIP</span> <i class="fas fa-external-link-alt"></i></a></li>

@@ -457,7 +457,8 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
                     Format = film.Format,
                     ReleaseDate = film.ReleaseDate,
                     Description = film.Description,
-                    ProductionCompany = film.ProductionCompany
+                    ProductionCompany = film.ProductionCompany,
+                    TrailerUrl = film.TrailerLink
 
 
                 };

@@ -2,7 +2,23 @@
 @{
     ViewData["Title"] = "Đặt vé - " + Model.Title;
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var trailerUrl = "https://www.youtube.com/embed/TcMBFSGVi1c"; // Link trailer YouTube nhúng
+    string trailerUrl = "https://www.youtube.com/embed/TcMBFSGVi1c"; // fallback trailer
+
+    if (!string.IsNullOrWhiteSpace(Model.TrailerUrl))
+    {
+        if (Model.TrailerUrl.Contains("watch?v="))
+        {
+            trailerUrl = Model.TrailerUrl.Replace("watch?v=", "embed/");
+        }
+        else if (Model.TrailerUrl.Contains("youtu.be/"))
+        {
+            trailerUrl = Model.TrailerUrl.Replace("youtu.be/", "www.youtube.com/embed/");
+        }
+        else
+        {
+            trailerUrl = Model.TrailerUrl;
+        }
+    }
 }
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
