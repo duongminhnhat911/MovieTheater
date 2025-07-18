@@ -80,7 +80,7 @@ namespace BookingManagement.Service
                 // Áp dụng giảm giá
                 if (promo.DiscountAmount.HasValue)
                     total -= promo.DiscountAmount.Value;
-                else if (promo.DiscountPercent.HasValue)
+                if (promo.DiscountPercent.HasValue)
                     total -= (total * promo.DiscountPercent.Value) / 100;
 
                 promoId = promo.Id;
