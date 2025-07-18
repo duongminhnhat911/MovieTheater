@@ -449,6 +449,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
 
                 var viewModel = new BookingViewModel
                 {
+                    MovieId = film.Id,
                     Title = film.Title,
                     Image = film.Image,
                     Genres = film.Genres,

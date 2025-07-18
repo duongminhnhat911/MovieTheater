@@ -329,7 +329,9 @@
                     }
                 </div>
                 <div class="booking-button">
-                    <button class="btn-movie btn-book" id="bookNowBtn">
+                    <button class="btn-movie btn-book"
+                            id="bookNowBtn"
+                            data-movie-id="@Model.MovieId">
                         <i class="fas fa-ticket-alt"></i> Đặt vé
                     </button>
                 </div>
@@ -396,4 +398,13 @@
 
 @section Scripts {
     <script src="~/js/booking.js"></script>
+    <script>
+        document.getElementById("bookNowBtn")?.addEventListener("click", function () {
+            const movieId = this.getAttribute("data-movie-id");
+            if (movieId) {
+                // Tạo link chính xác bất kể đang ở Area nào
+                window.location.href = `/Booking/Booking/Showtimes?movieId=${movieId}`;
+            }
+        });
+    </script>
 }
