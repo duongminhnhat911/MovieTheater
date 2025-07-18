@@ -8,12 +8,15 @@ namespace MovieBookingWebMVC.Areas.Booking.Models.ViewModel
         [Display(Name = "Mã khuyến mãi")]
         public string PromotionCode { get; set; }
 
+        [Required]
         [Display(Name = "Mô tả")]
         public string? Description { get; set; }
+        [Required]
 
         [Display(Name = "Giảm theo số tiền")]
         public int? DiscountAmount { get; set; }
 
+        [Required]
         [Display(Name = "Giảm theo phần trăm")]
         public int? DiscountPercent { get; set; }
 
