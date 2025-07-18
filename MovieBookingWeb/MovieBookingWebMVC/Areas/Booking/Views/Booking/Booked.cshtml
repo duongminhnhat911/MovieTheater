@@ -1,0 +1,718 @@
+﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModels.ConfirmBookingViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    ViewData["Title"] = "Đặt vé thành công";
+}
+
+<style>
+    :root {
+        --primary-black: #000000;
+        --mint-light: #CCFFE4;
+        --teal-primary: #9FCBC0;
+        --gray-light: #d0d0d0;
+        --white: #ffffff;
+        --shadow-color: rgba(0, 0, 0, 0.1);
+        --border-radius: 12px;
+        --success-green: #28a745;
+    }
+
+    body {
+        background: linear-gradient(135deg, var(--mint-light) 0%, var(--gray-light) 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        color: var(--primary-black);
+    }
+
+    .confirm-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    .page-header.header-section {
+        background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
+        color: var(--white);
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+    }
+
+        .page-header.header-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        .page-header.header-section .page-title {
+            color: var(--white);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 0.5rem;
+            animation: bounceIn 1s ease-out;
+        }
+
+        .page-header.header-section .page-subtitle {
+            color: var(--white);
+            opacity: 0.9;
+            font-weight: 400;
+            margin: 0;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .page-header.header-section::after {
+            content: "✓";
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: checkmarkPop 1s ease-out 0.8s both;
+        }
+
+    @@keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @@keyframes bounceIn {
+        0% {
+            transform: scale(0.3);
+            opacity: 0;
+        }
+
+        50% {
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+
+        70% {
+            transform: scale(0.9);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes checkmarkPop {
+        0% {
+            transform: scale(0) rotate(180deg);
+            opacity: 0;
+        }
+
+        80% {
+            transform: scale(1.2) rotate(360deg);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(1) rotate(360deg);
+            opacity: 1;
+        }
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-black);
+        margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 4px var(--shadow-color);
+    }
+
+    .page-subtitle {
+        color: var(--primary-black);
+        font-size: 1.1rem;
+        opacity: 0.7;
+        font-weight: 500;
+    }
+
+    .booking-card {
+        background: var(--white);
+        border-bottom-left-radius: var(--border-radius);
+        border-bottom-right-radius: var(--border-radius);
+        box-shadow: 0 8px 32px var(--shadow-color);
+        overflow: hidden;
+        position: relative;
+        animation: fadeInUp 0.8s ease-out 0.3s both;
+    }
+
+        .booking-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--success-green);
+        }
+
+    .movie-section {
+        padding: 2.5rem;
+        background: var(--mint-light);
+        border-bottom: 1px solid var(--teal-primary);
+    }
+
+    .movie-poster {
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+        border: 3px solid var(--teal-primary);
+    }
+
+        .movie-poster:hover {
+            transform: scale(1.02);
+        }
+
+    .movie-info {
+        padding-left: 2rem;
+    }
+
+    .movie-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--primary-black);
+        margin-bottom: 0.8rem;
+        line-height: 1.2;
+    }
+
+    .movie-subtitle {
+        color: var(--primary-black);
+        font-size: 1.1rem;
+        line-height: 1.4;
+        margin-bottom: 1rem;
+        opacity: 0.8;
+    }
+
+    .booking-details {
+        padding: 2.5rem;
+        background: var(--white);
+    }
+
+    .details-table {
+        background: var(--white);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: 0 4px 16px var(--shadow-color);
+        border: 1px solid var(--teal-primary);
+    }
+
+        .details-table th {
+            background: var(--teal-primary);
+            color: var(--primary-black);
+            font-weight: 600;
+            align-content: center;
+            padding-left: 1rem;
+            border-bottom: 1px solid var(--gray-light);
+            font-size: 1rem;
+            position: relative;
+        }
+
+            .details-table th::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 4px;
+                background: var(--primary-black);
+            }
+
+        .details-table td {
+            padding: 1.2rem 1.5rem;
+            border: none;
+            border-bottom: 1px solid var(--gray-light);
+            font-size: 1rem;
+            color: var(--primary-black);
+            position: relative;
+        }
+
+        .details-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .details-table tr:nth-child(even) {
+            background: var(--gray-light);
+        }
+
+        .details-table tr:hover {
+            background: var(--mint-light) !important;
+            transition: background-color 0.3s ease;
+        }
+
+    .order-id {
+        font-family: 'Courier New', monospace;
+        font-weight: 600;
+        color: var(--primary-black);
+        background: var(--gray-light);
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius);
+        font-size: 0.95rem;
+        border: 1px solid var(--teal-primary);
+    }
+
+    .seat-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .seat-badge {
+        background: var(--teal-primary);
+        color: var(--primary-black);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 8px var(--shadow-color);
+        transition: all 0.3s ease;
+        border: 1px solid var(--primary-black);
+        animation: seatBadgeIn 0.6s ease-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+        .seat-badge:hover {
+            transform: translateY(-2px);
+            background: var(--primary-black);
+            color: var(--white);
+        }
+
+    @@keyframes seatBadgeIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .total-price {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--primary-black);
+        background: var(--mint-light);
+        padding: 0.8rem 1.2rem;
+        border-radius: var(--border-radius);
+        border: 2px solid var(--teal-primary);
+    }
+
+    .status-badge {
+        padding: 0.6rem 1.2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: 2px solid;
+    }
+
+    .status-paid {
+        background: var(--success-green);
+        color: var(--white);
+        border-color: var(--success-green);
+        animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    @@keyframes statusPulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.05);
+        }
+    }
+
+    .action-section {
+        padding: 2.5rem;
+        background: var(--mint-light);
+        border-top: 1px solid var(--teal-primary);
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .btn-home {
+        background: var(--gray-light);
+        border: 2px solid var(--teal-primary);
+        color: var(--primary-black);
+        padding: 1rem 2rem;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px var(--shadow-color);
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-home:hover {
+            background: var(--teal-primary);
+            color: var(--primary-black);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            text-decoration: none;
+        }
+
+    .btn-more-movies {
+        background: var(--teal-primary);
+        border: 2px solid var(--primary-black);
+        color: var(--primary-black);
+        padding: 1rem 2.5rem;
+        border-radius: var(--border-radius);
+        font-size: 1.1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px var(--shadow-color);
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-more-movies:hover {
+            background: var(--primary-black);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            text-decoration: none;
+        }
+
+    .info-icon {
+        color: var(--primary-black);
+        margin-right: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .booking-summary {
+        background: var(--white);
+        border: 2px solid var(--teal-primary);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 16px var(--shadow-color);
+    }
+
+    .summary-title {
+        color: var(--primary-black);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--gray-light);
+    }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary-black);
+            background: var(--mint-light);
+            padding: 0.8rem 1rem;
+            border-radius: var(--border-radius);
+            margin: 0.5rem -0.5rem 0;
+        }
+
+    .text-success {
+        color: var(--success-green) !important;
+    }
+
+    .text-muted {
+        color: var(--primary-black) !important;
+        opacity: 0.7;
+    }
+
+    @@media (max-width: 768px) {
+        .page-title {
+            font-size: 2rem;
+        }
+
+        .movie-section {
+            padding: 1.5rem;
+        }
+
+        .movie-info {
+            padding-left: 0;
+            margin-top: 1.5rem;
+        }
+
+        .movie-title {
+            font-size: 1.8rem;
+        }
+
+        .booking-details {
+            padding: 1.5rem;
+        }
+
+        .details-table th,
+        .details-table td {
+            padding: 1rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn-home,
+        .btn-more-movies {
+            width: 100%;
+            text-align: center;
+        }
+
+        .seat-badges {
+            justify-content: center;
+        }
+
+        .page-header.header-section::after {
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            top: 15px;
+            right: 15px;
+        }
+    }
+</style>
+
+<div class="confirm-container">
+    <!-- Page Header -->
+    <div class="page-header header-section">
+        <h1 class="page-title login-title">
+            ĐẶT VÉ THÀNH CÔNG!
+        </h1>
+        <p class="page-subtitle text-white">
+            Cảm ơn bạn đã sử dụng hệ thống đặt vé của chúng tôi
+        </p>
+    </div>
+
+    <!-- Booking Card -->
+    <div class="booking-card">
+        <!-- Movie Section -->
+        <div class="movie-section">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <img src="@Model.Movie.Image" alt="@Model.Movie.Title" class="movie-poster img-fluid" />
+                </div>
+                <div class="col-md-8">
+                    <div class="movie-info">
+                        <h2 class="movie-title">@Model.Movie.Title</h2>
+                        @if (!string.IsNullOrEmpty(Model.Movie.Subtitle))
+                        {
+                            <p class="movie-subtitle">@Model.Movie.Subtitle</p>
+                        }
+
+                        <!-- Booking Summary -->
+                        <div class="booking-summary">
+                            <h5 class="summary-title">
+                                <i class="fas fa-receipt me-2"></i>
+                                Chi tiết thanh toán
+                            </h5>
+                            <div class="summary-item">
+                                <span>Số ghế:</span>
+                                <span>@Model.SelectedSeats.Count() ghế</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Giá mỗi ghế:</span>
+                                <span>@((@Model.TotalPrice / @Model.SelectedSeats.Count()).ToString("N0")) VND</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Tổng tiền:</span>
+                                <span>@Model.TotalPrice.ToString("N0") VND</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Details -->
+        <div class="booking-details">
+            <table class="table details-table">
+                <tr>
+                    <th>
+                        <i class="fas fa-barcode info-icon"></i>
+                        Mã đơn hàng
+                    </th>
+                    <td>
+                        <span class="order-id">@Model.OrderId</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <i class="fas fa-user info-icon"></i>
+                        Người đặt
+                    </th>
+                    <td>
+                        <span class="order-id">
+                            @User.Identity.Name
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <i class="fas fa-door-open info-icon"></i>
+                        Phòng chiếu
+                    </th>
+                    <td>@Model.Showtime.RoomName</td>
+                </tr>
+                <tr>
+                    <th>
+                        <i class="fas fa-calendar-alt info-icon"></i>
+                        Ngày chiếu
+                    </th>
+                    <td>@Model.Showtime.ShowDate.ToString("dd/MM/yyyy")</td>
+                </tr>
+                <tr>
+                    <th>
+                        <i class="fas fa-clock info-icon"></i>
+                        Giờ chiếu
+                    </th>
+                    <td>@Model.Showtime.FromTime</td>
+                </tr>
+                <tr>
+                    <th>
+                        <i class="fas fa-calendar-check info-icon"></i>
+                        Ngày đặt vé
+                    </th>
+                    <td>@Model.BookingDate.ToString("dd/MM/yyyy")</td>
+                </tr>
+                <tr>
+                    <th>
+                        <i class="fas fa-couch info-icon"></i>
+                        Ghế đã đặt
+                    </th>
+                    <td>
+                        <div class="seat-badges">
+                            @foreach (var seat in Model.SelectedSeats)
+                            {
+                                <span class="seat-badge">@seat.Row@seat.Column</span>
+                            }
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <i class="fas fa-money-bill-wave info-icon"></i>
+                        Tổng tiền
+                    </th>
+                    <td>
+                        <span class="total-price">@Model.TotalPrice.ToString("N0") VND</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <i class="fas fa-info-circle info-icon"></i>
+                        Trạng thái
+                    </th>
+                    <td>
+                        <span class="status-badge status-paid">
+                            <i class="fas fa-check-circle me-1"></i>
+                            Đã thanh toán
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Action Section -->
+        <div class="action-section">
+            <div class="action-buttons">
+                <a href="/" class="btn-home">
+                    <i class="fas fa-home me-2"></i>
+                    Về trang chủ
+                </a>
+                <a href="/Booking/Booking/MoviesByDate" class="btn-more-movies">
+                    <i class="fas fa-film me-2"></i>
+                    Xem thêm phim
+                </a>
+            </div>
+            <div class="mt-4 text-center">
+                <small class="text-muted">
+                    <i class="fas fa-heart me-1"></i>
+                    Cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của chúng tôi
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Add interactive effects
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animate seat badges on load
+        const seatBadges = document.querySelectorAll('.seat-badge');
+        seatBadges.forEach((badge, index) => {
+            badge.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Add hover effect to table rows
+        const tableRows = document.querySelectorAll('.details-table tr');
+        tableRows.forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = 'rgba(204, 255, 228, 0.5)';
+            });
+            row.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = '';
+            });
+        });
+
+        // Add success celebration effect
+        setTimeout(() => {
+            const header = document.querySelector('.page-header.header-section');
+            header.style.animation = 'successPulse 1s ease-in-out';
+        }, 2000);
+    });
+
+    // Success pulse animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @@keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
