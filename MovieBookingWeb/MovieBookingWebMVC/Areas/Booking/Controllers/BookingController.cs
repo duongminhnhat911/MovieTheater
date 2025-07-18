@@ -91,11 +91,8 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             // ✅ Lấy hoặc tạo userId
             if (!User.Identity.IsAuthenticated)
             {
-                if (HttpContext.Session.GetInt32("TempUserId") == null)
-                {
-                    HttpContext.Session.SetInt32("TempUserId", new Random().Next(1000, 9999));
-                }
-                ViewBag.UserId = HttpContext.Session.GetInt32("TempUserId");
+                // Nếu chưa đăng nhập, chuyển hướng về trang Login
+                return RedirectToAction("Login", "Account", new { area = "User", returnUrl = Url.Action("SelectSeat", "Booking", new { scheduleId }) });
             }
             else
             {
