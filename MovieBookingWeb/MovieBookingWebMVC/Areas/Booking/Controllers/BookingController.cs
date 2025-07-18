@@ -454,7 +454,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
                     Image = film.Image,
                     Genres = film.Genres,
                     Duration = film.Duration,
-                    Rating = film.Rating,
+                    Rating = film.RatingCode,
                     Subtitle = film.Subtitle,
                     Director = film.Director,
                     Format = film.Format,
