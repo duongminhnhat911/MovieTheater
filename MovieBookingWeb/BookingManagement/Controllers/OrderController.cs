@@ -12,10 +12,13 @@ namespace BookingManagement.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _service;
+        private readonly IOrderService _orderService;
 
-        public OrderController(IOrderService service)
+
+        public OrderController(IOrderService service, IOrderService orderService)
         {
             _service = service;
+            _orderService = orderService;
         }
 
         [HttpPost]
@@ -72,5 +75,17 @@ namespace BookingManagement.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+
+        [HttpGet("history")]
+        public async Task<IActionResult> GetOrderHistory([FromQuery] int userId)
+        {
+
+            var orderHistory = await _orderService.GetOrderHistoryAsync(userId);
+            return Ok(orderHistory);
+
+            return Ok(orderHistory);
+        }
+
+
     }
 }

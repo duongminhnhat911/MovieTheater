@@ -13,5 +13,6 @@
         public required bool Status { get; set; }
         public int? PromotionId { get; set; }
         public Promotion? Promotion { get; set; }
+        public List<OrderDetail> OrderDetails { get; set; } = new();
     }
 }

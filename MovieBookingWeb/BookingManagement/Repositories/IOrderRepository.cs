@@ -1,4 +1,5 @@
-﻿using BookingManagement.Models.Entities;
+﻿using BookingManagement.Models.DTOs;
+using BookingManagement.Models.Entities;
 
 namespace BookingManagement.Repositories
 {
@@ -14,5 +15,7 @@ namespace BookingManagement.Repositories
         Task UpdatePromotionAsync(Promotion promo);
 
         Task<Promotion?> GetPromotionByCodeAsync(string code);
+
+        Task<List<OrderHistoryDto>> GetOrderHistoryByUserIdAsync(int userId);
     }
 }
