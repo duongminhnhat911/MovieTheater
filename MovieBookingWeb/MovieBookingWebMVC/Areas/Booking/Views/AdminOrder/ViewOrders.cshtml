@@ -1,0 +1,91 @@
+﻿@using MovieBookingWebMVC.Areas.Booking.Models.ViewModel
+@model List<OrderSummaryViewModel>
+
+@{
+    ViewData["Title"] = "Lịch sử đơn hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lịch sử đơn hàng</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>ID Người dùng</th>
+            <th>Ngày đặt</th>
+            <th>Thành tiền</th>
+            <th>Trạng thái</th>
+            <th>ID Khuyến mãi</th>
+            <th>Tác vụ</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.UserId</td>
+                <td>@order.BookingDate.ToString("dd/MM/yyyy")</td>
+                <td>@order.TotalPrice.ToString("N0") đ</td>
+                <td>
+                    @if (order.Status)
+                    {
+                        <span class="badge bg-success">Hoạt động</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Đã hủy</span>
+                    }
+                </td>
+                <td>@(order.PromotionId.HasValue? order.PromotionId.ToString() : "Không có")</td>
+                <td>
+                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#orderDetailModal"
+                            data-id="@order.Id">
+                        Chi tiết
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal hiển thị chi tiết -->
+<div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chi tiết đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body" id="orderDetailContent">
+                <p>Đang tải...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#orderDetailModal').on('show.bs.modal', function (e) {
+            var button = $(e.relatedTarget);
+            var orderId = button.data('id');
+
+            console.log("Đang load chi tiết cho OrderId =", orderId);
+
+            $('#orderDetailContent').html("<p>Đang tải...</p>");
+
+            $.ajax({
+                url: `/Booking/AdminOrder/OrderDetailsPartial/${orderId}`,
+                type: 'GET',
+                success: function (data) {
+                    $('#orderDetailContent').html(data);
+                },
+                error: function (xhr, status, error) {
+                    $('#orderDetailContent').html(`<p class="text-danger">Lỗi: ${xhr.status} - ${xhr.statusText}</p>`);
+                    console.error("Lỗi load chi tiết:", xhr.responseText);
+                }
+            });
+        });
+    </script>
+}

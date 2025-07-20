@@ -1,5 +1,6 @@
 ﻿using BookingManagement.Models.DTOs;
 using BookingManagement.Models.Entities;
+using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
 
 namespace BookingManagement.Service
 {
@@ -10,5 +11,7 @@ namespace BookingManagement.Service
         Task<OrderDetail?> GetByIdAsync(int id);
         Task<OrderDetail?> UpdateAsync(int id, UpdateOrderDetailDto dto);
         Task<bool> DeleteAsync(int id);
+        Task<OrderDetailDto?> GetFullOrderDetailAsync(int orderId);
+
     }
 }

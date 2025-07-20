@@ -4,7 +4,7 @@
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
 
     // Điều kiện hiển thị sidebar cho Admin (bao gồm các controller quản trị như Admin, Movie, User)
-    var showAdminSidebar = isAdmin && new[] { "Admin", "Movie", "User", "AdminShowtime", "AdminRoom", "AdminPromotion" }.Contains(currentController);
+    var showAdminSidebar = isAdmin && new[] { "Admin", "Movie", "User", "AdminShowtime", "AdminRoom", "AdminPromotion", "AdminOrder" }.Contains(currentController);
 
     // Điều kiện hiển thị sidebar cho người dùng, chỉ khi ở trang "Profile"
     var showUserSidebar = User?.Identity?.IsAuthenticated == true
@@ -578,7 +578,8 @@
                             <span>Danh sách thành viên</span>
                         </a>
 
-                        <a class="nav-link sidebar-link d-flex align-items-center gap-2" href="#">
+                        <a class="nav-link sidebar-link d-flex align-items-center gap-2 @(currentController == "AdminOrder" && currentAction == "ViewOrders" ? "active" : "")"
+                           asp-area="Booking" asp-controller="AdminOrder" asp-action="ViewOrders">    
                             <i class="fas fa-chart-bar"></i>
                             <span>Thống kê & Báo cáo</span>
                         </a>

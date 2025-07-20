@@ -1,0 +1,51 @@
+﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModel.OrderDetailViewModel
+<h5 class="modal-title text-dark">Chi tiết đơn hàng</h5>
+
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <th>Mã đơn hàng</th>
+            <td>@Model.OrderId</td>
+        </tr>
+        <tr>
+            <th>Người dùng</th>
+            <td>@Model.UserId</td>
+        </tr>
+        <tr>
+            <th>Ngày đặt</th>
+            <td>@Model.BookingDate</td>
+        </tr>
+        <tr>
+            <th>Trạng thái</th>
+            <td>@Model.Status</td>
+        </tr>
+        <tr>
+            <th>Mã khuyến mãi</th>
+            <td>@Model.PromotionCode</td>
+        </tr>
+        <tr>
+            <th>Ngày chiếu</th>
+            <td>@Model.ShowDate</td>
+        </tr>
+        <tr>
+            <th>Giờ chiếu</th>
+            <td>@Model.FromTime.Replace("\\", "") - @Model.ToTime.Replace("\\", "")</td>
+        </tr>
+        <tr>
+            <th>Phòng</th>
+            <td>@Model.RoomName</td>
+        </tr>
+        <tr>
+            <th>Ghế đã đặt</th>
+            <td>@string.Join(", ", Model.Seats)</td>
+        </tr>
+        <tr>
+            <th>Giá chi tiết</th>
+            <td>@Model.TotalDetailPrice.ToString("N0") đ</td>
+        </tr>
+        <tr>
+            <th>Tổng thanh toán</th>
+            <td>@Model.TotalPrice.ToString("N0") đ</td>
+        </tr>
+    </tbody>
+</table>
