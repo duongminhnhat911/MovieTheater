@@ -1,14 +1,17 @@
 ﻿using MovieBookingWebMVC.Areas.Booking.Models.ViewModel;
+using MovieBookingWebMVC.Areas.Movie.Services;
 
 namespace MovieBookingWebMVC.Areas.Booking.Services
 {
     public class OrderApiService : IOrderApiService
     {
         private readonly HttpClient _httpClient;
+        private readonly MovieApiService _movieApiService;
 
-        public OrderApiService(IHttpClientFactory factory)
+        public OrderApiService(IHttpClientFactory factory, MovieApiService movieApiService)
         {
             _httpClient = factory.CreateClient("ApiClient_Booking");
+            _movieApiService = movieApiService;
         }
 
         public async Task<List<OrderSummaryViewModel>> GetAllOrdersAsync()
@@ -25,8 +28,18 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
             var response = await _httpClient.GetAsync($"/api/OrderDetail/full/{orderId}");
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<OrderDetailViewModel>()
-                   ?? new OrderDetailViewModel();
+            var detail = await response.Content.ReadFromJsonAsync<OrderDetailViewModel>()
+                         ?? new OrderDetailViewModel();
+
+
+            if (detail.MovieId > 0)
+            {
+                var movie = await _movieApiService.GetMovie(detail.MovieId);
+                if (movie != null)
+                    detail.MovieTitle = movie.Title; 
+            }
+
+            return detail;
         }
     }
 }

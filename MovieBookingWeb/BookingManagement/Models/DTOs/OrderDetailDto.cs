@@ -10,8 +10,6 @@
         public string PromotionCode { get; set; } = "";
 
         public int MovieId { get; set; }
-        public string MovieTitle { get; set; } = "";
-
         public string ShowDate { get; set; } = "";
         public string FromTime { get; set; } = "";
         public string ToTime { get; set; } = "";

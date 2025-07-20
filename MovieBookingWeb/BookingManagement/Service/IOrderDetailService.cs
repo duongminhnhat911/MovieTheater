@@ -1,6 +1,5 @@
 ﻿using BookingManagement.Models.DTOs;
 using BookingManagement.Models.Entities;
-using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
 
 namespace BookingManagement.Service
 {

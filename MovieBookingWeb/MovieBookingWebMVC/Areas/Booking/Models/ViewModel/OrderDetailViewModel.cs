@@ -12,7 +12,9 @@ namespace MovieBookingWebMVC.Areas.Booking.Models.ViewModel
         public int TotalPrice { get; set; }
         public string Status { get; set; } = "";
         public string? PromotionCode { get; set; }
-
+        //Thông tin phim
+        public int MovieId { get; set; }
+        public string MovieTitle { get; set; } = "";
         // Thông tin suất chiếu
         public string ShowDate { get; set; } = "";
         public string FromTime { get; set; } = "";

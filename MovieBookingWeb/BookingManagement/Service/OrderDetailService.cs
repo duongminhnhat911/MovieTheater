@@ -2,8 +2,6 @@
 using BookingManagement.Models.Entities;
 using BookingManagement.Repositories;
 using Microsoft.EntityFrameworkCore;
-using MovieManagement.Data;
-using MovieManagement.Models.Entities;
 
 namespace BookingManagement.Service
 {
@@ -75,6 +73,10 @@ namespace BookingManagement.Service
                 TotalPrice = first.Order?.TotalPrice ?? 0,
                 Status = first.Order?.Status == true ? "Đã thanh toán" : "Chưa thanh toán",
                 PromotionCode = first.Order?.Promotion?.PromotionCode ?? "Không áp dụng",
+
+
+                MovieId = first.Showtime?.MovieId ?? 0,
+
 
                 ShowDate = first.Showtime?.ShowDate.ToString("yyyy-MM-dd") ?? "",
                 FromTime = first.Showtime?.FromTime.ToString(@"hh\\:mm") ?? "",
