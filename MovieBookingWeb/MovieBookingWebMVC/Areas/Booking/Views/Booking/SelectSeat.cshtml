@@ -535,7 +535,7 @@
     <script>
         const userId = @userId;
         const showtimeId = @Model.ShowtimeId;
-        const connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7116/seatHub").build();
+        const connection = new signalR.HubConnectionBuilder().withUrl("https://bookingmanagement-api.azurewebsites.net/seatHub").build();
 
         // Nhận sự kiện khi có người giữ ghế
         connection.on("SeatLocked", (seatId, uid) => {
@@ -610,7 +610,7 @@
                     for (let cb of checkedSeats) {
                         const seatId = parseInt(cb.value);
                         console.log(`🔓 Gửi yêu cầu unlock ghế ${seatId}`);
-                        await fetch("https://localhost:7116/api/realtime/seatshowtime/unlock", {
+                        await fetch("https://bookingmanagement-api.azurewebsites.net/api/realtime/seatshowtime/unlock", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ showtimeId, seatId, userId })
@@ -641,7 +641,7 @@
                 const seatId = parseInt(this.value);
                 if (this.checked) {
                     console.log(`🖱 Chọn ghế ${seatId}, gửi yêu cầu lock`);
-                    const response = await fetch("https://localhost:7116/api/realtime/seatshowtime/lock", {
+                    const response = await fetch("https://bookingmanagement-api.azurewebsites.net/api/realtime/seatshowtime/lock", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ showtimeId, seatId, userId })
@@ -655,7 +655,7 @@
                     }
                 } else {
                     console.log(`🔄 Bỏ chọn ghế ${seatId}, gửi unlock`);
-                    await fetch("https://localhost:7116/api/realtime/seatshowtime/unlock", {
+                    await fetch("https://bookingmanagement-api.azurewebsites.net/api/realtime/seatshowtime/unlock", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ showtimeId, seatId, userId })

@@ -12,7 +12,7 @@
 
     <script>
     const connection = new signalR.HubConnectionBuilder()
-        .withUrl("https://localhost:7116/seatHub", { withCredentials: true })
+        .withUrl("https://bookingmanagement-api.azurewebsites.net/seatHub", { withCredentials: true })
       .build();
 
     const log = (msg) => {

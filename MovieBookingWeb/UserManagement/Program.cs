@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowMVC", policy =>
     {
-        policy.WithOrigins("http://localhost:7169") // Port của frontend MVC
+        policy.WithOrigins("https://moviebookingweb-mvc.azurewebsites.net/") // Port của frontend MVC
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
@@ -45,18 +45,23 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 var app = builder.Build();
 
 //Apply database migration (nếu chưa có database thì EF sẽ tạo và seed luôn)
-using (var scope = app.Services.CreateScope())
+try
 {
+    using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
     dbContext.Database.Migrate();
 }
-
-
-if (app.Environment.IsDevelopment())
+catch (Exception ex)
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    Console.WriteLine("⚠️ Failed to apply migration: " + ex.Message);
 }
+// Hiển thị Swagger bất kể môi trường nào (dev/prod/staging, v.v.)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "User Management API v1");
+    c.RoutePrefix = string.Empty; // Đặt Swagger UI ở root URL (tùy chọn)
+});
 
 app.UseHttpsRedirection();
 

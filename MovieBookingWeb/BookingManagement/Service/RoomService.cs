@@ -28,13 +28,13 @@ namespace BookingManagement.Service
             for (int i = 0; i < dto.Rows; i++)
             {
                 char rowChar = (char)('A' + i);
-                for (int j = 1; j <= dto.Columns; j++)
+                for (int j = 0; j < dto.Columns; j++) // sửa từ j = 1 -> j = 0
                 {
                     await _repo.AddSeatAsync(new Seat
                     {
                         RoomId = room.Id,
                         SeatRow = rowChar,
-                        SeatColumn = (char)(j.ToString()[0]),
+                        SeatColumn = (char)(j.ToString()[0]), // vẫn giữ nguyên cách này
                         SeatStatus = true
                     });
                 }
@@ -63,25 +63,18 @@ namespace BookingManagement.Service
             var currentColumns = currentSeats.Select(s => s.SeatColumn).Distinct().Count();
 
             // Nếu có thay đổi sơ đồ thì cập nhật lại ghế
-            if (currentRows != dto.Rows || currentColumns != dto.Columns)
+            for (int i = 0; i < dto.Rows; i++)
             {
-                room.RoomQuantity = dto.Rows * dto.Columns;
-
-                await _repo.RemoveSeatsByRoomIdAsync(room.Id);
-
-                for (int i = 0; i < dto.Rows; i++)
+                char rowChar = (char)('A' + i);
+                for (int j = 0; j < dto.Columns; j++) // cũng sửa từ j = 1 -> j = 0
                 {
-                    char rowChar = (char)('A' + i);
-                    for (int j = 1; j <= dto.Columns; j++)
+                    await _repo.AddSeatAsync(new Seat
                     {
-                        await _repo.AddSeatAsync(new Seat
-                        {
-                            RoomId = room.Id,
-                            SeatRow = rowChar,
-                            SeatColumn = (char)(j.ToString()[0]), // dùng string để xử lý 2 chữ số trở lên
-                            SeatStatus = true
-                        });
-                    }
+                        RoomId = room.Id,
+                        SeatRow = rowChar,
+                        SeatColumn = (char)(j.ToString()[0]),
+                        SeatStatus = true
+                    });
                 }
             }
 

@@ -46,7 +46,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             var client = _httpClientFactory.CreateClient();
 
             // Lấy tất cả suất chiếu
-            var showtimeRes = await client.GetAsync("https://localhost:7116/api/Showtime");
+            var showtimeRes = await client.GetAsync("https://bookingmanagement-api.azurewebsites.net/api/Showtime");
             if (!showtimeRes.IsSuccessStatusCode)
                 return View(new List<MovieWithShowtimeDTO>());
 
@@ -62,7 +62,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             {
                 var movieId = group.Key;
 
-                var movieRes = await client.GetAsync($"https://localhost:7197/api/Movies/{movieId}");
+                var movieRes = await client.GetAsync($"https://moviemanagement-api.azurewebsites.net/api/Movies/{movieId}");
                 if (!movieRes.IsSuccessStatusCode)
                     continue;
 

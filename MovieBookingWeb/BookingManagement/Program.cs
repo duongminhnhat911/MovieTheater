@@ -48,14 +48,14 @@ builder.Services.AddDbContext<BookingDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddHttpClient<IMovieServiceClient, MovieManagementHttpClient>(client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7197/"); // ⚠️ Đổi đúng URI MovieManagement service của bạn
+    client.BaseAddress = new Uri("https://moviemanagement-api.azurewebsites.net/"); // ✅ Đã chỉnh sửa đúng URI deploy
 });
 //Cấu hình CORS cho MVC
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowMVC", policy =>
     {
-        policy.WithOrigins("https://localhost:7169") // Port của frontend MVC
+        policy.WithOrigins("https://moviebookingweb-mvc.azurewebsites.net") // Port của frontend MVC
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
@@ -87,11 +87,12 @@ using (var scope = app.Services.CreateScope())
 }
 
 // -------------------- 4. MIDDLEWARE PIPELINE --------------------
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Booking Management API v1");
+    c.RoutePrefix = string.Empty; // Đặt Swagger UI ở root URL (tùy chọn)
+});
 
 app.UseHttpsRedirection();
 

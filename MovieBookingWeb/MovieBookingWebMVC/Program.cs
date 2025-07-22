@@ -13,18 +13,18 @@ builder.Services.AddHttpContextAccessor();
 // ✅ Cấu hình HttpClient để gọi API
 builder.Services.AddHttpClient("ApiClient_User", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7165/");
+    client.BaseAddress = new Uri("https://usermanagement-g6b7euhybjaveud3.indonesiacentral-01.azurewebsites.net/");
     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 });
 
 builder.Services.AddHttpClient("ApiClient_Movie", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7197/");
+    client.BaseAddress = new Uri("https://moviemanagement-api.azurewebsites.net/");
     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 });
 builder.Services.AddHttpClient("ApiClient_Booking", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7116/");
+    client.BaseAddress = new Uri("https://bookingmanagement-api.azurewebsites.net/");
     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 });
 
