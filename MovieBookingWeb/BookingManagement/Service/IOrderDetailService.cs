@@ -10,5 +10,7 @@ namespace BookingManagement.Service
         Task<OrderDetail?> GetByIdAsync(int id);
         Task<OrderDetail?> UpdateAsync(int id, UpdateOrderDetailDto dto);
         Task<bool> DeleteAsync(int id);
+        Task<OrderDetailDto?> GetFullOrderDetailAsync(int orderId);
+
     }
 }

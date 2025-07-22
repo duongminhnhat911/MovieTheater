@@ -56,5 +56,15 @@ namespace BookingManagement.Controllers
             if (!success) return NotFound();
             return Ok("Đã xóa chi tiết đơn hàng.");
         }
+
+        [HttpGet("full/{orderId}")]
+        public async Task<IActionResult> GetFullOrderDetail(int orderId)
+        {
+            var result = await _service.GetFullOrderDetailAsync(orderId);
+            if (result == null)
+                return NotFound("Không tìm thấy đơn hàng.");
+
+            return Ok(result);
+        }
     }
 }
