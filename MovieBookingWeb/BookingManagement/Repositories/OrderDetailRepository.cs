@@ -41,5 +41,18 @@ namespace BookingManagement.Repositories
 
         public async Task SaveChangesAsync() =>
             await _db.SaveChangesAsync();
+
+        public async Task<List<OrderDetail>> GetByOrderIdWithIncludesAsync(int orderId)
+        {
+            return await _db.OrderDetails
+                .Where(od => od.OrderId == orderId)
+                .Include(od => od.Order)
+                    .ThenInclude(o => o.Promotion)
+                .Include(od => od.Seat)
+                    .ThenInclude(s => s.Room)
+                .Include(od => od.Showtime)
+                .ToListAsync();
+        }
+
     }
 }
