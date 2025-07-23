@@ -1,0 +1,209 @@
+﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModel.OrderDetailViewModel
+
+<div class="booking-details">
+    <table class="table details-table">
+        <tr>
+            <th><i class="fas fa-barcode info-icon"></i> Mã đơn hàng</th>
+            <td><span class="order-id">@Model.OrderId</span></td>
+        </tr>
+        <tr>
+            <th><i class="fas fa-user info-icon"></i> Người dùng</th>
+            <td><span class="order-id">@Model.UserId</span></td>
+        </tr>
+        <tr>
+            <th><i class="fas fa-calendar-check info-icon"></i> Ngày đặt</th>
+            <td>@Model.BookingDate</td>
+        </tr>
+        <tr>
+            <th><i class="fas fa-info-circle info-icon"></i> Trạng thái</th>
+            <td>
+                <span class="status-badge @(Model.Status == "Paid" ? "status-paid" : "status-unpaid")">
+                    @if (Model.Status == "Đã thanh toán")
+                    {
+                        <i class="fas fa-check-circle me-1"></i> <text>Đã thanh toán</text>
+                    }
+                    else
+                    {
+                        <i class="fas fa-exclamation-triangle me-1"></i> <text>Chưa thanh toán</text>
+                    }
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <th><i class="fas fa-ticket-alt info-icon"></i> Mã khuyến mãi</th>
+            <td>@Model.PromotionCode</td>
+        </tr>
+        <tr>
+            <th><i class="fas fa-film info-icon"></i> Tên phim</th>
+            <td>@Model.MovieTitle</td>
+        </tr>
+        <tr>
+            <th><i class="fas fa-calendar-alt info-icon"></i> Ngày chiếu</th>
+            <td>@Model.ShowDate</td>
+        </tr>
+        <tr>
+            <th><i class="fas fa-clock info-icon"></i> Giờ chiếu</th>
+            <td>@Model.FromTime.Replace("\\", "") - @Model.ToTime.Replace("\\", "")</td>
+        </tr>
+        <tr>
+            <th><i class="fas fa-door-open info-icon"></i> Phòng</th>
+            <td>@Model.RoomName</td>
+        </tr>
+        <tr>
+            <th><i class="fas fa-couch info-icon"></i> Ghế đã đặt</th>
+            <td>
+                <div class="seat-badges">
+                    @foreach (var seat in Model.Seats)
+                    {
+                        <span class="seat-badge">@seat</span>
+                    }
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th><i class="fas fa-money-check-alt info-icon"></i> Giá chi tiết</th>
+            <td><span class="total-price">@Model.TotalDetailPrice.ToString("N0") đ</span></td>
+        </tr>
+        <tr>
+            <th><i class="fas fa-money-bill-wave info-icon"></i> Tổng thanh toán</th>
+            <td><span class="total-price">@Model.TotalPrice.ToString("N0") đ</span></td>
+        </tr>
+    </table>
+</div>
+
+<style>
+    :root {
+        --primary-black: #000000;
+        --mint-light: #CCFFE4;
+        --teal-primary: #9FCBC0;
+        --gray-light: #d0d0d0;
+        --white: #ffffff;
+        --shadow-color: rgba(0, 0, 0, 0.1);
+        --border-radius: 12px;
+    }
+
+    .booking-details {
+        padding: 1rem;
+        background: var(--white);
+        text-align: left;
+    }
+
+    .details-table {
+        background: var(--white);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: 0 4px 16px var(--shadow-color);
+        border: 1px solid var(--teal-primary);
+    }
+
+        .details-table th {
+            background: var(--teal-primary);
+            color: var(--primary-black);
+            font-weight: 600;
+            align-content: center;
+            padding-left: 1rem;
+            border-bottom: 1px solid var(--gray-light);
+            font-size: 1rem;
+            position: relative;
+        }
+
+            .details-table th::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 4px;
+                background: var(--primary-black);
+            }
+
+        .details-table td {
+            padding: 1.2rem 1.5rem;
+            border: none;
+            border-bottom: 1px solid var(--gray-light);
+            font-size: 1rem;
+            color: var(--primary-black);
+            position: relative;
+        }
+
+    .table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        border: none;
+    }
+
+    .details-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .details-table tr:nth-child(even) {
+        background: var(--gray-light);
+    }
+
+    .details-table th,
+    .details-table td {
+        text-align: left !important;
+        vertical-align: middle !important;
+    }
+
+    .order-id {
+        font-family: 'Courier New', monospace;
+        font-weight: 600;
+        color: var(--primary-black);
+        background: var(--gray-light);
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius);
+        font-size: 0.95rem;
+        border: 1px solid var(--teal-primary);
+    }
+
+    .seat-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .seat-badge {
+        background: var(--teal-primary);
+        color: var(--primary-black);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 8px var(--shadow-color);
+        transition: all 0.3s ease;
+        border: 1px solid var(--primary-black);
+    }
+
+    .total-price {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--primary-black);
+        background: var(--mint-light);
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius);
+        border: 2px solid var(--teal-primary);
+    }
+
+    .status-badge {
+        padding: 0.6rem 1.2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: 2px solid;
+    }
+
+    .status-paid {
+        background: var(--teal-primary);
+        color: var(--primary-black);
+        border-color: var(--primary-black);
+    }
+
+    .status-unpaid {
+        background: var(--gray-light);
+        color: var(--primary-black);
+        border-color: var(--primary-black);
+    }
+</style>

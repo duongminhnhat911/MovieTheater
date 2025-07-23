@@ -10,5 +10,6 @@ namespace BookingManagement.Repositories
         Task<OrderDetail?> GetByIdAsync(int id);
         void Remove(OrderDetail detail);
         Task SaveChangesAsync();
+        Task<List<OrderDetail>> GetByOrderIdWithIncludesAsync(int orderId);
     }
 }

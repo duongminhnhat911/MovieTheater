@@ -1,41 +1,31 @@
 ﻿@model IEnumerable<MovieBookingWebMVC.Areas.Booking.Models.ViewModel.ShowtimeViewModel>
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Quản lý suất chiếu";
+    var today = DateTime.Today;
 }
 
 <style>
     :root {
-        --primary-black: #000000;
-        --mint-light: #CCFFE4;
-        --teal-green: #9FCBC0;
-        --light-gray: #F5F5F5;
-        --white: #ffffff;
-        --success-green: #28a745;
-        --warning-orange: #ffc107;
-        --danger-red: #dc3545;
-        --shadow-light: rgba(0, 0, 0, 0.1);
-        --shadow-medium: rgba(0, 0, 0, 0.15);
-    }
-
-    body {
-        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        min-height: 100vh;
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        --dark-gradient: linear-gradient(135deg, #434343 0%, #000000 100%);
+        --light-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
     }
 
     .main-container {
-        background: var(--white);
         border-radius: 20px;
-        box-shadow: 0 10px 30px var(--shadow-light);
         margin: 2rem 1rem;
         max-width: 1400px;
         overflow: hidden;
     }
 
     .header-section {
-        background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
-        color: var(--white);
+        background: linear-gradient(135deg, #000000 0%, #333333 100%);
+        color: #ffffff;
         padding: 2rem;
         text-align: center;
         position: relative;
@@ -49,8 +39,8 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(204, 255, 228, 0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
         }
 
     @@keyframes rotate {
@@ -73,38 +63,15 @@
     }
 
     .content-section {
-        padding: 2rem;
-        background: var(--mint-light);
+        padding: 2.5rem;
+        background: #CCFFE4;
         background-image: radial-gradient(circle at 20% 20%, rgba(159, 203, 192, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(245, 245, 245, 0.2) 0%, transparent 50%);
     }
 
-    .success-alert {
-        background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
-        color: var(--white);
-        border: none;
-        border-radius: 15px;
-        padding: 1rem 2rem;
-        font-weight: 600;
-        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
-        animation: slideInDown 0.5s ease-out;
-    }
-
-    @@keyframes slideInDown {
-        from {
-            transform: translateY(-20px);
-            opacity: 0;
-        }
-
-        to {
-            transform: translateY(0);
-            opacity: 1;
-        }
-    }
-
     .add-showtime-btn {
-        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
-        border: none;
-        color: var(--white);
+        background: linear-gradient(135deg, #9FCBC0 0%, #7fb3d3 100%);
+        border: #ffffff;
+        color: #ffffff;
         padding: 0.75rem 2rem;
         border-radius: 25px;
         font-weight: 600;
@@ -136,184 +103,299 @@
         .add-showtime-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(159, 203, 192, 0.6);
-            color: var(--white);
+            color: #ffffff;
         }
 
-    .showtime-table {
-        background: var(--white);
+    .stats-info {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 1rem;
+        color: #666;
+        font-weight: 500;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(102, 126, 234, 0.1);
         border-radius: 15px;
+        font-size: 0.9rem;
+    }
+
+    .calendar-container {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 2rem;
         overflow: hidden;
-        box-shadow: 0 10px 30px var(--shadow-light);
-        margin-top: 2rem;
     }
 
-    .table-header th {
-        background: var(--primary-black);
-        color: var(--white);
-        padding: 1.2rem 1rem;
-        font-weight: 600;
-        text-align: center;
+    .success-alert {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: #ffffff;
         border: none;
-        position: relative;
+        border-radius: 15px;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        animation: slideInDown 0.5s ease-out;
     }
 
-        .table-header th::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: var(--teal-green);
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
+    @@keyframes slideInDown {
+        from {
+            transform: translateY(-30px);
+            opacity: 0;
         }
 
-        .table-header th:hover::after {
-            width: 80%;
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* FullCalendar Custom Styles */
+    .fc {
+        font-family: 'Inter', sans-serif;
+    }
+
+    .fc-toolbar-title {
+        font-size: 1.75rem !important;
+        font-weight: 700 !important;
+        color: #333 !important;
+    }
+
+    .fc-button-primary {
+        background: var(--primary-gradient) !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 0.5rem 1rem !important;
+        font-weight: 600 !important;
+        transition: var(--transition) !important;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+    }
+
+        .fc-button-primary:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
         }
 
-    .table tbody tr {
+        .fc-button-primary:not(:disabled):active,
+        .fc-button-primary:not(:disabled).fc-button-active {
+            background: var(--secondary-gradient) !important;
+            box-shadow: 0 4px 15px rgba(249, 63, 251, 0.4) !important;
+        }
+
+    .fc-daygrid-day {
+        transition: var(--transition);
+    }
+
+    .fc-col-header-cell {
+        background: linear-gradient(135deg, #000000 0%, #434343 100%) !important;
+        color: white !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+        border: none !important;
+        padding: 1rem 0 !important;
+        text-transform: uppercase;
+        font-size: 1rem !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        transition: background 0.3s ease;
+    }
+
+    .fc .fc-col-header-cell-cushion {
+        color: white !important;
+    }
+
+    .fc-daygrid-day {
+        background: #fff;
         transition: all 0.3s ease;
-        border-bottom: 1px solid rgba(159, 203, 192, 0.2);
+        border: 1px solid #f0f0f0;
+        vertical-align: top;
     }
 
-        .table tbody tr:hover {
-            background: linear-gradient(135deg, var(--mint-light) 0%, rgba(159, 203, 192, 0.1) 100%);
-            transform: translateX(5px);
+        .fc-daygrid-day:hover {
+            background: #f9f9f9 !important;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
         }
 
-    .table tbody td {
-        padding: 1rem;
-        vertical-align: middle;
-        border: none;
-        position: relative;
+    .fc-day-today {
+        background: linear-gradient(135deg, #e0e0e0 0%, #cfcfcf 100%);
+        border: 2px solid #999999 !important;
+        transition: background 0.3s ease, border 0.3s ease;
     }
 
-    .showtime-id {
-        background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
-        color: var(--white);
-        padding: 0.3rem 0.8rem;
+    .fc-daygrid-day-number {
+        font-weight: 600;
+        color: #333;
+        padding: 0.25rem;
+        transition: color 0.3s ease;
+    }
+
+        .fc-daygrid-day-number:hover {
+            color: #667eea;
+            transform: scale(1.1);
+        }
+
+    @@media (max-width: 768px) {
+        .fc-col-header-cell {
+            font-size: 0.85rem !important;
+            padding: 0.5rem 0 !important;
+        }
+
+        .fc-daygrid-day-number {
+            font-size: 0.85rem;
+        }
+    }
+
+    .fc-daygrid-day-number {
+        font-weight: 600 !important;
+        color: #333 !important;
+        padding: 0.5rem !important;
+    }
+
+    .fc-event {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0.25rem 0.5rem !important;
+        margin: 0.125rem !important;
+        font-size: 0.75rem !important;
+        font-weight: 500 !important;
+        cursor: pointer !important;
+        transition: var(--transition) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    }
+
+        .fc-event:hover {
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+
+    .fc-event-title {
+        font-weight: 600 !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
+
+    .fc-list-event-title {
+        color: white !important;
+    }
+
+        .fc-list-event-title a {
+            color: white !important;
+        }
+
+    .fc-list-event:hover .fc-list-event-title a {
+        color: white !important;
+    }
+
+    .fc-event-time {
+        font-weight: 500 !important;
+        opacity: 0.9 !important;
+    }
+
+    /* Event Details Modal */
+    .event-details {
+        background: white;
         border-radius: 15px;
-        font-weight: 700;
+        padding: 1.5rem;
+        box-shadow: var(--card-shadow);
+        margin-top: 1rem;
+        display: none;
+    }
+
+        .event-details.active {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .event-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .event-info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
         font-size: 0.9rem;
-        display: inline-block;
-        min-width: 40px;
-        text-align: center;
     }
 
-    .movie-id-badge {
-        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
-        color: var(--white);
-        padding: 0.3rem 0.8rem;
-        border-radius: 15px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        display: inline-block;
-        min-width: 40px;
-        text-align: center;
-    }
-
-    .movie-title {
-        font-weight: 600;
-        color: var(--primary-black);
-        line-height: 1.4;
-    }
-
-    .room-badge {
-        background: var(--light-gray);
-        padding: 0.3rem 0.8rem;
-        border-radius: 15px;
-        font-weight: 600;
-        color: var(--primary-black);
-        display: inline-block;
-        border: 2px solid var(--teal-green);
-    }
-
-    .show-date {
-        font-family: 'Courier New', monospace;
-        font-weight: 600;
-        color: var(--primary-black);
-        padding: 0.3rem 0.8rem;
-        border-radius: 10px;
-        display: inline-block;
-    }
-
-    .time-badge {
-        background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
-        color: var(--white);
-        padding: 0.3rem 0.8rem;
-        border-radius: 15px;
-        font-weight: 600;
-        font-size: 0.85rem;
-        display: inline-block;
-        min-width: 70px;
-        text-align: center;
-    }
+        .event-info-item i {
+            width: 20px;
+            color: black;
+        }
 
     .action-buttons {
         display: flex;
-        gap: 0.5rem;
-        justify-content: center;
-        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+        flex-wrap: wrap;
     }
 
     .btn-action {
         padding: 0.5rem 1rem;
         border: none;
-        border-radius: 20px;
+        border-radius: 25px;
         font-size: 0.85rem;
         font-weight: 600;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
+        transition: var(--transition);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
         cursor: pointer;
     }
 
     .btn-edit {
-        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
-        color: var(--white);
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
+        background: var(--warning-gradient);
+        color: white;
+        box-shadow: 0 4px 15px rgba(250, 112, 154, 0.3);
     }
 
         .btn-edit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(159, 203, 192, 0.5);
-            color: var(--white);
+            box-shadow: 0 8px 25px rgba(250, 112, 154, 0.4);
+            color: white;
         }
 
-    .btn-delete {
-        background: linear-gradient(135deg, var(--danger-red) 0%, #c82333 100%);
-        color: var(--white);
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #666;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 20px;
+        margin-top: 2rem;
     }
 
-        .btn-delete:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.5);
-        }
-
-    .btn-view {
-        background: linear-gradient(135deg, var(--warning-orange) 0%, #fd7e14 100%);
-        color: var(--white);
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
-    }
-
-        .btn-view:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.5);
-            color: var(--white);
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ccc;
         }
 
     @@media (max-width: 768px) {
-        .main-container {
-            margin: 1rem;
-            border-radius: 15px;
+        .container-fluid {
+            padding: 0 0.5rem;
         }
 
         .header-title {
@@ -321,123 +403,508 @@
         }
 
         .content-section {
+            padding: 1.5rem;
+        }
+
+        .stats-info {
+            justify-content: center;
+        }
+
+        .calendar-container {
             padding: 1rem;
         }
 
-        .table-responsive {
-            font-size: 0.85rem;
+        .fc-toolbar {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .fc-toolbar-title {
+            font-size: 1.5rem !important;
         }
 
         .action-buttons {
             flex-direction: column;
-            gap: 0.3rem;
         }
 
         .btn-action {
             width: 100%;
-            padding: 0.4rem 0.8rem;
+            justify-content: center;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .header-section {
+            padding: 2rem 1rem;
+        }
+
+        .header-title {
+            font-size: 1.75rem;
+        }
+
+        .content-section {
+            padding: 1rem;
+        }
+
+        .calendar-container {
+            padding: 0.5rem;
+        }
+    }
+
+    .fc-col-header-cell-cushion, .fc-daygrid-day-number {
+        text-decoration: none !important;
+    }
+
+    .fc-header-toolbar .fc-button-group button {
+        margin-right: 0.5rem;
+    }
+
+        .fc-header-toolbar .fc-button-group button:last-child {
+            margin-right: 0;
+        }
+
+    /* List View Container */
+    .fc-list {
+        border: none !important;
+        border-radius: 20px !important;
+        overflow: hidden !important;
+        box-shadow: var(--card-shadow) !important;
+        background: white !important;
+    }
+
+    .fc-list-event-dot {
+        display: none !important;
+    }
+
+    /* Day Header Row */
+    .fc-list-day-cushion {
+        background: var(--light-gradient) !important;
+        color: #333 !important;
+        font-weight: 700 !important;
+        font-size: 1.1rem !important;
+        padding: 0.5rem 1rem !important;
+        border: none !important;
+        position: sticky !important;
+        top: 60px !important;
+        z-index: 9 !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+
+    .fc-list-day-text, .fc-list-day-side-text {
+        text-decoration: none !important;
+    }
+
+    .fc-list-day-side-text {
+        margin-left: auto !important;
+    }
+
+    .fc .fc-list-day-cushion,
+    .fc .fc-list-table td {
+        padding: 0.5rem 1rem !important;
+    }
+
+    /* Event Rows */
+    .fc-list-event {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        cursor: pointer !important;
+        border: none !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        padding: 0.5rem 1rem !important;
+    }
+
+        .fc-list-event:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%) !important;
+            transform: translateX(5px) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .fc-list-event:last-child {
+            border-bottom: none !important;
+        }
+
+    /* Event Time Column */
+    .fc-list-event-time {
+        padding: 1.5rem 2rem !important;
+        font-weight: 600 !important;
+        color: white !important;
+        font-size: 0.95rem !important;
+        border: none !important;
+        min-width: 120px !important;
+        vertical-align: middle !important;
+        background: rgba(102, 126, 234, 0.05) !important;
+        position: relative !important;
+    }
+
+        .fc-list-event-time::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(135deg, #f9d423 0%, #ff4e50 100%);
+            transition: all 0.3s ease;
+        }
+
+    .fc-list-event:hover .fc-list-event-time::before {
+        width: 6px;
+        background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+        box-shadow: 0 0 12px rgba(255, 215, 0, 0.7);
+    }
+
+    .fc-list-event-graphic {
+        padding: 10px;
+        display: none !important;
+    }
+
+    /* Event Title Column */
+    .fc-list-event-title {
+        padding: 1.5rem 2rem !important;
+        font-weight: 600 !important;
+        color: white !important;
+        font-size: 1rem !important;
+        border: none !important;
+        vertical-align: middle !important;
+        position: relative !important;
+    }
+
+        .fc-list-event-title a {
+            color: white !important;
+            text-decoration: none !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.75rem !important;
+            transition: color 0.3s ease !important;
+        }
+
+    .fc-list-event:hover .fc-list-event-title a {
+        color: black !important;
+    }
+
+    /* Add icon to event titles */
+    .fc-list-event-title a::before {
+        content: '\f008';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        color: white;
+        font-size: 1.1rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    /* Empty State for List View */
+    .fc-list-empty {
+        text-align: center !important;
+        padding: 3rem 2rem !important;
+        color: #666 !important;
+        font-size: 1.1rem !important;
+        background: white !important;
+        border-radius: 20px !important;
+    }
+
+        .fc-list-empty::before {
+            content: '\f073';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 3rem;
+            color: #ddd;
+            display: block;
+            margin-bottom: 1rem;
+            margin-right: 10px;
+        }
+
+    /* List View Responsive */
+    @@media (max-width: 768px) {
+        .fc-list-table thead th {
+            padding: 1rem 1.5rem !important;
+            font-size: 1rem !important;
+        }
+
+        .fc-list-day-cushion {
+            padding: 1rem 1.5rem !important;
+            font-size: 1rem !important;
+        }
+
+        .fc-list-event-time {
+            padding: 1rem 1.5rem !important;
+            min-width: 100px !important;
+            font-size: 0.9rem !important;
+        }
+
+        .fc-list-event-title {
+            padding: 1rem 1.5rem !important;
+            font-size: 0.95rem !important;
+        }
+    }
+
+    /* Additional Animation Effects */
+    .fc-list-event-time,
+    .fc-list-event-title {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .fc-list-event:hover .fc-list-event-time {
+        background: rgba(102, 126, 234, 0.1) !important;
+        color: #333 !important;
+    }
+
+    .fc-list-event:hover .fc-list-event-title a::before {
+        transform: scale(1.1) !important;
+        color: #764ba2 !important;
+    }
+
+    /* Scrollbar Styling for List View */
+    .fc-list::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .fc-list::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .fc-list::-webkit-scrollbar-thumb {
+        background: var(--primary-gradient);
+        border-radius: 10px;
+    }
+
+        .fc-list::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-gradient);
+        }
+
+    @@keyframes spin {
+        0% {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+
+        100% {
+            transform: translate(-50%, -50%) rotate(360deg);
         }
     }
 </style>
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.10/index.global.min.css" rel="stylesheet" />
+
 <div class="main-container">
     <div class="header-section">
         <h1 class="header-title">
-            <i class="fas fa-calendar-alt me-2"></i>
-            Quản lý suất chiếu
+            <i class="fas fa-calendar-alt me-2"></i> Quản lý suất chiếu
         </h1>
     </div>
 
     <div class="content-section">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="/Booking/AdminShowtime/Create" class="add-showtime-btn">
+                <i class="fas fa-plus"></i>
+                Thêm suất chiếu mới
+            </a>
+            <div class="stats-info">
+                <div class="stat-item">
+                    <i class="fas fa-film"></i>
+                    Suất chiếu:<strong style="margin-left: -3px;">@Model.Count()</strong>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-calendar-day"></i>
+                    Hôm nay: <strong style="margin-left: -3px;">@Model.Count(x => x.ShowDate == DateOnly.FromDateTime(DateTime.Today))</strong>
+                </div>
+            </div>
+        </div>
+
         @if (TempData["Success"] != null)
         {
-            <div class="alert success-alert text-center mb-4" id="alertSuccess">
+            <div class="success-alert" id="alertSuccess">
                 @TempData["Success"]
             </div>
         }
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <a href="/Booking/AdminShowtime/Create" class="add-showtime-btn">
-                <i class="fas fa-plus"></i>
-                Thêm suất chiếu
-            </a>
-            <div class="text-muted">
-                <i class="fas fa-clock"></i>
-                Tổng cộng: <strong>@Model.Count()</strong> suất chiếu
+        <div class="calendar-container">
+            <div id="calendar"></div>
+        </div>
+
+        <div class="event-details" id="eventDetails">
+            <div class="event-info" id="eventInfo">
+                <!-- Event details will be populated here -->
             </div>
         </div>
 
-        <div class="showtime-table">
-            <div class="table-responsive">
-                <table class="table mb-0">
-                    <thead class="table-header">
-                        <tr>
-                            <th style="width: 3%;">ID</th>
-                            <th style="width: 10%;">Mã phim</th>
-                            <th style="width: 23%;">Tên phim</th>
-                            <th style="width: 25%;">Phòng chiếu</th>
-                            <th style="width: 15%;">Ngày chiếu</th>
-                            <th style="width: 12%;">Giờ bắt đầu</th>
-                            <th style="width: 12%;">Giờ kết thúc</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td class="text-center">
-                                    <span class="showtime-id">@item.Id</span>
-                                </td>
-                                <td class="text-center">
-                                    <span class="movie-id-badge">@item.MovieId</span>
-                                </td>
-                                <td>
-                                    <div class="movie-title">@item.MovieName</div>
-                                </td>
-                                <td class="text-center">
-                                    <span class="room-badge">@item.Room</span>
-                                </td>
-                                <td class="text-center">
-                                    <span class="show-date">@item.ShowDate.ToString("dd/MM/yyyy")</span>
-                                </td>
-                                <td class="text-center">
-                                    <span class="time-badge">@item.FromTime</span>
-                                </td>
-                                <td class="text-center">
-                                    <span class="time-badge">@item.ToTime</span>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <i class="fas fa-calendar-times"></i>
+                <h3>Chưa có suất chiếu nào</h3>
+                <p>Hãy thêm suất chiếu đầu tiên để bắt đầu quản lý lịch chiếu phim.</p>
             </div>
-        </div>
+        }
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.10/index.global.min.js"></script>
+
 <script>
-    // Auto-hide success alert after 5 seconds
     document.addEventListener('DOMContentLoaded', function() {
-        const alertSuccess = document.getElementById('alertSuccess');
-        if (alertSuccess) {
+        const calendarEl = document.getElementById('calendar');
+        const eventDetailsEl = document.getElementById('eventDetails');
+        const eventInfoEl = document.getElementById('eventInfo');
+
+        // Convert server data to FullCalendar events
+        const events = @Html.Raw(Json.Serialize(Model.Select(x => new
+        {
+                id = x.Id,
+                title = x.MovieName,
+                start = x.ShowDate.ToString("yyyy-MM-dd") + "T" + x.FromTime.ToString("HH:mm:ss"),
+                end = x.ShowDate.ToString("yyyy-MM-dd") + "T" + x.ToTime.ToString("HH:mm:ss"),
+                room = x.Room,
+                movieName = x.MovieName,
+                showDate = x.ShowDate.ToString("dd/MM/yyyy"),
+                fromTime = x.FromTime.ToString("HH:mm"),
+                toTime = x.ToTime.ToString("HH:mm"),
+                backgroundColor = GetEventColor(x.MovieName.GetHashCode()),
+                borderColor = GetEventColor(x.MovieName.GetHashCode()),
+                classNames = new[] { "movie-event-" + ((Math.Abs(x.MovieName.GetHashCode()) % 5) + 1) }
+        })));
+
+        // Initialize FullCalendar
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,dayGridWeek,listWeek'
+            },
+            locale: 'vi',
+            firstDay: 1,
+            weekends: true,
+            editable: false,
+            eventDisplay: 'block',
+            dayMaxEvents: 3,
+            moreLinkClick: 'popover',
+            events: events,
+            buttonText: {
+                today: 'Hôm nay',
+                month: 'Tháng',
+                week: 'Tuần',
+                day: 'Ngày',
+                list: 'Danh sách'
+            },
+            dayHeaderFormat: { weekday: 'long' },
+            eventClick: function(info) {
+                showEventDetails(info.event);
+            },
+            eventMouseEnter: function(info) {
+                info.el.style.transform = 'translateY(-2px)';
+                info.el.style.boxShadow = '0 8px 25px rgba(0,0,0,0.2)';
+            },
+            eventMouseLeave: function(info) {
+                info.el.style.transform = 'translateY(0)';
+                info.el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+            },
+            dayCellDidMount: function(info) {
+                // Add hover effect to day cells
+                info.el.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = 'rgba(102, 126, 234, 0.05)';
+                });
+                info.el.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            },
+            eventDidMount: function(info) {
+                // Add tooltip
+                info.el.setAttribute('title',
+                    info.event.extendedProps.movieName + '\n' +
+                    'Phòng: ' + info.event.extendedProps.room + '\n' +
+                    'Thời gian: ' + info.event.extendedProps.fromTime + ' - ' + info.event.extendedProps.toTime
+                );
+            }
+        });
+
+        calendar.render();
+
+        // Function to show event details
+        function showEventDetails(event) {
+            const eventInfo = `
+                <h4 style="color: #333; font-weight: 700;">
+                    <i class="fas fa-film me-2"></i>
+                    ${event.extendedProps.movieName}
+                </h4>
+                <div class="event-info-item text-dark">
+                    <i class="fas fa-calendar-day"></i>
+                    <span><strong>Ngày chiếu:</strong> ${event.extendedProps.showDate}</span>
+                </div>
+                <div class="event-info-item text-dark">
+                    <i class="fas fa-clock"></i>
+                    <span><strong>Giờ chiếu:</strong> ${event.extendedProps.fromTime} - ${event.extendedProps.toTime}</span>
+                </div>
+                <div class="event-info-item text-dark">
+                    <i class="fas fa-door-open"></i>
+                    <span><strong>Phòng chiếu:</strong> ${event.extendedProps.room}</span>
+                </div>
+    @*
+            <div class="action-buttons">
+                <a href="/Booking/AdminShowtime/Edit/${event.id}" class="btn-action btn-edit">
+                    <i class="fas fa-edit"></i>
+                    Chỉnh sửa
+                </a>
+            </div>
+            *@
+            `;
+
+            eventInfoEl.innerHTML = eventInfo;
+            eventDetailsEl.classList.add('active');
+
+            // Scroll to event details
+            eventDetailsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Hide success alert after 5 seconds
+        const successAlert = document.getElementById('alertSuccess');
+        if (successAlert) {
             setTimeout(() => {
-                alertSuccess.style.transition = 'opacity 0.5s ease-out';
-                alertSuccess.style.opacity = '0';
+                successAlert.style.animation = 'slideOutUp 0.5s ease-out';
                 setTimeout(() => {
-                    alertSuccess.remove();
+                    successAlert.remove();
                 }, 500);
             }, 5000);
         }
-    });
 
-    // Add loading state for delete buttons
-    document.querySelectorAll('form[onsubmit*="confirm"]').forEach(form => {
-        form.addEventListener('submit', function(e) {
-            const button = this.querySelector('button[type="submit"]');
-            if (button) {
-                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xóa...';
-                button.disabled = true;
+        // Add slideOutUp animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @@keyframes slideOutUp {
+                from {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateY(-30px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Hide event details when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!eventDetailsEl.contains(e.target) && !e.target.closest('.fc-event')) {
+                eventDetailsEl.classList.remove('active');
             }
         });
     });
 </script>
+
+@functions {
+    private static string GetEventColor(int hash)
+    {
+        var colors = new[] {
+            "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+            "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+            "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
+            "linear-gradient(135deg, #434343 0%, #000000 100%)"
+        };
+        return colors[Math.Abs(hash) % colors.Length];
+    }
+}
+

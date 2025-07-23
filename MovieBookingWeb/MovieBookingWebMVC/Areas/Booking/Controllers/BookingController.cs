@@ -91,11 +91,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             // ✅ Lấy hoặc tạo userId
             if (!User.Identity.IsAuthenticated)
             {
-                if (HttpContext.Session.GetInt32("TempUserId") == null)
-                {
-                    HttpContext.Session.SetInt32("TempUserId", new Random().Next(1000, 9999));
-                }
-                ViewBag.UserId = HttpContext.Session.GetInt32("TempUserId");
+                return RedirectToAction("Login", "Account", new { area = "User", returnUrl = Url.Action("SelectSeat", "Booking", new { scheduleId }) });
             }
             else
             {
@@ -449,19 +445,19 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
 
                 var viewModel = new BookingViewModel
                 {
+                    MovieId = film.Id,
                     Title = film.Title,
                     Image = film.Image,
                     Genres = film.Genres,
                     Duration = film.Duration,
-                    Rating = film.Rating,
+                    Rating = film.RatingCode,
                     Subtitle = film.Subtitle,
                     Director = film.Director,
                     Format = film.Format,
                     ReleaseDate = film.ReleaseDate,
                     Description = film.Description,
-                    ProductionCompany = film.ProductionCompany
-
-
+                    ProductionCompany = film.ProductionCompany,
+                    TrailerUrl = film.TrailerLink
                 };
                 return View(viewModel);
             }

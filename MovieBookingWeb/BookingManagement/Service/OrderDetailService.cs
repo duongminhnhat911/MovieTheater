@@ -56,5 +56,39 @@ namespace BookingManagement.Service
             await _repo.SaveChangesAsync();
             return true;
         }
+        public async Task<OrderDetailDto?> GetFullOrderDetailAsync(int orderId)
+        {
+            var details = await _repo.GetByOrderIdWithIncludesAsync(orderId);
+            if (details == null || !details.Any()) return null;
+
+            var first = details.First();
+
+            return new OrderDetailDto
+            {
+                OrderId = first.OrderId,
+                UserId = first.Order?.UserId ?? 0,
+                BookingDate = first.Order?.BookingDate.ToString("yyyy-MM-dd") ?? "",
+                TotalPrice = first.Order?.TotalPrice ?? 0,
+                Status = first.Order?.Status == true ? "Đã thanh toán" : "Chưa thanh toán",
+                PromotionCode = first.Order?.Promotion?.PromotionCode ?? "Không áp dụng",
+
+
+                MovieId = first.Showtime?.MovieId ?? 0,
+
+
+                ShowDate = first.Showtime?.ShowDate.ToString("yyyy-MM-dd") ?? "",
+                FromTime = first.Showtime?.FromTime.ToString(@"hh\\:mm") ?? "",
+                ToTime = first.Showtime?.ToTime.ToString(@"hh\\:mm") ?? "",
+                RoomName = first.Seat?.Room?.RoomName ?? "",
+
+                Seats = details
+                    .Where(d => d.Seat != null)
+                    .Select(d => $"{d.Seat!.SeatRow}{d.Seat.SeatColumn}")
+                    .ToList(),
+
+
+                TotalDetailPrice = details.Sum(x => x.Price)
+            };
+        }
     }
 }
