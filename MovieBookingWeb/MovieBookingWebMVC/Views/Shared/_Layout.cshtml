@@ -4,7 +4,7 @@
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
 
     // Điều kiện hiển thị sidebar cho Admin (bao gồm các controller quản trị như Admin, Movie, User)
-    var showAdminSidebar = isAdmin && new[] { "Admin", "Movie", "User", "AdminShowtime", "AdminRoom", "AdminPromotion" }.Contains(currentController);
+    var showAdminSidebar = isAdmin && new[] { "Admin", "Movie", "User", "AdminShowtime", "AdminRoom", "AdminPromotion", "AdminOrder" }.Contains(currentController);
 
     // Điều kiện hiển thị sidebar cho người dùng, chỉ khi ở trang "Profile"
     var showUserSidebar = User?.Identity?.IsAuthenticated == true
@@ -461,7 +461,10 @@
                                 </a>
                             </li> *@
                             <li class="nav-item mx-2">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link text-white"
+                                   asp-area="Booking"
+                                   asp-controller="Promotion"
+                                   asp-action="ShowPromotionList">
                                     Khuyến mãi
                                 </a>
                             </li>
@@ -554,10 +557,9 @@
                         <h5 class="mb-3">
                             <i class="fas fa-crown me-2"></i>Trang quản trị
                         </h5>
-                        <a class="nav-link sidebar-link d-flex align-items-center gap-2 @(currentController == "Admin" && currentAction == "ViewMovie" ? "active" : "")"
+                        <a class="nav-link sidebar-link d-flex align-items-center gap-2 @(currentController == "Movie" && currentAction == "ViewMovie" ? "active" : "")"
                            asp-area="Movie" asp-controller="Movie" asp-action="ViewMovie">
-                            <i class="fas fa-film"></i>
-                            <span>Danh sách phim</span>
+                            <i class="fas fa-film"></i> <span>Danh sách phim</span>
                         </a>
                         <a class="nav-link sidebar-link d-flex align-items-center gap-2 @(currentController == "AdminShowtime" && currentAction == "Index" ? "active" : "")"
                            asp-area="Booking" asp-controller="AdminShowtime" asp-action="Index">
@@ -578,9 +580,10 @@
                             <span>Danh sách thành viên</span>
                         </a>
 
-                        <a class="nav-link sidebar-link d-flex align-items-center gap-2" href="#">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>Thống kê & Báo cáo</span>
+                        <a class="nav-link sidebar-link d-flex align-items-center gap-2 @(currentController == "AdminOrder" && currentAction == "ViewOrders" ? "active" : "")"
+                           asp-area="Booking" asp-controller="AdminOrder" asp-action="ViewOrders">
+                            <i class="fas fa-receipt"></i>
+                            <span>Lịch sử đơn hàng</span>
                         </a>
                     </nav>
                 </aside>
@@ -651,11 +654,7 @@
                         </h5>
                         <ul class="list-unstyled">
                             <li><a href="/movies" class="footer-link"><span>Phim đang chiếu</span> <i class="fas fa-external-link-alt"></i></a></li>
-                            <li>
-                                <a asp-area="Booking" asp-controller="Booking" asp-action="MoviesByDate" class="footer-link">
-                                    <span>Lịch chiếu</span> <i class="fas fa-external-link-alt"></i>
-                                </a>
-                            </li>
+                            <li><a href="/showtimes" class="footer-link"><span>Lịch chiếu</span> <i class="fas fa-external-link-alt"></i></a></li>
                             <li><a href="/booking" class="footer-link"><span>Đặt vé online</span> <i class="fas fa-external-link-alt"></i></a></li>
                             <li><a href="/promotions" class="footer-link"><span>Khuyến mãi</span> <i class="fas fa-external-link-alt"></i></a></li>
                             <li><a href="/membership" class="footer-link"><span>Thành viên VIP</span> <i class="fas fa-external-link-alt"></i></a></li>
@@ -676,10 +675,10 @@
                     </div>
 
                     <div class="col-md-3 mb-4">
-                        <h5 class="text-uppercase">
+                        <h5 style="line-height: 2; margin-top: -0.5rem;" class="text-uppercase">
                             <i class="fas fa-share-alt me-2"></i>Kết nối với chúng tôi
                         </h5>
-                        <ul class="list-inline">
+                        <ul style="margin-top: -0.75rem;" class="list-inline">
                             <li class="list-inline-item">
                                 <a href="https://facebook.com" target="_blank" title="Facebook">
                                     <i class="fab fa-facebook"></i>
