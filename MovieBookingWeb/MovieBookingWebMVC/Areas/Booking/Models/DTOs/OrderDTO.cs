@@ -7,5 +7,7 @@
         public DateOnly BookingDate { get; set; }
         public int TotalPrice { get; set; }
         public bool Status { get; set; }
+        //
+        public int? PromotionId { get; set; }
     }
 }

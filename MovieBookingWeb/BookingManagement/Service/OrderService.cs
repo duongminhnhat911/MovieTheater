@@ -11,6 +11,7 @@ namespace BookingManagement.Service
         private readonly ISeatShowtimeRepository _seatShowtimeRepo;
         private readonly ISeatRepository _seatRepo;
         private readonly IOrderRepository _orderRepository;
+        
 
         public OrderService(IOrderRepository repo, IShowtimeRepository showtimeRepository, ISeatShowtimeRepository seatShowtimeRepo, ISeatRepository seatRepository, IOrderRepository orderRepository)
         {
@@ -134,10 +135,10 @@ namespace BookingManagement.Service
                 Status = order.Status
             };
         }
-        public async Task<List<OrderHistoryDto>> GetOrderHistoryAsync(int userId)
+        //
+        public async Task<List<Order>> GetOrdersByUserIdAsync(int userId)
         {
-            return await _orderRepository.GetOrderHistoryByUserIdAsync(userId);
+            return await _orderRepository.GetOrdersByUserIdAsync(userId);
         }
-
     }
 }

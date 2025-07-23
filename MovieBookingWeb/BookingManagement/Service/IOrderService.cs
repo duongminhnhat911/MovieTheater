@@ -11,7 +11,6 @@ namespace BookingManagement.Service
         Task<Order?> UpdateOrderAsync(int id, Order dto);
         Task<bool> DisableOrderAsync(int id);
         Task<OrderConfirmationDto?> CreatePaymentAsync(CreatePaymentRequestDto request);
-
-        Task<List<OrderHistoryDto>> GetOrderHistoryAsync(int userId);
+        Task<List<Order>> GetOrdersByUserIdAsync(int userId);
     }
 }

@@ -471,5 +471,34 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+
+        //
+        [HttpGet]
+        public async Task<IActionResult> MyOrders()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account", new { area = "User" });
+            }
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                TempData["ErrorMessage"] = "Không thể xác định người dùng.";
+                return RedirectToAction("MoviesByDate");
+            }
+
+            var client = _httpClientFactory.CreateClient("ApiClient_Booking");
+            var response = await client.GetAsync($"api/Order/user/{userId}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Không thể lấy danh sách đơn hàng.";
+                return RedirectToAction("MoviesByDate");
+            }
+
+            var orders = await response.Content.ReadFromJsonAsync<List<OrderDTO>>();
+            return View(orders); // 👉 bạn tạo view `Views/Booking/MyOrders.cshtml`
+        }
     }
 }
