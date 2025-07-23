@@ -334,28 +334,37 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             {
                 _logger.LogInformation("🔄 VNPay return callback received");
 
-                // Log tất cả các query string từ VNPay
+                // Log toàn bộ các query string từ VNPay
                 _logger.LogInformation("📋 ALL VNPAY PARAMETERS:");
                 foreach (var param in Request.Query)
                 {
                     _logger.LogInformation("  {Key} = {Value}", param.Key, param.Value);
                 }
 
-                // Gửi lại các tham số này cho API callback
+                // Gửi callback lên API xử lý thanh toán
                 var client = _httpClientFactory.CreateClient("ApiClient_Booking");
-                var callbackUrl = $"api/Vnpay/callback{Request.QueryString}"; // tái sử dụng query string từ VNPay
+                var callbackUrl = $"api/Vnpay/callback{Request.QueryString}";
                 var callbackResponse = await client.GetAsync(callbackUrl);
 
-                // Đọc lại orderId để redirect
-                var orderId = Request.Query["vnp_TxnRef"].ToString();
+                // ✅ Parse orderId từ vnp_OrderInfo (Description)
+                var description = Request.Query["vnp_OrderInfo"].ToString(); // ex: "OrderId:123"
+                var orderIdStr = description.Replace("OrderId:", "").Trim();
+
+                if (!int.TryParse(orderIdStr, out var orderId))
+                {
+                    _logger.LogWarning("❌ Không parse được orderId từ vnp_OrderInfo: {Description}", description);
+                    TempData["ErrorMessage"] = "Không xác định được đơn hàng.";
+                    return RedirectToAction("MoviesByDate");
+                }
+
                 var transactionNo = Request.Query["vnp_TransactionNo"].ToString();
 
                 if (callbackResponse.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation("✅ Payment SUCCESS! Order: {OrderId}", orderId);
+                    _logger.LogInformation("✅ Payment SUCCESS! OrderId = {OrderId}", orderId);
 
                     TempData["SuccessMessage"] = "Thanh toán VNPay thành công! Đặt vé hoàn tất.";
-                    TempData["BookingCode"] = $"BK{orderId.PadLeft(6, '0')}";
+                    TempData["BookingCode"] = $"BK{orderId.ToString().PadLeft(6, '0')}";
                     TempData["TransactionNo"] = transactionNo;
                     TempData["VNPaySuccess"] = true;
 
