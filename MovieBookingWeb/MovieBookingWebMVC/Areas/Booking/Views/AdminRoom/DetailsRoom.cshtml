@@ -215,7 +215,7 @@
         background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 50%, #1f1f1f 100%);
         color: #ffffff;
         text-align: center;
-        padding: 20px;
+        padding: 15px;
         border-radius: 50px;
         margin-bottom: 40px;
         font-weight: 700;
@@ -394,63 +394,6 @@
         100% {
             box-shadow: 0 0 0 0 rgba(251, 191, 36, 0);
         }
-    }
-
-    /* Seat Legend */
-    .seat-legend {
-        display: flex;
-        justify-content: center;
-        gap: 32px;
-        margin-top: 20px;
-        flex-wrap: wrap;
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 16px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .legend-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 1rem;
-        font-weight: 600;
-        color: #000000;
-        padding: 12px 16px;
-        border-radius: 12px;
-        transition: all 0.3s ease;
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-        .legend-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-
-    .legend-color {
-        width: 28px;
-        height: 28px;
-        border-radius: 8px;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .legend-available {
-        background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-        border-color: #16a34a;
-    }
-
-    .legend-occupied {
-        background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
-        border-color: #dc2626;
-    }
-
-    .legend-selected {
-        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-        border-color: #d97706;
     }
 
     /* Button Styling */
@@ -739,22 +682,6 @@
                             }
                         </div>
                     }
-                </div>
-
-                <!-- Seat Legend -->
-                <div class="seat-legend">
-                    <div class="legend-item">
-                        <div class="legend-color legend-available"></div>
-                        <span>Ghế trống</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color legend-occupied"></div>
-                        <span>Ghế đã đặt</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color legend-selected"></div>
-                        <span>Ghế đã chọn</span>
-                    </div>
                 </div>
             }
             else

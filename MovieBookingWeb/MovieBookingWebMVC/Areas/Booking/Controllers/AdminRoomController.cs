@@ -9,8 +9,8 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
     public class AdminRoomController : Controller
     {
         private readonly IRoomService _roomService;
-
         private readonly ILogger<AdminRoomController> _logger;
+        private const int PageSize = 5;
 
         public AdminRoomController(IRoomService roomService, ILogger<AdminRoomController> logger)
         {
@@ -18,10 +18,30 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             _logger = logger;
         }
         // GET: /AdminRoom
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var rooms = await _roomService.GetRoomsAsync();
-            return View(rooms);
+            try
+            {
+                var rooms = await _roomService.GetRoomsAsync();
+                int totalRooms = rooms.Count;
+                int totalPages = (int)Math.Ceiling((double)totalRooms / PageSize);
+
+                ViewBag.CurrentPage = page;
+                ViewBag.TotalPages = totalPages;
+
+                var pagedRooms = rooms
+                    .OrderBy(r => r.Id)
+                    .Skip((page - 1) * PageSize)
+                    .Take(PageSize)
+                    .ToList();
+
+                return View(pagedRooms);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Lỗi khi lấy danh sách phòng: {ex.Message}";
+                return View(new List<AdminRoomController>());
+            }
         }
 
         // GET: /AdminRoom/Details/5

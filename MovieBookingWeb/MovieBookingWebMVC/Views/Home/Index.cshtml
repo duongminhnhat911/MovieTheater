@@ -593,7 +593,7 @@
     .movie-detail {
         display: flex;
         align-items: center;
-        gap: 5px;
+        gap: 10px;
     }
 
     .movie-actions {
@@ -892,7 +892,7 @@
 </section>
 
 <!-- Now Showing Section -->
-<section class="movie-section" style="background-color: #0f172a">
+<section class="movie-section now-showing-section" style="background-color: #0f172a">
     <div class="container">
         <div class="section-header">
             <h2 class="section-title">PHIM ĐANG CHIẾU</h2>
@@ -938,15 +938,15 @@
                         </div>
                         <div class="movie-details">
                             <div class="movie-detail">
-                                <i class="fas fa-clock me-2"></i>
-                                <span>@film.Duration phút</span>
+                                <i class="fas fa-clock"></i>
+                                <span style="margin-left: 2px;">@film.Duration phút</span>
                             </div>
                             <div class="movie-detail">
-                                <i class="fas fa-calendar me-2"></i>
+                                <i class="fas fa-calendar me-1"></i>
                                 <span>@film.ReleaseDate</span>
                             </div>
                             <div class="movie-detail">
-                                <i class="fas fa-eye me-1"></i>
+                                <i class="fas fa-eye"></i>
                                 <span>@film.RatingCode</span>
                             </div>
                         </div>
@@ -1013,15 +1013,15 @@
 
                         <div class="movie-details">
                             <div class="movie-detail">
-                                <i class="fas fa-clock me-2"></i>
-                                <span>135 phút</span>
+                                <i class="fas fa-clock"></i>
+                                <span style="margin-left: 2px;">135 phút</span>
                             </div>
                             <div class="movie-detail">
-                                <i class="fas fa-calendar me-2"></i>
+                                <i class="fas fa-calendar me-1"></i>
                                 <span>2024</span>
                             </div>
                             <div class="movie-detail">
-                                <i class="fas fa-eye me-2"></i>
+                                <i class="fas fa-eye"></i>
                                 <span>T18</span>
                             </div>
                         </div>
@@ -1068,6 +1068,17 @@
         </div>
         <div class="modal-body">
             <iframe id="trailerFrame" src="" allowfullscreen></iframe>
+        </div>
+        <div class="modal-footer" style="border: none; display: flex; justify-content: center;">
+            <div class="booking-button">
+                <a asp-area="Booking"
+                   asp-controller="Booking"
+                   asp-action="Showtimes"
+                   asp-route-movieId=""
+                   class="btn-movie btn-book">
+                    <i class="fas fa-ticket-alt"></i> Đặt vé
+                </a>
+            </div>
         </div>
     </div>
 </div>
