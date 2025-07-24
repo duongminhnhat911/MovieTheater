@@ -1,0 +1,62 @@
+﻿
+@{
+    @model IEnumerable<MovieBookingWebMVC.Areas.Booking.Models.DTOs.OrderDTO>
+    
+    ViewData["Title"] = "Đơn hàng của bạn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    <h2>Đơn hàng của bạn</h2>
+    @if (!Model.Any())
+    {
+        <p>Không có đơn hàng nào.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th>Thông tin chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.Id</td>
+                        <td>@order.BookingDate</td>
+                        <td>@order.TotalPrice.ToString("N0") đ</td>
+                        <td>@(order.Status ? "Đã thanh toán" : "Chờ thanh toán")</td>
+                        <td>
+                            <button class="btn btn-outline-info btn-sm btn-detail" data-order-id="@order.Id">
+                                Chi tiết
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <!-- Modal sẽ được inject nội dung -->
+
+
+    @section Scripts {
+        <script>
+                        $('.btn-detail').click(function () {
+                var orderId = $(this).data('order-id'); // nhớ dùng đúng data-order-id
+
+                $.get('/Booking/Order/Details/' + orderId, function (html) {
+                    $('#orderDetailContainer').html(html);
+                    $('#orderDetailModal').modal('show');
+                }).fail(function () {
+                    alert("Không thể tải chi tiết đơn hàng.");
+                });
+            });
+        </script>
+    }
+    <div id="orderDetailContainer"></div>
+
+}

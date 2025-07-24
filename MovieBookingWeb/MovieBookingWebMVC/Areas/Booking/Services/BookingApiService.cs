@@ -167,5 +167,18 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
 
         }
 
+        //
+        public async Task<List<OrderDTO>> GetOrdersByUserIdAsync(int userId)
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient_Booking");
+            var response = await client.GetAsync($"api/Order/user/{userId}");
+
+            if (!response.IsSuccessStatusCode)
+                throw new HttpRequestException($"API trả về lỗi: {response.StatusCode}");
+
+            var orders = await response.Content.ReadFromJsonAsync<List<OrderDTO>>();
+            return orders ?? new List<OrderDTO>();
+        }
+
     }
 }
