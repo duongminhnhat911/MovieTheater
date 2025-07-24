@@ -1,4 +1,5 @@
-﻿using BookingManagement.Models.VnPayModels;
+﻿using BookingManagement.Models.Entities;
+using BookingManagement.Models.VnPayModels;
 using Microsoft.Extensions.Options;
 using VNPAY.NET;
 using VNPAY.NET.Models;
@@ -28,12 +29,15 @@ namespace BookingManagement.Service.VnPay
 
         public string CreatePaymentUrl(double amount, string orderId, string ipAddress)
         {
+            // Tạo PaymentId ngẫu nhiên bằng timestamp (sẽ không trùng)
+            long paymentId = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
             var request = new PaymentRequest
             {
-                PaymentId = long.Parse(orderId),
+                PaymentId = paymentId,
                 Money = amount,
                 IpAddress = ipAddress,
-                Description = $"Thanh toán đơn hàng #{orderId}"
+                Description = $"OrderId:{orderId}" // Lưu orderId thật tại đây để callback đọc lại
             };
 
             return _vnpay.GetPaymentUrl(request);
