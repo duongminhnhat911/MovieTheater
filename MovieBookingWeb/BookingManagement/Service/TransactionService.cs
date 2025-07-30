@@ -63,10 +63,23 @@ namespace BookingManagement.Service
         {
             if (!result.IsSuccess) return false;
 
-            var existing = await _repo.GetByOrderIdAsync((int)result.PaymentId);
+            // Tách orderId từ Description
+            int orderId;
+            if (!string.IsNullOrEmpty(result.Description) && result.Description.Contains("OrderId:"))
+            {
+                string[] parts = result.Description.Split("OrderId:");
+                if (parts.Length == 2 && int.TryParse(parts[1], out var parsedId))
+                {
+                    orderId = parsedId;
+                }
+                else return false;
+            }
+            else return false;
+
+            var existing = await _repo.GetByOrderIdAsync(orderId);
             if (existing != null) return true;
 
-            var order = await _OrderRepo.GetByIdAsync((int)result.PaymentId);
+            var order = await _OrderRepo.GetByIdAsync(orderId);
             if (order == null) return false;
 
             var transaction = new Transaction
@@ -85,7 +98,6 @@ namespace BookingManagement.Service
             foreach (var detail in relatedDetails)
             {
                 var seatShowtime = await _seatShowtimeRepo.GetAsync(detail.ShowtimeId, detail.SeatId);
-
                 if (seatShowtime != null)
                 {
                     seatShowtime.Status = SeatStatus.Booked;

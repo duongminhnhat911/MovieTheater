@@ -10,13 +10,14 @@ namespace BookingManagement.Service
         private readonly IShowtimeRepository _showtimeRepository;
         private readonly ISeatShowtimeRepository _seatShowtimeRepo;
         private readonly ISeatRepository _seatRepo;
-
-        public OrderService(IOrderRepository repo, IShowtimeRepository showtimeRepository, ISeatShowtimeRepository seatShowtimeRepo, ISeatRepository seatRepository)
+        private readonly IOrderRepository _orderRepository;
+        public OrderService(IOrderRepository repo, IShowtimeRepository showtimeRepository, ISeatShowtimeRepository seatShowtimeRepo, ISeatRepository seatRepository, IOrderRepository orderRepository)
         {
             _repo = repo;
             _showtimeRepository = showtimeRepository;
             _seatShowtimeRepo = seatShowtimeRepo;
             _seatRepo = seatRepository;
+            _orderRepository = orderRepository;
         }
 
         public async Task<List<Order>> GetAllOrdersAsync() => await _repo.GetAllAsync();
@@ -130,6 +131,10 @@ namespace BookingManagement.Service
                 Seats = seatNames,
                 Status = order.Status
             };
+        }
+        public async Task<List<Order>> GetOrdersByUserIdAsync(int userId)
+        {
+            return await _orderRepository.GetOrdersByUserIdAsync(userId);
         }
     }
 }

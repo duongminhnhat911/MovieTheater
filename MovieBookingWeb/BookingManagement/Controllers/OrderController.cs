@@ -72,5 +72,12 @@ namespace BookingManagement.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetOrdersByUserId(int userId)
+        {
+            var orders = await _service.GetOrdersByUserIdAsync(userId);
+            return Ok(orders);
+        }
     }
 }

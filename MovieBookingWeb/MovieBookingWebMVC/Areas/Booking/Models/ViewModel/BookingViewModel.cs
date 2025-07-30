@@ -2,6 +2,7 @@
 {
     public class BookingViewModel
     {
+        public int MovieId { get; set; }
         public string? Title { get; set; }
         public string? Image { get; set; }
         public List<string>? Genres { get; set; }
@@ -15,6 +16,7 @@
         public string? Description { get; set; }
         public string? ProductionCompany { get; set; }
         public List<string>? AvailableDates { get; set; }
+        public string? TrailerUrl { get; set; }
     }
     
 }

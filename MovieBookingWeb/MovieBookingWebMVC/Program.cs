@@ -39,6 +39,7 @@ builder.Services.AddScoped<IShowtimeWebService, ShowtimeWebService>();
 builder.Services.AddScoped<ISeatWebService, SeatWebService>();
 builder.Services.AddScoped<IBookingApiService, BookingApiService>();
 builder.Services.AddScoped<IPromotionApiService, PromotionApiService>();
+builder.Services.AddScoped<IOrderApiService, OrderApiService>();
 
 builder.Services.AddControllersWithViews()
     .AddViewOptions(options =>

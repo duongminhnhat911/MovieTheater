@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MovieBookingWebMVC.Areas.Booking.Models.ViewModel;
 using MovieBookingWebMVC.Areas.Booking.Services;
 
 namespace MovieBookingWebMVC.Areas.Booking.Controllers
 {
     [Area("Booking")]
+    [Authorize(Roles = "Admin")]
     public class AdminPromotionController : Controller
     {
         private readonly IPromotionApiService _promotionService;

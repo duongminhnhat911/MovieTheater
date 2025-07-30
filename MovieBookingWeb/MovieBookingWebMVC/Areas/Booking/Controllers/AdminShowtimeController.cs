@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
 using MovieBookingWebMVC.Areas.Booking.Models.ViewModel;
@@ -9,6 +10,7 @@ using IRoomService = MovieBookingWebMVC.Areas.Booking.Services.IRoomService;
 namespace MovieBookingWebMVC.Areas.Booking.Controllers
 {
     [Area("Booking")]
+    [Authorize(Roles = "Admin")]
     public class AdminShowtimeController : Controller
     {
         private readonly IShowtimeApiService _showtimeService;
