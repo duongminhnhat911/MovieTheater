@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Text;
 using System.Security.Claims;
 using MovieBookingWebMVC.Areas.Booking.Models.ViewModel;
+using System.Reflection;
 
 namespace MovieBookingWebMVC.Areas.Booking.Controllers
 {
@@ -19,19 +20,22 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
         private readonly IShowtimeWebService _showtimeService;
         private readonly ILogger<BookingController> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IOrderApiService _orderService;
 
         public BookingController(
             IBookingApiService bookingApiService,
             MovieApiService movieApiService,
             IShowtimeWebService showtimeService,
             IHttpClientFactory httpClientFactory,
-            ILogger<BookingController> logger)
+            ILogger<BookingController> logger,
+            IOrderApiService orderService)
         {
             _bookingApiService = bookingApiService;
             _movieApiService = movieApiService;
             _showtimeService = showtimeService;
             _httpClientFactory = httpClientFactory;
             _logger = logger;
+            _orderService = orderService;
         }
 
         public async Task<IActionResult> Showtimes(int movieId)
@@ -335,28 +339,37 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             {
                 _logger.LogInformation("🔄 VNPay return callback received");
 
-                // Log tất cả các query string từ VNPay
+                // Log toàn bộ các query string từ VNPay
                 _logger.LogInformation("📋 ALL VNPAY PARAMETERS:");
                 foreach (var param in Request.Query)
                 {
                     _logger.LogInformation("  {Key} = {Value}", param.Key, param.Value);
                 }
 
-                // Gửi lại các tham số này cho API callback
+                // Gửi callback lên API xử lý thanh toán
                 var client = _httpClientFactory.CreateClient("ApiClient_Booking");
-                var callbackUrl = $"api/Vnpay/callback{Request.QueryString}"; // tái sử dụng query string từ VNPay
+                var callbackUrl = $"api/Vnpay/callback{Request.QueryString}";
                 var callbackResponse = await client.GetAsync(callbackUrl);
 
-                // Đọc lại orderId để redirect
-                var orderId = Request.Query["vnp_TxnRef"].ToString();
+                // ✅ Parse orderId từ vnp_OrderInfo (Description)
+                var description = Request.Query["vnp_OrderInfo"].ToString(); // ex: "OrderId:123"
+                var orderIdStr = description.Replace("OrderId:", "").Trim();
+
+                if (!int.TryParse(orderIdStr, out var orderId))
+                {
+                    _logger.LogWarning("❌ Không parse được orderId từ vnp_OrderInfo: {Description}", description);
+                    TempData["ErrorMessage"] = "Không xác định được đơn hàng.";
+                    return RedirectToAction("MoviesByDate");
+                }
+
                 var transactionNo = Request.Query["vnp_TransactionNo"].ToString();
 
                 if (callbackResponse.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation("✅ Payment SUCCESS! Order: {OrderId}", orderId);
+                    _logger.LogInformation("✅ Payment SUCCESS! OrderId = {OrderId}", orderId);
 
                     TempData["SuccessMessage"] = "Thanh toán VNPay thành công! Đặt vé hoàn tất.";
-                    TempData["BookingCode"] = $"BK{orderId.PadLeft(6, '0')}";
+                    TempData["BookingCode"] = $"BK{orderId.ToString().PadLeft(6, '0')}";
                     TempData["TransactionNo"] = transactionNo;
                     TempData["VNPaySuccess"] = true;
 
@@ -471,5 +484,61 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+        //
+        [HttpGet]
+        public async Task<IActionResult> MyOrders()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account", new { area = "User" });
+            }
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                TempData["ErrorMessage"] = "Không thể xác định người dùng.";
+                return RedirectToAction("MoviesByDate");
+            }
+
+            try
+            {
+                var orders = await _bookingApiService.GetOrdersByUserIdAsync(userId);
+
+                if (orders == null || !orders.Any())
+                {
+                    TempData["InfoMessage"] = "Bạn chưa có đơn hàng nào.";
+                    return View(new List<OrderDTO>()); // hoặc chuyển hướng nếu muốn
+                }
+
+                return View("MyOrders", orders);
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Lỗi khi gọi API lấy đơn hàng người dùng.");
+                TempData["ErrorMessage"] = "Không thể lấy dữ liệu đơn hàng. Vui lòng thử lại sau.";
+                return RedirectToAction("MoviesByDate");
+            }
+        }
+        [HttpGet("Booking/Order/Details/{id}")]
+        public async Task<IActionResult> OrderDetailsPartial([FromRoute(Name = "id")] int orderId)
+        {
+            try
+            {
+                var details = await _orderService.GetOrderDetailsAsync(orderId);
+                if (details == null)
+                {
+                    _logger.LogWarning($"❗Không tìm thấy OrderId: {orderId}");
+                    return NotFound();
+                }
+
+                return PartialView("~/Areas/Booking/Views/AdminOrder/_OrderDetailsPartial.cshtml", details);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"💥 Lỗi khi lấy chi tiết OrderId: {orderId}");
+                return StatusCode(500);
+            }
+        }
+
     }
 }

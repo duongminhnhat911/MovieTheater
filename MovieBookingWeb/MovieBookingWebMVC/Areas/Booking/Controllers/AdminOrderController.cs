@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MovieBookingWebMVC.Areas.Booking.Services;
 
 namespace MovieBookingWebMVC.Areas.Booking.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Booking")]
     public class AdminOrderController : Controller
     {

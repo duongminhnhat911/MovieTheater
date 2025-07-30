@@ -6,10 +6,14 @@
     // Điều kiện hiển thị sidebar cho Admin (bao gồm các controller quản trị như Admin, Movie, User)
     var showAdminSidebar = isAdmin && new[] { "Admin", "Movie", "User", "AdminShowtime", "AdminRoom", "AdminPromotion", "AdminOrder" }.Contains(currentController);
 
-    // Điều kiện hiển thị sidebar cho người dùng, chỉ khi ở trang "Profile"
+    // Điều kiện hiển thị sidebar cho User
     var showUserSidebar = User?.Identity?.IsAuthenticated == true
-                          && currentController == "Account"
-                          && currentAction == "Profile";
+                          && User.IsInRole("User")
+                          && (
+                              (currentController == "Account" && currentAction == "Profile")
+                              || (currentController == "Booking" && currentAction == "MyOrders")
+                              //|| (currentController == "Promotion" && currentAction == "ShowPromotionList")
+                          );
 }
 
 <!DOCTYPE html>
@@ -43,8 +47,6 @@
             --gradient-primary: linear-gradient(135deg, var(--primary-red), var(--primary-gold));
             --gradient-dark: linear-gradient(135deg, var(--dark-bg), var(--dark-card));
             --shadow-glow: 0 20px 40px rgba(220, 38, 38, 0.3);
-        }
-
         }
 
         * {
@@ -510,7 +512,7 @@
                                     @if (User.IsInRole("User"))
                                     {
                                         <li>
-                                            <a class="dropdown-item" href="#">
+                                            <a class="dropdown-item" href="/Booking/Booking/MyOrders">
                                                 <i class="fas fa-ticket-alt me-2"></i> Lịch sử đặt vé
                                             </a>
                                         </li>
@@ -579,7 +581,6 @@
                             <i class="fas fa-users"></i>
                             <span>Danh sách thành viên</span>
                         </a>
-
                         <a class="nav-link sidebar-link d-flex align-items-center gap-2 @(currentController == "AdminOrder" && currentAction == "ViewOrders" ? "active" : "")"
                            asp-area="Booking" asp-controller="AdminOrder" asp-action="ViewOrders">
                             <i class="fas fa-receipt"></i>
@@ -608,16 +609,19 @@
 
                         @if (User!.IsInRole("User"))
                         {
-                            <a class="nav-link sidebar-link d-flex align-items-center gap-2 @(currentController == "Account" && currentAction == "BookingHistory" ? "active" : "")"
-                               href="#">
+                            <a asp-area="Booking"
+                               asp-controller="Booking"
+                               asp-action="MyOrders"
+                               class="nav-link sidebar-link d-flex align-items-center gap-2 @(currentController == "Booking" && currentAction == "MyOrders" ? "active" : "")">
                                 <i class="fas fa-history"></i>
                                 <span>Lịch sử đặt vé</span>
                             </a>
-
-                            <a class="nav-link sidebar-link d-flex align-items-center gap-2" href="#">
+                            @*
+                            <a class="nav-link sidebar-link d-flex align-items-center gap-2" href="/Booking/Promotion/ShowPromotionList">
                                 <i class="fas fa-gift"></i>
                                 <span>Ưu đãi & Điểm thưởng</span>
                             </a>
+                            *@
                         }
                     </nav>
                 </aside>
