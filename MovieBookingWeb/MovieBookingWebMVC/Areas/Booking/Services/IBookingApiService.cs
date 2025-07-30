@@ -9,5 +9,6 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
         Task<ShowTime?> GetScheduleDetailAsync(int scheduleId);
         Task<SeatShowtimeDTO> GetSeatSchedulesAsync(int showtimeId);
         Task<ConfirmBookingViewModel?> MarkOrderAsBookedAsync(int orderId);
+        Task<List<OrderDTO>> GetOrdersByUserIdAsync(int userId);
     }
 }

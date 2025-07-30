@@ -14,5 +14,6 @@ namespace BookingManagement.Repositories
         Task UpdatePromotionAsync(Promotion promo);
 
         Task<Promotion?> GetPromotionByCodeAsync(string code);
+        Task<List<Order>> GetOrdersByUserIdAsync(int userId);
     }
 }

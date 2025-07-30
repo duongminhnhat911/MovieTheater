@@ -1,0 +1,393 @@
+﻿@model IEnumerable<MovieBookingWebMVC.Areas.Booking.Models.DTOs.OrderDTO>
+@{
+    ViewData["Title"] = "Lịch sử đặt vé";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+     :root {
+         --dark-card: #1E293B;
+         --primary-black: #000000;
+         --mint-light: #CCFFE4;
+         --teal-green: #9FCBC0;
+         --light-gray: #F5F5F5;
+         --text-primary: #F8FAFC;
+         --white: #ffffff;
+         --success-green: #28a745;
+         --danger-red: #dc3545;
+         --warning-yellow: #ffc107;
+         --shadow-light: rgba(0, 0, 0, 0.1);
+     }
+
+     body {
+         background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+         min-height: 100vh;
+     }
+
+     .main-container {
+         background: var(--white);
+         border-radius: 20px;
+         box-shadow: 0 10px 30px var(--shadow-light);
+         margin: 2rem 1rem;
+         max-width: 1400px;
+         overflow: hidden;
+     }
+
+     .header-section {
+         background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
+         color: var(--white);
+         padding: 2rem;
+         text-align: center;
+         position: relative;
+         overflow: hidden;
+     }
+
+         .header-section::before {
+             content: '';
+             position: absolute;
+             top: -50%;
+             left: -50%;
+             width: 200%;
+             height: 200%;
+             background: radial-gradient(circle, rgba(204, 255, 228, 0.1) 0%, transparent 70%);
+             animation: rotate 20s linear infinite;
+         }
+
+     @@keyframes rotate {
+         0%
+
+     {
+         transform: rotate(0deg);
+     }
+
+     100% {
+         transform: rotate(360deg);
+     }
+
+     }
+
+     .header-title {
+         font-size: 2.5rem;
+         font-weight: 700;
+         margin: 0;
+         position: relative;
+         z-index: 1;
+         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+     }
+
+     .content-section {
+         padding: 2rem;
+         background: var(--mint-light);
+         background-image: radial-gradient(circle at 20% 20%, rgba(159, 203, 192, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(245, 245, 245, 0.2) 0%, transparent 50%);
+     }
+
+     .booking-details {
+         padding: 1rem;
+         background: none !important;
+         text-align: left;
+     }
+
+     .order-table {
+         border-radius: 15px;
+         overflow: hidden;
+         box-shadow: 0 10px 30px var(--shadow-light);
+     }
+
+     .table-header th {
+         background: var(--primary-black);
+         color: var(--white);
+         padding: 1.2rem 1rem;
+         font-weight: 600;
+         text-align: center;
+         border: none;
+         position: relative;
+     }
+
+         .table-header th::after {
+             content: '';
+             position: absolute;
+             bottom: 0;
+             left: 50%;
+             width: 0;
+             height: 2px;
+             background: var(--teal-green);
+             transition: all 0.3s ease;
+             transform: translateX(-50%);
+         }
+
+         .table-header th:hover::after {
+             width: 80%;
+         }
+
+     .table tbody tr {
+         transition: all 0.3s ease;
+         border-bottom: 1px solid rgba(159, 203, 192, 0.2);
+     }
+
+         .table tbody tr:hover {
+             background: rgba(159, 203, 192, 0.05);
+             transform: translateY(-1px);
+         }
+
+     .table tbody td {
+         padding: 1rem;
+         vertical-align: middle;
+         border: none;
+         text-align: center;
+     }
+
+     .order-id-badge {
+         background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
+         color: var(--white);
+         padding: 0.3rem 0.8rem;
+         border-radius: 15px;
+         font-weight: 700;
+         font-size: 0.9rem;
+         display: inline-block;
+         min-width: 40px;
+         text-align: center;
+     }
+
+     .booking-date {
+         font-family: 'Courier New', monospace;
+         font-weight: 600;
+         color: var(--primary-black);
+         padding: 0.3rem 0.8rem;
+         border-radius: 10px;
+         display: inline-block;
+     }
+
+     .total-price {
+         font-size: 1rem;
+         font-weight: 700;
+         color: var(--primary-black);
+         background: var(--light-gray);
+         padding: 0.5rem 1rem;
+         border-radius: var(--border-radius);
+         border: 2px solid var(--teal-primary);
+     }
+
+     .total-price-table {
+         background: var(--light-gray);
+         padding: 0.3rem 0.8rem;
+         border-radius: 15px;
+         font-weight: 600;
+         color: var(--primary-black);
+         display: inline-block;
+         border: 2px solid var(--teal-green);
+     }
+
+    .details-table {
+        margin-bottom: 0;
+    }
+
+     .status-badge-paid {
+         background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
+         color: var(--white);
+         padding: 0.3rem 0.8rem;
+         border-radius: 15px;
+         font-weight: 600;
+         font-size: 0.85rem;
+         display: inline-block;
+         min-width: 100px;
+         text-align: center;
+     }
+
+     .status-badge-pending {
+         background: linear-gradient(135deg, var(--warning-yellow) 0%, #f39c12 100%);
+         color: var(--white);
+         padding: 0.3rem 0.8rem;
+         border-radius: 15px;
+         font-weight: 600;
+         font-size: 0.85rem;
+         display: inline-block;
+         min-width: 100px;
+         text-align: center;
+     }
+
+     .btn-details {
+         background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+         color: var(--white);
+         border: none;
+         border-radius: 20px;
+         padding: 0.5rem 1rem;
+         font-weight: 600;
+         transition: all 0.3s;
+         cursor: pointer;
+     }
+
+         .btn-details:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 5px 15px rgba(159, 203, 192, 0.5);
+             color: var(--white);
+         }
+
+     .alert-warning {
+         background: linear-gradient(135deg, rgba(204, 255, 228, 0.8) 0%, rgba(159, 203, 192, 0.3) 100%);
+         border: 1px solid var(--teal-green);
+         color: var(--primary-black);
+         border-radius: 15px;
+         padding: 1.5rem;
+         text-align: center;
+         font-weight: 600;
+         box-shadow: 0 5px 15px rgba(159, 203, 192, 0.2);
+     }
+
+     /* Modal Styles */
+     .modal-content {
+         background: var(--dark-card);
+         border: 1px solid rgba(220, 38, 38, 0.3);
+         border-radius: 20px;
+         padding: 0;
+         overflow: hidden;
+         display: flex;
+         flex-direction: column;
+         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+     }
+
+     .modal-header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         border-bottom: 1px solid rgba(220, 38, 38, 0.2);
+         padding: 0.5rem 1rem;
+     }
+
+     .modal-title {
+         font-size: 21.5px;
+         font-weight: 600;
+         color: var(--text-primary);
+     }
+
+     .modal-body {
+         padding: 1rem !important;
+         background: var(--mint-light);
+         background-image: radial-gradient(circle at 20% 20%, rgba(159, 203, 192, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(245, 245, 245, 0.2) 0%, transparent 50%);
+     }
+
+     .modal-close {
+         background: none;
+         border: none;
+         color: var(--text-secondary);
+         font-size: 1.5rem;
+         cursor: pointer;
+         border-radius: 50%;
+         transition: all 0.3s ease;
+     }
+
+     @@media (max-width: 768px) {
+         .header-title
+
+     {
+         font-size: 2rem;
+     }
+
+     .table-responsive {
+         font-size: 0.85rem;
+     }
+
+     .main-container {
+         margin: 1rem 0.5rem;
+     }
+
+     }
+</style>
+
+<div class="main-container">
+    <div class="header-section">
+        <h1 class="header-title">
+            <i class="fas fa-ticket-alt me-2"></i>
+            Lịch sử đặt vé
+        </h1>
+    </div>
+
+    <div class="content-section">
+        @if (!Model.Any())
+        {
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Không có đơn hàng nào.
+            </div>
+        }
+        else
+        {
+            <div class="order-table">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead class="table-header">
+                            <tr>
+                                <th>Mã đơn</th>
+                                <th>Ngày đặt</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th>Thông tin chi tiết</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <span class="order-id-badge">@order.Id</span>
+                                    </td>
+                                    <td>
+                                        <div class="booking-date">@order.BookingDate.ToString("dd/MM/yyyy")</div>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="total-price-table">@order.TotalPrice.ToString("N0") đ</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="@(order.Status ? "status-badge-paid" : "status-badge-pending")">
+                                            @(order.Status ? "Đã thanh toán" : "Chờ thanh toán")
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <button class="btn-details btn-sm btn-detail" data-order-id="@order.Id">
+                                            <i class="fas fa-eye"></i> Chi tiết
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal for Order Details -->
+<div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title">Chi tiết đơn hàng</h5>
+                <button type="button" class="modal-close" data-bs-dismiss="modal" aria-label="Đóng">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="orderDetailContent">
+                <p>Đang tải...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('.btn-detail').click(function () {
+            var orderId = $(this).data('order-id');
+
+            $('#orderDetailContent').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div>');
+            $('#orderDetailModal').modal('show');
+
+            // Load order details
+            $.get('/Booking/Order/Details/' + orderId, function (html) {
+                $('#orderDetailContent').html(html);
+            }).fail(function () {
+                $('#orderDetailContent').html('<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> Không thể tải chi tiết đơn hàng.</div>');
+            });
+        });
+    </script>
+}

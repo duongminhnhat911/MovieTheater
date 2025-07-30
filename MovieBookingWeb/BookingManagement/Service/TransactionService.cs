@@ -25,7 +25,7 @@ namespace BookingManagement.Service
         {
             await _repo.AddAsync(dto);
             await _repo.SaveChangesAsync();
-            return new { Message = "Transaction created successfully."};
+            return new { Message = "Transaction created successfully." };
         }
 
         public async Task<List<Transaction>> GetAllTransactionsAsync() =>
@@ -40,7 +40,7 @@ namespace BookingManagement.Service
             if (transaction == null) return null;
 
             transaction.OrderId = updated.OrderId;
-            
+
             transaction.TransactionDate = updated.TransactionDate;
             transaction.Price = updated.Price;
             transaction.Status = updated.Status;

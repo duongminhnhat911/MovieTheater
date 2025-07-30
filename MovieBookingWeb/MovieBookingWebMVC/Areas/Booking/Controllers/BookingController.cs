@@ -19,19 +19,22 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
         private readonly IShowtimeWebService _showtimeService;
         private readonly ILogger<BookingController> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IOrderApiService _orderService;
 
         public BookingController(
             IBookingApiService bookingApiService,
             MovieApiService movieApiService,
             IShowtimeWebService showtimeService,
             IHttpClientFactory httpClientFactory,
-            ILogger<BookingController> logger)
+            ILogger<BookingController> logger,
+            IOrderApiService orderService)
         {
             _bookingApiService = bookingApiService;
             _movieApiService = movieApiService;
             _showtimeService = showtimeService;
             _httpClientFactory = httpClientFactory;
             _logger = logger;
+            _orderService = orderService;
         }
 
         public async Task<IActionResult> Showtimes(int movieId)
@@ -475,6 +478,60 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
                 // Log the exception
                 TempData["Error"] = "Không thể tải thông tin chi tiết phim. Vui lòng thử lại sau.";
                 return RedirectToAction("Index", "Home");
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> MyOrders()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account", new { area = "User" });
+            }
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                TempData["ErrorMessage"] = "Không thể xác định người dùng.";
+                return RedirectToAction("MoviesByDate");
+            }
+
+            try
+            {
+                var orders = await _bookingApiService.GetOrdersByUserIdAsync(userId);
+
+                if (orders == null || !orders.Any())
+                {
+                    TempData["InfoMessage"] = "Bạn chưa có đơn hàng nào.";
+                    return View(new List<OrderDTO>()); // hoặc chuyển hướng nếu muốn
+                }
+
+                return View("MyOrders", orders);
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Lỗi khi gọi API lấy đơn hàng người dùng.");
+                TempData["ErrorMessage"] = "Không thể lấy dữ liệu đơn hàng. Vui lòng thử lại sau.";
+                return RedirectToAction("MoviesByDate");
+            }
+        }
+        [HttpGet("Booking/Order/Details/{id}")]
+        public async Task<IActionResult> OrderDetailsPartial([FromRoute(Name = "id")] int orderId)
+        {
+            try
+            {
+                var details = await _orderService.GetOrderDetailsAsync(orderId);
+                if (details == null)
+                {
+                    _logger.LogWarning($"❗Không tìm thấy OrderId: {orderId}");
+                    return NotFound();
+                }
+
+                return PartialView("~/Areas/Booking/Views/AdminOrder/_OrderDetailsPartial.cshtml", details);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"💥 Lỗi khi lấy chi tiết OrderId: {orderId}");
+                return StatusCode(500);
             }
         }
     }

@@ -43,5 +43,12 @@ namespace BookingManagement.Repositories
         {
             return await _db.Promotions.FirstOrDefaultAsync(p => p.PromotionCode == code);
         }
+        public async Task<List<Order>> GetOrdersByUserIdAsync(int userId)
+        {
+            return await _db.Orders
+                                 .Where(o => o.UserId == userId)
+                                 .ToListAsync();
+        }
+
     }
 }
