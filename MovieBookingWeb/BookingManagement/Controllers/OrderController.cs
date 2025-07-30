@@ -1,9 +1,7 @@
 ﻿using BookingManagement.Models.DTOs;
 using BookingManagement.Models.Entities;
 using BookingManagement.Service;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookingManagement.Controllers
 {

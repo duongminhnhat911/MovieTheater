@@ -1,5 +1,4 @@
 ﻿using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
-using MovieBookingWebMVC.Areas.Movie.Models.DTOs;
 using MovieBookingWebMVC.Areas.Movie.Models.ViewModel;
 
 namespace MovieBookingWebMVC.Areas.Booking.Models.ViewModels

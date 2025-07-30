@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UserManagement.Models.Entities;
-using UserManagement.Models.Entities;
 
 namespace UserManagement
 {

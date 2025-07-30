@@ -2,7 +2,6 @@
 using BookingManagement.Models.Entities;
 using BookingManagement.Models.Entities.Enums;
 using BookingManagement.Repositories;
-using Microsoft.EntityFrameworkCore;
 namespace BookingManagement.Service
 {
     // Services/SeatShowtimeService.cs

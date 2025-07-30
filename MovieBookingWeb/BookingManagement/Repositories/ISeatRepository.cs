@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using BookingManagement.Models.Entities;
+﻿using BookingManagement.Models.Entities;
 
 namespace BookingManagement.Repositories
 {
