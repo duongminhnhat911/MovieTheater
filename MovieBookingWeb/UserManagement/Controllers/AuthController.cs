@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UserManagement.Models.DTOs;
 using UserManagement.Services;
-using UserManagement.Repositories;
 using Microsoft.AspNetCore.Authentication;
 
 namespace UserManagement.Controllers

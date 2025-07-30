@@ -1,6 +1,5 @@
 ﻿using BookingManagement.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-using VNPAY.NET.Models;
 
 namespace BookingManagement.Repositories
 {

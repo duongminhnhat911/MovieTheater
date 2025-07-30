@@ -1,5 +1,4 @@
 ﻿using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
-using System.Globalization;
 
 namespace MovieBookingWebMVC.Areas.Booking.Models.ViewModels
 {

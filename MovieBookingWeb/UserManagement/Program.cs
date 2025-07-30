@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using UserManagement.Models;
 using UserManagement;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using UserManagement;
 using UserManagement.Repositories;
 using UserManagement.Services;
 

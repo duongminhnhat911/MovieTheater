@@ -1,5 +1,4 @@
-﻿using BookingManagement.Models.Entities;
-using BookingManagement.Models.VnPayModels;
+﻿using BookingManagement.Models.VnPayModels;
 using Microsoft.Extensions.Options;
 using VNPAY.NET;
 using VNPAY.NET.Models;

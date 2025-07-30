@@ -13,7 +13,7 @@
         public int? Duration { get; set; }
 
         public List<string>? Genres { get; set; }
-        public List<string>? Actors { get; set; } // ✅ Thay thế Cast
+        public List<string>? Actors { get; set; } 
 
         public string? Director { get; set; }
         public string? Description { get; set; }
