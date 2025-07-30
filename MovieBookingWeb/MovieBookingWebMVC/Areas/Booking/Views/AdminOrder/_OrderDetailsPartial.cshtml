@@ -18,7 +18,7 @@
             <th><i class="fas fa-info-circle info-icon"></i> Trạng thái</th>
             <td>
                 <span class="status-badge @(Model.Status == "Paid" ? "status-paid" : "status-unpaid")">
-                    @if (Model.Status == "Paid")
+                    @if (Model.Status == "Đã thanh toán")
                     {
                         <i class="fas fa-check-circle me-1"></i> <text>Đã thanh toán</text>
                     }
