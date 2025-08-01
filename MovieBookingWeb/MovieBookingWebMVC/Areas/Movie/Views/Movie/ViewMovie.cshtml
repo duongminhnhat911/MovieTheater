@@ -376,6 +376,29 @@
             padding: 0.4rem 0.8rem;
         }
     }
+
+    #movieDetailModal .modal-content {
+        background-color: #fff; /* trắng nền */
+        color: #000; /* đen chữ */
+    }
+
+    #movieDetailModal h3,
+    #movieDetailModal p,
+    #movieDetailModal strong,
+    #movieDetailModal a {
+        color: #000 !important;
+    }
+
+        #movieDetailModal a.btn-primary {
+            color: #fff !important;
+        }
+
+    /* Nếu bạn dùng Dark Mode toàn trang */
+    body.dark-mode #movieDetailModal .modal-content {
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+
 </style>
 
 <div class="main-container">
@@ -487,6 +510,11 @@
                                             <i class="fas fa-edit"></i>
                                             Sửa
                                         </a>
+                                        <button class="btn-action btn-info view-detail-btn" data-id="@film.Id">
+                                            <i class="fas fa-info-circle"></i>
+                                            Chi tiết
+                                        </button>
+
                                         <form asp-area="Movie" asp-controller="Movie" asp-action="DeleteMovie"
                                               asp-route-id="@film.Id" method="post" style="display:inline;"
                                               onsubmit="return confirm('Bạn có chắc chắn muốn xóa phim này không?');">
@@ -522,6 +550,25 @@
     </div>
 </div>
 
+<!-- Modal hiển thị chi tiết phim -->
+<div class="modal fade" id="movieDetailModal" tabindex="-1" role="dialog" aria-labelledby="movieModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title" id="movieModalLabel">Chi tiết phim</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body" id="movie-detail-content">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-3">Đang tải dữ liệu...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
     // Auto-hide success alert after 5 seconds
     document.addEventListener('DOMContentLoaded', function() {
@@ -545,6 +592,73 @@
                 button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xóa...';
                 button.disabled = true;
             }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('.view-detail-btn').click(function () {
+            const movieId = $(this).data('id');
+            $('#movie-detail-content').html(`
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-3">Đang tải dữ liệu...</p>
+                </div>
+            `);
+            $('#movieDetailModal').modal('show');
+
+            $.ajax({
+                url: `/Movie/Movie/GetMovieDetail/${movieId}`,
+                method: 'GET',
+                success: function (data) {
+                    let statusClass = "";
+                    let statusDisplay = "";
+
+    switch (data.status) {
+        case "Active":
+            statusClass = "status-active";
+            statusDisplay = "Đang chiếu";
+            break;
+        case "SoldOut":
+            statusClass = "status-soldout";
+            statusDisplay = "Hết vé";
+            break;
+        case "Deleted":
+            statusClass = "status-deleted";
+            statusDisplay = "Đã xóa";
+            break;
+        default:
+            statusClass = "status-active";
+            statusDisplay = "Không xác định";
+            break;
+    }
+                    let html = `
+                        <div class="row">
+                            <div class="col-md-4 text-center mb-3">
+                                <img src="${data.image}" alt="Poster" class="img-fluid rounded mb-2" />
+                            </div>
+                            <div class="col-md-8">
+                                <h3>${data.title}</h3>
+                                <p><strong>Thời lượng:</strong> ${data.duration ?? 'N/A'} phút</p>
+                                <p><strong>Ngày khởi chiếu:</strong> ${data.releaseDate ? new Date(data.releaseDate).toLocaleDateString('vi-VN') : 'N/A'}</p>
+                                <p><strong>Thể loại:</strong> ${data.genres?.join(", ") ?? ''}</p>
+                                <p><strong>Định dạng:</strong> ${data.format?.join(", ") ?? ''}</p>
+                                <p><strong>Phụ đề:</strong> ${data.subtitle}</p>
+                                <p><strong>Đạo diễn:</strong> ${data.director}</p>
+                                <p><strong>Diễn viên:</strong> ${data.actors?.join(", ") ?? ''}</p>
+                                <p><strong>Hãng sản xuất:</strong> ${data.productionCompany}</p>
+                                <p><strong>Mô tả:</strong> ${data.description}</p>
+                                <p><strong>Trạng thái:</strong> <span class="status-badge ${statusClass}">${statusDisplay}</span></p>
+                                <a href="${data.trailerLink}" target="_blank" class="btn btn-sm btn-primary mt-2">Xem trailer</a>
+                            </div>
+                        </div>
+                    `;
+                    $('#movie-detail-content').html(html);
+                },
+                error: function () {
+                    $('#movie-detail-content').html(`<p class="text-danger">Không thể tải thông tin phim.</p>`);
+                }
+            });
         });
     });
 </script>

@@ -251,5 +251,13 @@ namespace MovieBookingWebMVC.Areas.Movie.Controllers
                 return RedirectToAction("ViewMovie", "Movie", new { area = "Movie", page = Request.Query["page"] });
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMovieDetail(int id)
+        {
+            var film = await _movieApiService.GetMovie(id); // Gọi API để lấy MovieCreateDto
+            if (film == null) return NotFound();
+            return Json(film);
+        }
     }
 }
