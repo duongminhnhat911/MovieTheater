@@ -32,7 +32,7 @@ namespace UserManagement.Controllers
             return result ? Ok("Profile updated") : BadRequest("Update failed");
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -40,7 +40,7 @@ namespace UserManagement.Controllers
             return Ok(users);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -48,7 +48,7 @@ namespace UserManagement.Controllers
             return user == null ? NotFound() : Ok(user);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] AdminUpdateUserDto dto)
         {
@@ -56,7 +56,7 @@ namespace UserManagement.Controllers
             return updated ? Ok("Updated") : NotFound();
         }
 
-        [Authorize(Roles = "Admin")]
+/*        [Authorize(Roles = "Admin")]*/
         [HttpDelete("{id}")]
         public async Task<IActionResult> SoftDelete(int id)
         {
