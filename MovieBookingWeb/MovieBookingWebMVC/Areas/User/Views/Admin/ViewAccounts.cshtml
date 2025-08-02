@@ -87,12 +87,12 @@
                                     </td>
                                     <td>
                                         <div class="action-buttons">
-                                            <form asp-controller="Admin" asp-action="EditAccount" asp-route-id="@user.Id"
-                                                  method="post" style="display:inline;" onsubmit="return confirm('Bạn có muốn chỉnh sửa thông tin người dùng này không?');">
-                                                <button type="submit" class="btn-action btn-edit">
-                                                    <i class="fas fa-edit"></i> Sửa
-                                                </button>
-                                            </form>
+                                            <a asp-area="User" asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id"
+                                               class="btn-action btn-edit"
+                                               onclick="return confirm('Bạn có muốn chỉnh sửa thông tin người dùng này không?');">
+                                                <i class="fas fa-edit"></i> Sửa
+                                            </a>
+
                                             <form asp-controller="Admin" asp-action="DeleteAccount" asp-route-id="@user.Id"
                                                   method="post" style="display:inline;"
                                                   onsubmit="return confirm('Bạn có chắc muốn @(user.IsLocked ? "mở khóa" : "khóa") tài khoản này không?');">

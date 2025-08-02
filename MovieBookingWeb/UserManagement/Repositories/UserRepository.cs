@@ -68,7 +68,6 @@ namespace UserManagement.Repositories
             return true;
         }
 
-        //Admin
         public async Task<List<GetListUserDto>> GetAllUsersAsync()
         {
             return await _context.Users
@@ -79,7 +78,12 @@ namespace UserManagement.Repositories
                     FullName = u.FullName!,
                     Email = u.Email!,
                     Role = u.Role,
-                    IsLocked = u.IsLocked
+                    IsLocked = u.IsLocked,
+                    BirthDate = u.BirthDate,
+                    Gender = u.Gender,
+                    IdCard = u.IdCard,
+                    PhoneNumber = u.PhoneNumber,
+                    Address = u.Address
                 })
                 .ToListAsync();
         }
@@ -95,7 +99,12 @@ namespace UserManagement.Repositories
                     FullName = u.FullName!,
                     Email = u.Email!,
                     Role = u.Role,
-                    IsLocked = u.IsLocked
+                    IsLocked = u.IsLocked,
+                    BirthDate = u.BirthDate,
+                    Gender = u.Gender,
+                    IdCard = u.IdCard,
+                    PhoneNumber = u.PhoneNumber,
+                    Address = u.Address
                 })
                 .FirstOrDefaultAsync();
         }
