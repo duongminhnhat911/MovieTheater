@@ -59,5 +59,18 @@ namespace BookingManagement.Controllers
             if (!success) return NotFound();
             return Ok(new { message = "Deleted successfully" });
         }
+
+        [HttpGet("active-codes")]
+        public async Task<IActionResult> GetActivePromotionCodes()
+        {
+            var now = DateTime.Now;
+            var activePromos = await _service.GetAllAsync();
+
+            var codes = activePromos
+                .Where(p => p.IsActive && p.StartDate <= now && p.EndDate >= now && p.Quantity > 0)
+                .Select(p => p.PromotionCode.ToUpper())
+                .ToList();
+            return Ok(codes);
+        }
     }
 }

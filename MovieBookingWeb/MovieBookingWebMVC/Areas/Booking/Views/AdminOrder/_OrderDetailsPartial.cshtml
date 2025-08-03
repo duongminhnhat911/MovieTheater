@@ -1,75 +1,73 @@
 ﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModel.OrderDetailViewModel
 
-<div class="booking-details">
-    <table class="table details-table">
-        <tr>
-            <th><i class="fas fa-barcode info-icon"></i> Mã đơn hàng</th>
-            <td><span class="order-id">@Model.OrderId</span></td>
-        </tr>
-        <tr>
-            <th><i class="fas fa-user info-icon"></i> Người dùng</th>
-            <td><span class="order-id">@Model.UserId</span></td>
-        </tr>
-        <tr>
-            <th><i class="fas fa-calendar-check info-icon"></i> Ngày đặt</th>
-            <td>@Model.BookingDate</td>
-        </tr>
-        <tr>
-            <th><i class="fas fa-info-circle info-icon"></i> Trạng thái</th>
-            <td>
-                <span class="status-badge @(Model.Status == "Paid" ? "status-paid" : "status-unpaid")">
-                    @if (Model.Status == "Đã thanh toán")
-                    {
-                        <i class="fas fa-check-circle me-1"></i> <text>Đã thanh toán</text>
-                    }
-                    else
-                    {
-                        <i class="fas fa-exclamation-triangle me-1"></i> <text>Chưa thanh toán</text>
-                    }
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <th><i class="fas fa-ticket-alt info-icon"></i> Mã khuyến mãi</th>
-            <td>@Model.PromotionCode</td>
-        </tr>
-        <tr>
-            <th><i class="fas fa-film info-icon"></i> Tên phim</th>
-            <td>@Model.MovieTitle</td>
-        </tr>
-        <tr>
-            <th><i class="fas fa-calendar-alt info-icon"></i> Ngày chiếu</th>
-            <td>@Model.ShowDate</td>
-        </tr>
-        <tr>
-            <th><i class="fas fa-clock info-icon"></i> Giờ chiếu</th>
-            <td>@Model.FromTime.Replace("\\", "") - @Model.ToTime.Replace("\\", "")</td>
-        </tr>
-        <tr>
-            <th><i class="fas fa-door-open info-icon"></i> Phòng</th>
-            <td>@Model.RoomName</td>
-        </tr>
-        <tr>
-            <th><i class="fas fa-couch info-icon"></i> Ghế đã đặt</th>
-            <td>
-                <div class="seat-badges">
-                    @foreach (var seat in Model.Seats)
-                    {
-                        <span class="seat-badge">@seat</span>
-                    }
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th><i class="fas fa-money-check-alt info-icon"></i> Giá chi tiết</th>
-            <td><span class="total-price">@Model.TotalDetailPrice.ToString("N0") đ</span></td>
-        </tr>
-        <tr>
-            <th><i class="fas fa-money-bill-wave info-icon"></i> Tổng thanh toán</th>
-            <td><span class="total-price">@Model.TotalPrice.ToString("N0") đ</span></td>
-        </tr>
-    </table>
-</div>
+<table class="table details-table" style="margin-bottom: 0;">
+    <tr>
+        <th><i class="fas fa-barcode info-icon"></i> Mã đơn hàng</th>
+        <td><span class="order-id">@Model.OrderId</span></td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-user info-icon"></i> Người dùng</th>
+        <td><span class="order-id">@Model.UserId</span></td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-calendar-check info-icon"></i> Ngày đặt</th>
+        <td>@Model.BookingDate</td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-info-circle info-icon"></i> Trạng thái</th>
+        <td>
+            <span class="status-badge @(Model.Status == "Paid" ? "status-paid" : "status-unpaid")">
+                @if (Model.Status == "Đã thanh toán")
+                {
+                    <i class="fas fa-check-circle me-1"></i> <text>Đã thanh toán</text>
+                }
+                else
+                {
+                    <i class="fas fa-exclamation-triangle me-1"></i> <text>Chưa thanh toán</text>
+                }
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-ticket-alt info-icon"></i> Mã khuyến mãi</th>
+        <td>@Model.PromotionCode</td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-film info-icon"></i> Tên phim</th>
+        <td><strong style="text-transform: uppercase;">@Model.MovieTitle</strong></td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-calendar-alt info-icon"></i> Ngày chiếu</th>
+        <td>@Model.ShowDate</td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-clock info-icon"></i> Giờ chiếu</th>
+        <td>@Model.FromTime.Replace("\\", "") - @Model.ToTime.Replace("\\", "")</td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-door-open info-icon"></i> Phòng</th>
+        <td>@Model.RoomName</td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-couch info-icon"></i> Ghế đã đặt</th>
+        <td>
+            <div class="seat-badges">
+                @foreach (var seat in Model.Seats)
+                {
+                    <span class="seat-badge">@seat</span>
+                }
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-money-check-alt info-icon"></i> Giá chi tiết</th>
+        <td><span class="total-price">@Model.TotalDetailPrice.ToString("N0") đ</span></td>
+    </tr>
+    <tr>
+        <th><i class="fas fa-money-bill-wave info-icon"></i> Tổng thanh toán</th>
+        <td><span class="total-price">@Model.TotalPrice.ToString("N0") đ</span></td>
+    </tr>
+</table>
 
 <style>
     :root {
@@ -77,15 +75,10 @@
         --mint-light: #CCFFE4;
         --teal-primary: #9FCBC0;
         --gray-light: #d0d0d0;
+        --light-gray: #F5F5F5;
         --white: #ffffff;
         --shadow-color: rgba(0, 0, 0, 0.1);
         --border-radius: 12px;
-    }
-
-    .booking-details {
-        padding: 1rem;
-        background: var(--white);
-        text-align: left;
     }
 
     .details-table {
@@ -179,7 +172,7 @@
         font-size: 1rem;
         font-weight: 700;
         color: var(--primary-black);
-        background: var(--mint-light);
+        background: var(--light-gray);
         padding: 0.5rem 1rem;
         border-radius: var(--border-radius);
         border: 2px solid var(--teal-primary);

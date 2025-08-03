@@ -1,8 +1,7 @@
 ﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModels.ConfirmBookingViewModel
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
-@{
     ViewData["Title"] = "Xác nhận đơn đặt vé";
 }
 
@@ -15,13 +14,6 @@
         --white: #ffffff;
         --shadow-color: rgba(0, 0, 0, 0.1);
         --border-radius: 12px;
-    }
-
-    body {
-        background: linear-gradient(135deg, var(--mint-light) 0%, var(--gray-light) 100%);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        min-height: 100vh;
-        color: var(--primary-black);
     }
 
     .confirm-container {
@@ -269,7 +261,7 @@
     }
 
     .action-section {
-        padding: 2.5rem;
+        padding: 1.5rem 2.5rem;
         background: var(--mint-light);
         border-top: 1px solid var(--teal-primary);
     }
@@ -285,7 +277,7 @@
         background: var(--gray-light);
         border: 2px solid var(--teal-primary);
         color: var(--primary-black);
-        padding: 1rem 2rem;
+        padding: 0.75rem 1.5rem;
         border-radius: var(--border-radius);
         font-size: 1rem;
         font-weight: 600;
@@ -304,7 +296,7 @@
         background: var(--teal-primary);
         border: 2px solid var(--primary-black);
         color: var(--primary-black);
-        padding: 1rem 2.5rem;
+        padding: 0.75rem 1.5rem;
         border-radius: var(--border-radius);
         font-size: 1.1rem;
         font-weight: 600;
@@ -384,17 +376,20 @@
         margin-bottom: 0.5rem;
         padding: 0.5rem 0;
         border-bottom: 1px solid var(--gray-light);
+        color: black;
     }
 
         .summary-item:last-child {
             border-bottom: none;
             font-weight: 700;
             font-size: 1.1rem;
-            color: var(--primary-black);
-            background: var(--mint-light);
-            padding: 0.8rem 1rem;
-            border-radius: var(--border-radius);
-            margin: 0.5rem -0.5rem 0;
+            color: #222; /* Tối hơn nhưng không quá đen */
+            background: linear-gradient(135deg, #dfffe6, #b2f0cf); /* Mint gradient nhẹ */
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            margin: 1rem -0.5rem 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
         }
 
     .text-success {
@@ -502,7 +497,7 @@
 
         <!-- Booking Details -->
         <div class="booking-details">
-            <table class="table details-table">
+            <table class="table details-table" style="margin-bottom: 0;">
                 <tr>
                     <th>
                         <i class="fas fa-barcode info-icon"></i>
@@ -653,4 +648,7 @@
         });
     });
 </script>
+
+
+
 

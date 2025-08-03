@@ -28,13 +28,14 @@ namespace BookingManagement.Service
             for (int i = 0; i < dto.Rows; i++)
             {
                 char rowChar = (char)('A' + i);
-                for (int j = 1; j <= dto.Columns; j++)
+                for (int j = 1; j < dto.Columns; j++) // j chạy từ 0 đến 9
                 {
+                    char columnChar = (char)('0' + j); // '0' → '9'
                     await _repo.AddSeatAsync(new Seat
                     {
                         RoomId = room.Id,
                         SeatRow = rowChar,
-                        SeatColumn = (char)(j.ToString()[0]),
+                        SeatColumn = columnChar,
                         SeatStatus = true
                     });
                 }
@@ -72,13 +73,14 @@ namespace BookingManagement.Service
                 for (int i = 0; i < dto.Rows; i++)
                 {
                     char rowChar = (char)('A' + i);
-                    for (int j = 1; j <= dto.Columns; j++)
+                    for (int j = 0; j < dto.Columns; j++) // bắt đầu từ 0 như CreateRoomAsync
                     {
+                        char columnChar = (char)('0' + j);
                         await _repo.AddSeatAsync(new Seat
                         {
                             RoomId = room.Id,
                             SeatRow = rowChar,
-                            SeatColumn = (char)(j.ToString()[0]), // dùng string để xử lý 2 chữ số trở lên
+                            SeatColumn = columnChar,
                             SeatStatus = true
                         });
                     }

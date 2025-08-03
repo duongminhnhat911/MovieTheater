@@ -1,164 +1,10 @@
 ﻿@model List<MovieBookingWebMVC.Areas.User.Models.DTOs.GetListUserDto>
 @{
-    ViewData["Title"] = "Quản lý người dùng";
+    ViewData["Title"] = "Danh sách thành viên";
     int currentPage = ViewBag.CurrentPage as int? ?? 1;
     int totalPages = ViewBag.TotalPages as int? ?? 1;
+    int index = 1;
 }
-
-<div class="main-container">
-    <div class="header-section">
-        <h1 class="header-title">
-            <i class="fas fa-users-cog me-2"></i>
-            Danh sách thành viên
-        </h1>
-    </div>
-
-    <div class="content-section">
-        @if (TempData["Success"] != null)
-        {
-            <div class="alert success-alert text-center mb-4" id="alertSuccess">
-                <i class="fas fa-check-circle me-2"></i>
-                @TempData["Success"]
-            </div>
-        }
-
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-danger text-center custom-alert mb-4" id="alertDanger">
-                <i class="fa-solid fa-exclamation-circle"></i>
-                @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)))
-            </div>
-        }
-
-        @if (!Model.Any())
-        {
-            <div class="empty-state">
-                <i class="fas fa-users-slash"></i>
-                <div class="alert alert-info" style="max-width: 400px; margin: 0 auto; padding: 1.5rem;">
-                    <strong>Danh sách trống!</strong><br>
-                    Hiện tại chưa có thành viên nào trong hệ thống.
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="movie-table">
-                <div class="table-responsive">
-                    <table class="table mb-0">
-                        <thead class="table-header">
-                            <tr>
-                                <th>ID</th>
-                                <th>Tên đăng nhập</th>
-                                <th>Họ và tên</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Trạng thái</th>
-                                <th>Tác vụ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var user in Model)
-                            {
-                                <tr>
-                                    <td class="text-center">
-                                        <span class="movie-id">@user.Id</span>
-                                    </td>
-                                    <td><div class="movie-title">@user.Username</div></td>
-                                    <td>@user.FullName</td>
-                                    <td><small class="text-muted">@user.Email</small></td>
-                                    <td class="text-center">
-                                        <span class="status-badge status-active" style="background:#9FCBC0; color:#000;">
-                                            @user.Role
-                                        </span>
-                                    </td>
-                                    <td class="text-center">
-                                        @if (user.IsLocked)
-                                        {
-                                            <span class="status-badge status-deleted">
-                                                <i class="fas fa-lock"></i> Đã khóa
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="status-badge status-active">
-                                                <i class="fas fa-check-circle"></i> Hoạt động
-                                            </span>
-                                        }
-                                    </td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <form asp-controller="Admin" asp-action="EditAccount" asp-route-id="@user.Id"
-                                                  method="post" style="display:inline;" onsubmit="return confirm('Bạn có muốn chỉnh sửa thông tin người dùng này không?');">
-                                                <button type="submit" class="btn-action btn-edit">
-                                                    <i class="fas fa-edit"></i> Sửa
-                                                </button>
-                                            </form>
-                                            <form asp-controller="Admin" asp-action="DeleteAccount" asp-route-id="@user.Id"
-                                                  method="post" style="display:inline;"
-                                                  onsubmit="return confirm('Bạn có chắc muốn @(user.IsLocked ? "mở khóa" : "khóa") tài khoản này không?');">
-                                                <button type="submit" class="btn-action @(user.IsLocked ? "btn-edit" : "btn-delete")">
-                                                    <i class="fas @(user.IsLocked ? "fa-unlock" : "fa-lock")"></i>
-                                                    @(user.IsLocked ? "Mở khóa" : "Khóa")
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            @if (totalPages > 1)
-            {
-                <div class="pagination-container">
-                    <nav aria-label="Phân trang">
-                        <ul class="pagination">
-                            @if (currentPage > 1)
-                            {
-                                <li class="page-item">
-                                    <a class="page-link" asp-action="ViewAccounts" asp-route-pageNumber="@(currentPage - 1)">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </a>
-                                </li>
-                            }
-                            @for (int i = 1; i <= totalPages; i++)
-                            {
-                                <li class="page-item @(i == currentPage ? "active" : "")">
-                                    <a class="page-link" asp-action="ViewAccounts" asp-route-pageNumber="@i">@i</a>
-                                </li>
-                            }
-                            @if (currentPage < totalPages)
-                            {
-                                <li class="page-item">
-                                    <a class="page-link" asp-action="ViewAccounts" asp-route-pageNumber="@(currentPage + 1)">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                    </nav>
-                </div>
-            }
-        }
-    </div>
-</div>
-
-
-<script>
-    // Auto hide alerts after 5 seconds
-    setTimeout(function() {
-        const alerts = document.querySelectorAll('#alertSuccess, #alertDanger');
-        alerts.forEach(alert => {
-            if (alert) {
-                alert.style.transition = 'opacity 0.5s ease';
-                alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 500);
-            }
-        });
-    }, 5000);
-</script>
 
 <style>
     :root {
@@ -257,44 +103,6 @@
         }
     }
 
-    .add-movie-btn {
-        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
-        border: none;
-        color: var(--white);
-        padding: 0.75rem 2rem;
-        border-radius: 25px;
-        font-weight: 600;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 15px rgba(159, 203, 192, 0.4);
-        position: relative;
-        overflow: hidden;
-    }
-
-        .add-movie-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .add-movie-btn:hover::before {
-            left: 100%;
-        }
-
-        .add-movie-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(159, 203, 192, 0.6);
-            color: var(--white);
-        }
-
     .movie-table {
         background: var(--white);
         border-radius: 15px;
@@ -360,10 +168,11 @@
         color: var(--white);
     }
 
-    .status-soldout {
-        background: linear-gradient(135deg, var(--warning-orange) 0%, #fd7e14 100%);
-        color: var(--white);
-    }
+        .status-active:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(159, 203, 192, 0.5);
+            color: var(--white);
+        }
 
     .status-deleted {
         background: linear-gradient(135deg, var(--danger-red) 0%, #e91e63 100%);
@@ -395,7 +204,6 @@
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 0.3rem;
     }
 
         .btn-edit:hover {
@@ -404,20 +212,30 @@
             color: var(--white);
         }
 
-    .btn-delete {
-        background: linear-gradient(135deg, var(--danger-red) 0%, #c82333 100%);
+    .btn-unlock {
+        background: linear-gradient(135deg, #4e4e4e 0%, #2b2b2b 100%);
         color: var(--white);
     }
 
-        .btn-delete:hover {
+        .btn-unlock:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.5);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+        }
+
+    .btn-lock {
+        background: linear-gradient(135deg, #2196f3 0%, #0d47a1 100%);
+        color: var(--white);
+    }
+
+        .btn-lock:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.5);
         }
 
     .pagination-container {
         display: flex;
         justify-content: center;
-        margin-top: 2rem;
+        margin-top: 1.5rem;
         padding: 1rem;
     }
 
@@ -531,3 +349,157 @@
         }
     }
 </style>
+
+<div class="main-container">
+    <div class="header-section">
+        <h1 class="header-title">
+            <i class="fas fa-users me-2"></i>
+            Danh sách thành viên
+        </h1>
+    </div>
+
+    <div class="content-section">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert success-alert text-center mb-4" id="alertSuccess">
+                <i class="fas fa-check-circle me-1"></i>
+                @TempData["Success"]
+            </div>
+        }
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger text-center custom-alert mb-4" id="alertDanger">
+                <i class="fa-solid fa-exclamation-circle"></i>
+                @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)))
+            </div>
+        }
+
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <i class="fas fa-users-slash"></i>
+                <div class="alert alert-info" style="max-width: 400px; margin: 0 auto; padding: 1.5rem;">
+                    <strong>Danh sách trống!</strong><br>
+                    Hiện tại chưa có thành viên nào trong hệ thống.
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="movie-table">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead class="table-header">
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên đăng nhập</th>
+                                <th>Họ và tên</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Trạng thái</th>
+                                <th>Tác vụ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <span class="movie-id">@index</span>
+                                    </td>
+                                    <td><div class="movie-title">@user.Username</div></td>
+                                    <td>@user.FullName</td>
+                                    <td><small class="text-muted">@user.Email</small></td>
+                                    <td class="text-center">
+                                        <span class="status-badge status-active" style="background:#9FCBC0; color:#000;">
+                                            @user.Role
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        @if (user.IsLocked)
+                                        {
+                                            <span class="status-badge status-deleted">
+                                                <i class="fas fa-lock me-1"></i> Đã khóa
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge status-active">
+                                                <i class="fas fa-check-circle me-1"></i> Hoạt động
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a asp-area="User" asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id"
+                                               class="btn-action btn-edit"
+                                               onclick="return confirm('Bạn có muốn chỉnh sửa thông tin người dùng này không?');">
+                                                <i class="fas fa-edit me-1"></i> Sửa
+                                            </a>
+                                            <form asp-controller="Admin" asp-action="DeleteAccount" asp-route-id="@user.Id"
+                                                  method="post" style="display: inline;"
+                                                  onsubmit="return confirm('Bạn có chắc muốn @(user.IsLocked ? "mở khóa" : "khóa") tài khoản này không?');">
+                                                <button type="submit" class="btn-action @(user.IsLocked ? "btn-unlock" : "btn-lock")">
+                                                    <i class="fas @(user.IsLocked ? "fa-unlock" : "fa-lock") me-1"></i>
+                                                    @(user.IsLocked ? "Mở khóa" : "Khóa")
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            @if (totalPages > 1)
+            {
+                <div class="pagination-container">
+                    <nav aria-label="Phân trang">
+                        <ul class="pagination">
+                            @if (currentPage > 1)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" asp-action="ViewAccounts" asp-route-pageNumber="@(currentPage - 1)">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                            }
+                            @for (int i = 1; i <= totalPages; i++)
+                            {
+                                <li class="page-item @(i == currentPage ? "active" : "")">
+                                    <a class="page-link" asp-action="ViewAccounts" asp-route-pageNumber="@i">@i</a>
+                                </li>
+                            }
+                            @if (currentPage < totalPages)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" asp-action="ViewAccounts" asp-route-pageNumber="@(currentPage + 1)">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<script>
+    setTimeout(function() {
+        const alerts = document.querySelectorAll('#alertSuccess, #alertDanger');
+        alerts.forEach(alert => {
+            if (alert) {
+                alert.style.transition = 'opacity 0.5s ease';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
+            }
+        });
+    }, 5000);
+</script>
+
