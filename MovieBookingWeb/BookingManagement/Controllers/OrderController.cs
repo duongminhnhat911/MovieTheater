@@ -19,7 +19,9 @@ namespace BookingManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] Order order)
         {
+            if (order == null) return BadRequest();
             var result = await _service.CreateOrderAsync(order);
+            if (result == null) return BadRequest(new { error = "Không thể tạo đơn hàng." });
             return Ok(new { Message = "Đơn hàng đã được tạo" });
         }
 
@@ -41,6 +43,7 @@ namespace BookingManagement.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateOrder(int id, [FromBody] Order dto)
         {
+            if (dto == null || id != dto.Id) return BadRequest();
             var result = await _service.UpdateOrderAsync(id, dto);
             if (result == null) return NotFound();
             return Ok(result);
@@ -49,9 +52,16 @@ namespace BookingManagement.Controllers
         [HttpPatch("disable/{id}")]
         public async Task<IActionResult> DisableOrder(int id)
         {
-            var success = await _service.DisableOrderAsync(id);
-            if (!success) return NotFound();
-            return Ok("Đơn hàng đã bị khóa.");
+            try
+            {
+                var success = await _service.DisableOrderAsync(id);
+                if (!success) return NotFound();
+                return Ok("Đơn hàng đã bị khóa.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
         [HttpPost("payment")]
@@ -66,6 +76,10 @@ namespace BookingManagement.Controllers
                 return Ok(result);
             }
             catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (ArgumentException ex)
             {
                 return BadRequest(new { error = ex.Message });
             }

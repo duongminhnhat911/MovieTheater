@@ -5,7 +5,7 @@ using MovieManagement.Models.Entities;
 using MovieManagement.Models.DTOs;
 using MovieManagementWeb_API.Controllers;
 
-namespace MovieManagement.Tests
+namespace MovieManagementTests
 {
     public class MoviesControllerTests
     {

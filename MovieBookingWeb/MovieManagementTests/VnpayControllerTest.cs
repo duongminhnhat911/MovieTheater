@@ -1,140 +1,259 @@
-﻿using Moq;
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using BookingManagement.Controllers;
+﻿using BookingManagement.Controllers;
 using BookingManagement.Models.Entities;
+using BookingManagement.Repositories;
 using BookingManagement.Service;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+using Moq;
+using VNPAY.NET.Models;
 
-namespace BookingManagement.Tests.Controllers
+namespace BookingManagementTests
 {
-    public class TransactionControllerTests
+    public class VnpayControllerTest
     {
-        private readonly Mock<ITransactionService> _mockService;
-        private readonly TransactionController _controller;
+        private readonly Mock<IOrderRepository> _orderRepoMock = new();
+        private readonly Mock<IVnpayPaymentService> _vnpayServiceMock = new();
+        private readonly Mock<ITransactionService> _transactionServiceMock = new();
 
-        public TransactionControllerTests()
+        private VnpayController CreateController()
         {
-            _mockService = new Mock<ITransactionService>();
-            _controller = new TransactionController(_mockService.Object);
+            var controller = new VnpayController(
+                _orderRepoMock.Object,
+                _vnpayServiceMock.Object,
+                _transactionServiceMock.Object
+            );
+
+            var httpContext = new DefaultHttpContext();
+            httpContext.Connection.RemoteIpAddress = System.Net.IPAddress.Parse("192.168.1.1");
+            controller.ControllerContext.HttpContext = httpContext;
+
+            return controller;
         }
 
         [Fact]
-        // Test kiểm tra khi tạo transaction thành công, trả về kết quả Ok kèm transaction đã tạo.
-        public async Task CreateTransaction_ReturnsOkWithCreatedTransaction()
+        // Trả về NotFound khi không tìm thấy đơn hàng với ID đã cung cấp.
+        public async Task CreateUrl_OrderNotFound_ReturnsNotFound()
         {
-            // Arrange
-            var transaction = new Transaction { Id = 1, OrderId = 1, Price = 100, Status = true };
-            _mockService.Setup(s => s.CreateTransactionAsync(transaction))
-                        .ReturnsAsync(transaction);
+            _orderRepoMock.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync((Order?)null);
 
-            // Act
-            var result = await _controller.CreateTransaction(transaction);
+            var controller = CreateController();
 
-            // Assert
-            var okResult = result as OkObjectResult;
-            okResult.Should().NotBeNull();
-            okResult!.Value.Should().Be(transaction);
+            var result = await controller.CreateUrl(1);
+
+            var notFound = Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Equal("Không tìm thấy đơn hàng", notFound.Value);
         }
 
         [Fact]
-        // Test kiểm tra lấy tất cả transactions trả về danh sách với status code 200 OK.
-        public async Task GetAllTransactions_ReturnsOkWithList()
+        // Tạo URL thanh toán thành công khi đơn hàng hợp lệ.
+        public async Task CreateUrl_ValidOrder_ReturnsPaymentUrl()
         {
-            // Arrange
-            var list = new List<Transaction>
+            var order = new Order
             {
-                new Transaction { Id = 1, OrderId = 1 },
-                new Transaction { Id = 2, OrderId = 2 }
+                Id = 1,
+                UserId = 123,
+                BookingDate = DateOnly.FromDateTime(DateTime.Today),
+                TotalPrice = 150000,
+                Status = true
             };
-            _mockService.Setup(s => s.GetAllTransactionsAsync()).ReturnsAsync(list);
 
-            // Act
-            var result = await _controller.GetAllTransactions();
+            _orderRepoMock.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync(order);
+            _vnpayServiceMock.Setup(service => service.CreatePaymentUrl(150000, "1", "192.168.1.1"))
+                             .Returns("https://vnpay.vn/payment?orderId=1");
 
-            // Assert
-            var okResult = result as OkObjectResult;
-            okResult.Should().NotBeNull();
-            var value = okResult!.Value as List<Transaction>;
-            value.Should().HaveCount(2);
+            var controller = CreateController();
+
+            var result = await controller.CreateUrl(1);
+
+            var ok = Assert.IsType<OkObjectResult>(result);
+
+            var json = JsonSerializer.Serialize(ok.Value);
+            var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+
+            Assert.NotNull(dict);
+            Assert.Equal("https://vnpay.vn/payment?orderId=1", dict["paymentUrl"]);
         }
 
         [Fact]
-        // Test kiểm tra lấy transaction theo ID tồn tại, trả về Ok với dữ liệu đúng.
-        public async Task GetTransactionById_Exists_ReturnsOk()
+        // Xử lý callback từ VNPAY thành công → trả về trạng thái success.
+        public async Task Callback_SuccessfulPayment_ReturnsSuccess()
         {
-            // Arrange
-            var transaction = new Transaction { Id = 1, OrderId = 1 };
-            _mockService.Setup(s => s.GetTransactionByIdAsync(1)).ReturnsAsync(transaction);
+            var callbackResult = new PaymentResult
+            {
+                IsSuccess = true,
+                PaymentId = 123,
+                Description = "OK"
+            };
 
-            // Act
-            var result = await _controller.GetTransactionById(1);
+            _vnpayServiceMock.Setup(s => s.ProcessCallback(It.IsAny<IQueryCollection>()))
+                             .Returns(callbackResult);
 
-            // Assert
-            var okResult = result as OkObjectResult;
-            okResult.Should().NotBeNull();
-            okResult!.Value.Should().Be(transaction);
+            _transactionServiceMock.Setup(s => s.SaveTransactionAsync(callbackResult))
+                                   .ReturnsAsync(true);
+
+            var controller = CreateController();
+
+            var result = await controller.Callback();
+
+            var ok = Assert.IsType<OkObjectResult>(result);
+
+            var json = JsonSerializer.Serialize(ok.Value);
+            var data = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json);
+
+            Assert.Equal("success", data["status"].GetString());
+            Assert.Equal(123, data["orderId"].GetInt32());
         }
 
         [Fact]
-        // Test kiểm tra lấy transaction theo ID không tồn tại, trả về NotFound.
-        public async Task GetTransactionById_NotFound_ReturnsNotFound()
+        // Xử lý callback từ VNPAY thất bại → trả về lỗi và thông báo.
+        public async Task Callback_FailedPayment_ReturnsBadRequest()
         {
-            _mockService.Setup(s => s.GetTransactionByIdAsync(99)).ReturnsAsync((Transaction?)null);
+            var callbackResult = new PaymentResult
+            {
+                IsSuccess = false,
+            };
 
-            var result = await _controller.GetTransactionById(99);
+            _vnpayServiceMock.Setup(s => s.ProcessCallback(It.IsAny<IQueryCollection>()))
+                             .Returns(callbackResult);
 
-            result.Should().BeOfType<NotFoundObjectResult>();
+            var controller = CreateController();
+
+            var result = await controller.Callback();
+
+            var badRequest = Assert.IsType<BadRequestObjectResult>(result);
+
+            var json = JsonSerializer.Serialize(badRequest.Value);
+            var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+
+            Assert.NotNull(dict);
+            Assert.Equal("fail", dict["status"]);
+            Assert.Equal("Thanh toán thất bại", dict["message"]);
         }
 
         [Fact]
-        // Test kiểm tra cập nhật transaction thành công, trả về Ok với transaction đã cập nhật.
-        public async Task UpdateTransaction_Exists_ReturnsOk()
+        // Xử lý IPN hợp lệ (VNPAY gửi kết quả thanh toán về server) → lưu thành công.
+        public async Task Ipn_ValidRequest_ReturnsOk()
         {
-            // Arrange
-            var transaction = new Transaction { Id = 1, Price = 200 };
-            _mockService.Setup(s => s.UpdateTransactionAsync(1, transaction)).ReturnsAsync(transaction);
+            var result = new PaymentResult { IsSuccess = true };
 
-            // Act
-            var result = await _controller.UpdateTransaction(1, transaction);
+            _vnpayServiceMock.Setup(s => s.ProcessCallback(It.IsAny<IQueryCollection>()))
+                             .Returns(result);
 
-            // Assert
-            var okResult = result as OkObjectResult;
-            okResult.Should().NotBeNull();
-            okResult!.Value.Should().Be(transaction);
+            _transactionServiceMock.Setup(s => s.SaveTransactionAsync(result))
+                                   .ReturnsAsync(true);
+
+            var controller = CreateController();
+
+            var response = await controller.Ipn();
+
+            var ok = Assert.IsType<OkObjectResult>(response);
+            Assert.Equal("IPN OK", ok.Value);
         }
 
         [Fact]
-        // Test kiểm tra cập nhật transaction không tồn tại, trả về NotFound.
-        public async Task UpdateTransaction_NotFound_ReturnsNotFound()
+        // Xử lý IPN nhưng lưu transaction thất bại → trả về lỗi.
+        public async Task Ipn_SaveTransactionFailed_ReturnsBadRequest()
         {
-            var updated = new Transaction { Id = 99 };
-            _mockService.Setup(s => s.UpdateTransactionAsync(99, updated)).ReturnsAsync((Transaction?)null);
+            var result = new PaymentResult { IsSuccess = true };
 
-            var result = await _controller.UpdateTransaction(99, updated);
+            _vnpayServiceMock.Setup(s => s.ProcessCallback(It.IsAny<IQueryCollection>()))
+                             .Returns(result);
 
-            result.Should().BeOfType<NotFoundResult>();
+            _transactionServiceMock.Setup(s => s.SaveTransactionAsync(result))
+                                   .ReturnsAsync(false);
+
+            var controller = CreateController();
+
+            var response = await controller.Ipn();
+
+            var badRequest = Assert.IsType<BadRequestObjectResult>(response);
+            Assert.Equal("IPN Failed", badRequest.Value);
+        }
+
+        /* -----Test luồng hoạt động------ */
+        [Fact]
+        // Mô phỏng luồng thanh toán thành công hoàn chỉnh: tạo URL → callback → IPN.
+        public async Task CompletePaymentFlow_Success()
+        {
+            // Step 1: Giả lập đơn đặt hàng hợp lệ
+            var order = new Order
+            {
+                Id = 1,
+                UserId = 123,
+                BookingDate = DateOnly.FromDateTime(DateTime.Today),
+                TotalPrice = 150000,
+                Status = false // Chưa thanh toán
+            };
+
+            _orderRepoMock.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync(order);
+
+            // Step 2: Tạo URL thanh toán
+            _vnpayServiceMock.Setup(service => service.CreatePaymentUrl(150000, "1", "192.168.1.1"))
+                             .Returns("https://vnpay.vn/payment?orderId=1");
+
+            var controller = CreateController();
+            var createUrlResult = await controller.CreateUrl(1);
+            var okUrl = Assert.IsType<OkObjectResult>(createUrlResult);
+
+            var urlJson = JsonSerializer.Serialize(okUrl.Value);
+            var urlDict = JsonSerializer.Deserialize<Dictionary<string, string>>(urlJson);
+            Assert.NotNull(urlDict);
+            Assert.Equal("https://vnpay.vn/payment?orderId=1", urlDict["paymentUrl"]);
+
+            // Step 3: Gọi callback từ VNPAY sau khi thanh toán thành công
+            var paymentResult = new PaymentResult
+            {
+                IsSuccess = true,
+                PaymentId = 1,
+                Description = "OK"
+            };
+
+            _vnpayServiceMock.Setup(s => s.ProcessCallback(It.IsAny<IQueryCollection>()))
+                             .Returns(paymentResult);
+
+            _transactionServiceMock.Setup(s => s.SaveTransactionAsync(paymentResult))
+                                   .ReturnsAsync(true);
+
+            var callbackResult = await controller.Callback();
+            var okCallback = Assert.IsType<OkObjectResult>(callbackResult);
+            var callbackJson = JsonSerializer.Serialize(okCallback.Value);
+            var callbackData = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(callbackJson);
+            Assert.Equal("success", callbackData["status"].GetString());
+            Assert.Equal(1, callbackData["orderId"].GetInt32());
+
+            // Step 4: Gọi IPN để cập nhật đơn hàng (optional ở một số flow)
+            var ipnResult = await controller.Ipn();
+            var ipnOk = Assert.IsType<OkObjectResult>(ipnResult);
+            Assert.Equal("IPN OK", ipnOk.Value);
         }
 
         [Fact]
-        // Test kiểm tra xoá transaction thành công, trả về Ok.
-        public async Task DeleteTransaction_Success_ReturnsOk()
+        // Mô phỏng luồng callback thanh toán thất bại.
+        public async Task CompletePaymentFlow_FailedPayment_ReturnsError()
         {
-            _mockService.Setup(s => s.DeleteTransactionAsync(1)).ReturnsAsync(true);
+            var paymentResult = new PaymentResult
+            {
+                IsSuccess = false,
+                PaymentId = 2,
+                Description = "FAILED"
+            };
 
-            var result = await _controller.DeleteTransaction(1);
+            _vnpayServiceMock.Setup(s => s.ProcessCallback(It.IsAny<IQueryCollection>()))
+                             .Returns(paymentResult);
 
-            result.Should().BeOfType<OkObjectResult>();
-        }
+            var controller = CreateController();
 
-        [Fact]
-        // Test kiểm tra xoá transaction không tồn tại, trả về NotFound.
-        public async Task DeleteTransaction_NotFound_ReturnsNotFound()
-        {
-            _mockService.Setup(s => s.DeleteTransactionAsync(999)).ReturnsAsync(false);
+            var callbackResult = await controller.Callback();
 
-            var result = await _controller.DeleteTransaction(999);
+            var badRequest = Assert.IsType<BadRequestObjectResult>(callbackResult);
 
-            result.Should().BeOfType<NotFoundResult>();
+            var json = JsonSerializer.Serialize(badRequest.Value);
+            var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+
+            Assert.NotNull(dict);
+            Assert.Equal("fail", dict["status"]);
+            Assert.Equal("Thanh toán thất bại", dict["message"]);
         }
     }
 }

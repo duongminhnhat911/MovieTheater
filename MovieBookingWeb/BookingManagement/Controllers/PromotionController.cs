@@ -55,9 +55,16 @@ namespace BookingManagement.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var success = await _service.DeleteAsync(id);
-            if (!success) return NotFound();
-            return Ok(new { message = "Deleted successfully" });
+            try
+            {
+                var success = await _service.DeleteAsync(id);
+                if (!success) return NotFound();
+                return Ok(new { message = "Deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("active-codes")]

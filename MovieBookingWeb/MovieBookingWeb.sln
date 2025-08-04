@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieManagement", "MovieMan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingManagement", "BookingManagement\BookingManagement.csproj", "{5203A798-42B1-4C62-A049-BD6BDE030E4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieManagementTests", "MovieManagementTests\MovieManagementTests.csproj", "{7E944C50-96B3-42EC-A0A9-730575E50CCA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieBookingWebTest", "MovieManagementTests\MovieBookingWebTest.csproj", "{7E944C50-96B3-42EC-A0A9-730575E50CCA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

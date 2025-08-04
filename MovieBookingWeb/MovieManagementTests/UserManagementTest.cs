@@ -3,12 +3,8 @@ using UserManagement.Services;
 using UserManagement.Repositories;
 using UserManagement.Models.DTOs;
 using UserManagement.Models.Entities;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
 
-namespace MovieBookingTesting
+namespace UserManagementTests
 {
     public class UserServiceTests
     {
@@ -214,3 +210,4 @@ namespace MovieBookingTesting
         }
     }
 }
+

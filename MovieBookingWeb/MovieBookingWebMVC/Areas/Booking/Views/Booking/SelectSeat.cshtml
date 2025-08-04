@@ -903,7 +903,7 @@
                 target.classList.remove("d-none");
 
                 requestAnimationFrame(() => {
-                    target.classList.add("show"); // Vì `fade` đã có sẵn, hiệu ứng sẽ chạy mượt
+                    target.classList.add("show");
                     setTimeout(() => {
                         target.classList.remove("show");
                         setTimeout(() => target.classList.add("d-none"), 400);
