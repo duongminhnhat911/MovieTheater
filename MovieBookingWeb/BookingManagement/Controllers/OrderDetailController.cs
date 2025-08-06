@@ -19,8 +19,15 @@ namespace BookingManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOrderDetail([FromBody] CreateOrderDetailDto dto)
         {
-            var detail = await _service.CreateAsync(dto);
-            return Ok(new { detail.Id });
+            try
+            {
+                var detail = await _service.CreateAsync(dto);
+                return Ok(new { detail.Id });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -58,9 +65,7 @@ namespace BookingManagement.Controllers
         public async Task<IActionResult> GetFullOrderDetail(int orderId)
         {
             var result = await _service.GetFullOrderDetailAsync(orderId);
-            if (result == null)
-                return NotFound("Không tìm thấy đơn hàng.");
-
+            if (result == null) return NotFound("Không tìm thấy đơn hàng.");
             return Ok(result);
         }
     }

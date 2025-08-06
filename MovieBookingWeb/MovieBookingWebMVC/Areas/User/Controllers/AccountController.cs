@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using MovieBookingWebMVC.Areas.User.Models.ViewModel;
 using MovieBookingWebMVC.Areas.User.Models.DTOs;
+using MovieBookingWebMVC.Areas.User.Models.ViewModel;
 using Newtonsoft.Json;
+using System.Net;
+using System.Security.Claims;
 
 namespace MovieBookingWebMVC.Areas.User.Controllers
 {
@@ -35,9 +36,21 @@ namespace MovieBookingWebMVC.Areas.User.Controllers
             var client = _httpClientFactory.CreateClient("ApiClient_User");
             var response = await client.PostAsJsonAsync("api/auth/login", model);
 
+            if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                ModelState.AddModelError("", "Tài khoản đã bị khóa. Vui lòng liên hệ quản trị viên.");
+                return View(model);
+            }
+
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                ModelState.AddModelError("", "Sai tài khoản hoặc mật khẩu.");
+                return View(model);
+            }
+
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError("", "Sai tài khoản hoặc mật khẩu");
+                ModelState.AddModelError("", "Đăng nhập thất bại. Vui lòng thử lại sau.");
                 return View(model);
             }
 
@@ -51,11 +64,12 @@ namespace MovieBookingWebMVC.Areas.User.Controllers
             }
 
             var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Role, user.Role),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // 👈 thêm dòng này
-        };
+            {
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim("Username", user.Username),
+                new Claim(ClaimTypes.Role, user.Role),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);

@@ -228,7 +228,7 @@
         border: 1px solid var(--teal-green);
         color: var(--primary-black);
         border-radius: 15px;
-        padding: 1.5rem;
+        padding: 1rem;
         text-align: center;
         font-weight: 600;
         box-shadow: 0 5px 15px rgba(159, 203, 192, 0.2);
@@ -306,7 +306,7 @@
         @if (!Model.Any())
         {
             <div class="alert alert-warning">
-                <i class="fas fa-exclamation-triangle me-2"></i>
+                <i class="fas fa-exclamation-triangle me-1"></i>
                 Không có đơn hàng nào.
             </div>
         }
@@ -339,7 +339,7 @@
                                     </td>
                                     <td class="text-center">
                                         <span class="@(order.Status ? "status-badge-paid" : "status-badge-pending")">
-                                            @(order.Status ? "Đã thanh toán" : "Chờ thanh toán")
+                                            @(order.Status ? "Đã thanh toán" : "Chưa thanh toán")
                                         </span>
                                     </td>
                                     <td class="text-center">

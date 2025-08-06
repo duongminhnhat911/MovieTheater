@@ -13,9 +13,109 @@
     }
     var movieId = Context.Request.Query["movieId"].ToString();
     var schedules = Model.Where(s => s.ShowDate == selectedDate).OrderBy(s => s.FromTime).ToList();
+    var selectedMovie = new MovieBookingWebMVC.Areas.Booking.Models.DTOs.MovieWithShowtimeDTO
+    {
+        MovieId = 1,
+        Title = "Lật Mặt 7: Một Điều Ước",
+        Subtitle = "Bản điện ảnh 2025",
+        Image = "/images/movies/latmat7.jpg",
+        Duration = 120,
+        Genres = new List<string> { "Hành động", "Tâm lý", "Hài" },
+        Format = new List<string> { "2D", "IMAX" },
+        Director = "Lý Hải",
+    };
 }
 
 <style>
+    .movie-card {
+        width: 100%;
+        background: #f8f9fa;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        position: relative;
+        margin-bottom: 30px;
+    }
+
+        .movie-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+    .movie-header {
+        display: flex;
+        padding: 25px;
+        gap: 20px;
+        align-items: flex-start;
+    }
+
+    .movie-poster {
+        width: 120px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        transition: transform 0.3s ease;
+    }
+
+    .movie-card:hover .movie-poster {
+        transform: scale(1.05);
+    }
+
+    .movie-info {
+        flex: 1;
+    }
+
+    .movie-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        line-height: 1.3;
+        margin-top: -6px;
+    }
+
+    .movie-subtitle {
+        font-size: 1rem;
+        color: #7f8c8d;
+        margin-bottom: 10px;
+        font-style: italic;
+    }
+
+    .movie-details {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .movie-detail-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    .movie-detail-icon {
+        font-size: 1rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    .movie-detail-text {
+        flex: 1;
+    }
+
+    .movie-detail-label {
+        font-weight: 600;
+        color: #495057;
+    }
     .showtime-container {
         background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
         min-height: 100vh;
@@ -70,30 +170,28 @@
         z-index: 1;
     }
 
-    .date-selector {
-        padding: 30px;
-        background: #f8f9fa;
-    }
-
     .date-buttons {
         display: flex;
         gap: 15px;
+        margin-top: 30px;
         justify-content: center;
         flex-wrap: wrap;
     }
 
     .date-btn {
-        background: #ffffff;
+        background: #f8f9fa;
         border: 2px solid #e9ecef;
         color: #6c757d;
-        padding: 15px 25px;
+        padding: 10px 20px;
         border-radius: 15px;
-        text-decoration: none;
-        font-weight: 600;
+        cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        font-weight: 600;
+        text-align: center;
+        min-width: 80px;
         position: relative;
         overflow: hidden;
+        text-decoration: none;
     }
 
         .date-btn::before {
@@ -113,7 +211,8 @@
 
         .date-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            border-color: #FF6B6B;
             color: #495057;
         }
 
@@ -121,7 +220,6 @@
             background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
             color: white;
             border-color: transparent;
-            transform: translateY(-2px);
             box-shadow: 0 8px 16px rgba(255,107,107,0.3);
         }
 
@@ -139,7 +237,7 @@
         background: #ffffff;
         border: 2px solid #e9ecef;
         border-radius: 15px;
-        padding: 25px;
+        padding: 20px;
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
@@ -171,7 +269,7 @@
         font-size: 2rem;
         font-weight: 700;
         color: #2c3e50;
-        margin-bottom: 15px;
+        margin-bottom: 5px;
         display: flex;
         align-items: center;
         gap: 10px;
@@ -184,7 +282,6 @@
 
     .schedule-info {
         color: #6c757d;
-        margin-bottom: 20px;
         font-size: 1.1rem;
         display: flex;
         align-items: center;
@@ -200,7 +297,7 @@
         background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
         color: white;
         border: none;
-        padding: 12px 30px;
+        padding: 10px 25px;
         border-radius: 25px;
         font-weight: 600;
         text-decoration: none;
@@ -235,18 +332,19 @@
 
     .no-schedule {
         text-align: center;
-        padding: 60px 20px;
+        padding: 60px;
         color: #6c757d;
     }
 
     .no-schedule-icon {
+        margin-top: -15px;
         font-size: 4rem;
-        margin-bottom: 20px;
+        margin-bottom: 5px;
         opacity: 0.5;
     }
 
     .no-schedule-text {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         font-weight: 500;
     }
 
@@ -285,17 +383,49 @@
         <div class="showtime-header">
             <h2 class="showtime-title">@ViewData["Title"]</h2>
         </div>
-
-        <div class="date-selector">
-            <div class="date-buttons">
-                @foreach (var date in availableDates)
-                {
-                    <a class="date-btn @(date == selectedDate ? "active" : "")"
-                       href="?movieId=@movieId&date=@date.ToString("dd-MM-yyyy")">
-                        @date.ToString("dd/MM")
-                    </a>
-                }
+        <div class="movie-card">
+            <div class="movie-header">
+                <img src="@selectedMovie.Image" class="movie-poster" />
+                <div class="movie-info">
+                    <h3 class="movie-title">@selectedMovie.Title</h3>
+                    <p class="movie-subtitle">@selectedMovie.Subtitle</p>
+                    <div class="movie-details">
+                        <div class="movie-detail-item">
+                            <span class="movie-detail-icon">🎬</span>
+                            <span class="movie-detail-text">
+                                <span class="movie-detail-label">Đạo diễn:</span> @selectedMovie.Director
+                            </span>
+                        </div>
+                        <div class="movie-detail-item">
+                            <span class="movie-detail-icon">🎭</span>
+                            <span class="movie-detail-text">
+                                <span class="movie-detail-label">Thể loại:</span> @string.Join(", ", selectedMovie.Genres)
+                            </span>
+                        </div>
+                        <div class="movie-detail-item">
+                            <span class="movie-detail-icon">📺</span>
+                            <span class="movie-detail-text">
+                                <span class="movie-detail-label">Định dạng:</span> @string.Join(", ", selectedMovie.Format)
+                            </span>
+                        </div>
+                        <div class="movie-detail-item">
+                            <span class="movie-detail-icon">⏱️</span>
+                            <span class="movie-detail-text">
+                                <span class="movie-detail-label">Thời lượng:</span> @selectedMovie.Duration phút
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+        <div class="date-buttons">
+            @foreach (var date in availableDates)
+            {
+                <a class="date-btn @(date == selectedDate ? "active" : "")"
+                   href="?movieId=@movieId&date=@date.ToString("dd-MM-yyyy")">
+                    @date.ToString("dd/MM")
+                </a>
+            }
         </div>
 
         <div class="schedule-content">
