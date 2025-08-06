@@ -55,9 +55,29 @@ namespace BookingManagement.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var success = await _service.DeleteAsync(id);
-            if (!success) return NotFound();
-            return Ok(new { message = "Deleted successfully" });
+            try
+            {
+                var success = await _service.DeleteAsync(id);
+                if (!success) return NotFound();
+                return Ok(new { message = "Deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("active-codes")]
+        public async Task<IActionResult> GetActivePromotionCodes()
+        {
+            var now = DateTime.Now;
+            var activePromos = await _service.GetAllAsync();
+
+            var codes = activePromos
+                .Where(p => p.IsActive && p.StartDate <= now && p.EndDate >= now && p.Quantity > 0)
+                .Select(p => p.PromotionCode.ToUpper())
+                .ToList();
+            return Ok(codes);
         }
     }
 }

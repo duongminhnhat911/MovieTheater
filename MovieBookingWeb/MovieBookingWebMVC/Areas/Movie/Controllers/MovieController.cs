@@ -66,7 +66,7 @@ namespace MovieBookingWebMVC.Areas.Movie.Controllers
             }
             catch (HttpRequestException ex)
             {
-                TempData["Error"] = $"Lỗi API: {ex.Message}. Vui lòng đảm bảo API đang chạy.";
+                ModelState.AddModelError("", $"Lỗi API: {ex.Message}. Vui lòng đảm bảo API đang chạy.");
                 return View(new List<FilmViewModel>());
             }
         }
@@ -167,7 +167,7 @@ namespace MovieBookingWebMVC.Areas.Movie.Controllers
             }
             catch (HttpRequestException ex)
             {
-                TempData["Error"] = $"Lỗi API: {ex.Message}. Vui lòng đảm bảo API đang chạy.";
+                ModelState.AddModelError("", $"Lỗi API: {ex.Message}. Vui lòng đảm bảo API đang chạy.");
                 return RedirectToAction("ViewMovie");
             }
         }
@@ -247,7 +247,7 @@ namespace MovieBookingWebMVC.Areas.Movie.Controllers
             }
             catch (HttpRequestException ex)
             {
-                TempData["Error"] = $"Lỗi API: {ex.Message}. Vui lòng đảm bảo API đang chạy.";
+                ModelState.AddModelError("", $"Lỗi API: {ex.Message}. Vui lòng đảm bảo API đang chạy.");
                 return RedirectToAction("ViewMovie", "Movie", new { area = "Movie", page = Request.Query["page"] });
             }
         }

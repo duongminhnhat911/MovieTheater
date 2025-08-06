@@ -68,11 +68,11 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             var result = await _showtimeService.CreateShowtimeAsync(dto);
             if (result)
             {
-                TempData["Success"] = "✅ Tạo suất chiếu thành công!";
+                TempData["Success"] = "Tạo suất chiếu thành công!";
                 return RedirectToAction("Index");
             }
 
-            TempData["Error"] = "❌ Tạo suất chiếu thất bại.";
+            TempData["Error"] = "Tạo suất chiếu thất bại.";
             await LoadMoviesAndRoomsAsync(); // Nạp lại nếu tạo thất bại
             return View(dto);
         }

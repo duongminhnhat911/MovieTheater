@@ -41,12 +41,6 @@
         --shadow-medium: rgba(0, 0, 0, 0.15);
     }
 
-    body {
-        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        min-height: 100vh;
-    }
-
     .main-container {
         background: var(--white);
         border-radius: 20px;
@@ -77,16 +71,13 @@
         }
 
     @@keyframes rotate {
-        0%
+        0% {
+            transform: rotate(0deg);
+        }
 
-    {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-
+        100% {
+            transform: rotate(360deg);
+        }
     }
 
     .header-title {
@@ -188,18 +179,15 @@
         }
 
     .alert-custom {
-        background: rgba(248, 113, 113, 0.1);
-        border: 1px solid rgba(248, 113, 113, 0.3);
-        color: #dc2626;
-        border-radius: 12px;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        font-size: 0.9rem;
+        background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 15px;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        animation: slideInDown 0.5s ease-out;
     }
-
-        .alert-custom i {
-            margin-right: 0.5rem;
-        }
 
     .success-alert {
         background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
@@ -213,18 +201,14 @@
     }
 
     @@keyframes slideInDown {
-        from
-
-    {
-        transform: translateY(-20px);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
 
     .section-title {
@@ -464,19 +448,19 @@
         @if (@TempData["Success"] != null)
         {
             <div id="alertSuccess" class="alert success-alert text-center mb-4">
-                <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+                <i class="fas fa-check-circle me-1"></i> @TempData["Success"]
             </div>
         }
 
         @if (!ViewData.ModelState.IsValid)
         {
-        <div id="alertDanger" class="alert-custom text-center">
-            <i class="fas fa-exclamation-triangle"></i>
-            @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values
-                        .SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage)))
-        </div>
-                }
+            <div id="alertDanger" class="alert-custom text-center mb-4">
+                <i class="fas fa-exclamation-triangle me-1"></i>
+                @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values
+                            .SelectMany(v => v.Errors)
+                            .Select(e => e.ErrorMessage)))
+            </div>
+        }
 
         <form asp-action="AddMovie" method="post" enctype="multipart/form-data" novalidate>
             @Html.AntiForgeryToken()
@@ -696,7 +680,7 @@
             <input type="hidden" asp-for="Status" value="Active" />
 
             <button type="submit" class="btn btn-add-movie mt-4">
-                <i class="fas fa-plus me-2"></i>
+                <i class="fas fa-plus me-1"></i>
                 Thêm phim
             </button>
         </form>
@@ -780,7 +764,6 @@
         }
     });
 
-    // Auto-hide alerts
     document.addEventListener("DOMContentLoaded", function () {
         function fadeOutAndRemove(element) {
             setTimeout(() => {

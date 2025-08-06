@@ -56,13 +56,14 @@ namespace UserManagement.Controllers
             return updated ? Ok("Updated") : NotFound();
         }
 
-/*        [Authorize(Roles = "Admin")]*/
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> SoftDelete(int id)
         {
             var toggled = await _userService.ToggleUserLockAsync(id);
             return toggled ? Ok("Toggled lock status") : NotFound("User not found");
         }
+
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
         {

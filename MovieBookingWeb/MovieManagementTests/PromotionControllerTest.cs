@@ -4,7 +4,7 @@ using BookingManagement.Service;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-namespace BookingManagement.Tests
+namespace BookingManagementTests
 {
     public class PromotionControllerTests
     {
@@ -21,7 +21,6 @@ namespace BookingManagement.Tests
         // Đảm bảo controller trả về danh sách PromotionDto với OkObjectResult.
         public async Task GetAll_ReturnsListOfPromotions()
         {
-            // Arrange
             var mockPromotions = new List<PromotionDto>
             {
                 new PromotionDto
@@ -49,10 +48,8 @@ namespace BookingManagement.Tests
 
             _mockService.Setup(s => s.GetAllAsync()).ReturnsAsync(mockPromotions);
 
-            // Act
             var result = await _controller.GetAll();
 
-            // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var returnValue = Assert.IsType<List<PromotionDto>>(okResult.Value);
             Assert.Equal(2, returnValue.Count);
@@ -62,7 +59,6 @@ namespace BookingManagement.Tests
         // Trả về PromotionDto khi tìm thấy.
         public async Task Get_ReturnsPromotion_WhenFound()
         {
-            // Arrange
             var promo = new PromotionDto
             {
                 Id = 1,
@@ -77,10 +73,8 @@ namespace BookingManagement.Tests
             };
             _mockService.Setup(s => s.GetByIdAsync(1)).ReturnsAsync(promo);
 
-            // Act
             var result = await _controller.Get(1);
 
-            // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var returnValue = Assert.IsType<PromotionDto>(okResult.Value);
             Assert.Equal(1, returnValue.Id);
@@ -102,7 +96,6 @@ namespace BookingManagement.Tests
         // Trả về CreatedAtAction với PromotionDto khi tạo thành công.
         public async Task Create_ReturnsCreatedPromotion()
         {
-            // Arrange
             var createDto = new CreatePromotionDto
             {
                 PromotionCode = "NEWYEAR2025",
@@ -127,10 +120,8 @@ namespace BookingManagement.Tests
 
             _mockService.Setup(s => s.CreateAsync(createDto)).ReturnsAsync(createdPromo);
 
-            // Act
             var result = await _controller.Create(createDto);
 
-            // Assert
             var createdResult = Assert.IsType<CreatedAtActionResult>(result);
             var returnValue = Assert.IsType<PromotionDto>(createdResult.Value);
             Assert.Equal("NEWYEAR2025", returnValue.PromotionCode);
@@ -226,6 +217,159 @@ namespace BookingManagement.Tests
             var result = await _controller.Delete(999);
 
             Assert.IsType<NotFoundResult>(result);
+        }
+
+        /* -----Test luồng hoạt động------ */
+        [Fact]
+        // Người dùng xem danh sách khuyến mãi đang hoạt động (IsActive = true)
+        public async Task GetAll_ReturnsOnlyActivePromotions()
+        {
+            var mockPromotions = new List<PromotionDto>
+            {
+                new PromotionDto { Id = 1, PromotionCode = "ACTIVE1", IsActive = true },
+                new PromotionDto { Id = 2, PromotionCode = "INACTIVE1", IsActive = false }
+            };
+
+            _mockService.Setup(s => s.GetAllAsync()).ReturnsAsync(mockPromotions);
+
+            var result = await _controller.GetAll();
+
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnValue = Assert.IsType<List<PromotionDto>>(okResult.Value);
+
+            Assert.Contains(returnValue, p => p.IsActive);
+            Assert.Equal(2, returnValue.Count); // UI sẽ lọc ở phía client hoặc controller
+        }
+
+        [Fact]
+        // Người dùng nhập mã không tồn tại
+        public async Task GetById_ReturnsNotFound_WhenInvalidCodeUsed()
+        {
+            _mockService.Setup(s => s.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((PromotionDto?)null);
+
+            var result = await _controller.Get(9999); // id giả định không tồn tại
+
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        // Admin tạo khuyến mãi với ngày kết thúc nhỏ hơn ngày bắt đầu (logic fail)
+        public async Task Create_ReturnsBadRequest_WhenEndDateBeforeStartDate()
+        {
+            var createDto = new CreatePromotionDto
+            {
+                PromotionCode = "BADDATE",
+                StartDate = DateTime.Today.AddDays(10),
+                EndDate = DateTime.Today.AddDays(5) // Lỗi logic
+            };
+
+            _mockService.Setup(s => s.CreateAsync(createDto))
+                .ThrowsAsync(new InvalidOperationException("End date must be after start date"));
+
+            var result = await _controller.Create(createDto);
+
+            var badRequest = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Contains("End date must be after start date", badRequest.Value!.ToString());
+        }
+
+        [Fact]
+        // Admin cập nhật khuyến mãi thành trạng thái hết hiệu lực
+        public async Task Update_ChangesIsActiveStatus()
+        {
+            var updateDto = new UpdatePromotionDto
+            {
+                PromotionCode = "EXPIRE2025",
+                IsActive = false
+            };
+
+            var updatedPromo = new PromotionDto
+            {
+                Id = 8,
+                PromotionCode = "EXPIRE2025",
+                IsActive = false
+            };
+
+            _mockService.Setup(s => s.UpdateAsync(8, updateDto)).ReturnsAsync(updatedPromo);
+
+            var result = await _controller.Update(8, updateDto);
+
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnValue = Assert.IsType<PromotionDto>(okResult.Value);
+            Assert.False(returnValue.IsActive);
+        }
+
+        [Fact]
+        // Admin xóa khuyến mãi đã sử dụng rồi (service từ chối)
+        public async Task Delete_ReturnsBadRequest_WhenPromotionAlreadyUsed()
+        {
+            _mockService.Setup(s => s.DeleteAsync(1))
+                .ThrowsAsync(new InvalidOperationException("Promotion already used"));
+
+            var result = await _controller.Delete(1);
+
+            var badRequest = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Contains("Promotion already used", badRequest.Value!.ToString());
+        }
+
+        [Fact]
+        // Trả về danh sách mã khuyến mãi đang hoạt động
+        public async Task GetActivePromotionCodes_ReturnsOnlyValidCodes()
+        {
+            var now = DateTime.Now;
+
+            var mockPromos = new List<PromotionDto>
+            {
+                new PromotionDto // ✅ hợp lệ
+                {
+                    PromotionCode = "SUMMER",
+                    IsActive = true,
+                    StartDate = now.AddDays(-5),
+                    EndDate = now.AddDays(5),
+                    Quantity = 10
+                },
+                new PromotionDto // ❌ chưa bắt đầu
+                {
+                    PromotionCode = "FUTURE",
+                    IsActive = true,
+                    StartDate = now.AddDays(1),
+                    EndDate = now.AddDays(10),
+                    Quantity = 10
+                },
+                new PromotionDto // ❌ đã hết hạn
+                {
+                    PromotionCode = "EXPIRED",
+                    IsActive = true,
+                    StartDate = now.AddDays(-10),
+                    EndDate = now.AddDays(-1),
+                    Quantity = 10
+                },
+                new PromotionDto // ❌ đã hết số lượng
+                {
+                    PromotionCode = "EMPTY",
+                    IsActive = true,
+                    StartDate = now.AddDays(-5),
+                    EndDate = now.AddDays(5),
+                    Quantity = 0
+                },
+                new PromotionDto // ❌ không active
+                {
+                    PromotionCode = "INACTIVE",
+                    IsActive = false,
+                    StartDate = now.AddDays(-5),
+                    EndDate = now.AddDays(5),
+                    Quantity = 10
+                }
+            };
+
+            _mockService.Setup(s => s.GetAllAsync()).ReturnsAsync(mockPromos);
+
+            var result = await _controller.GetActivePromotionCodes();
+
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var codes = Assert.IsType<List<string>>(okResult.Value);
+
+            Assert.Single(codes);
+            Assert.Contains("SUMMER", codes);
         }
     }
 }

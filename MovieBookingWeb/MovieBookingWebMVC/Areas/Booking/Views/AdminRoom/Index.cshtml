@@ -3,7 +3,10 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Danh sách phòng chiếu ";
+    ViewBag.Title = "Danh sách phòng chiếu";
+    int currentPage = ViewBag.CurrentPage as int? ?? 1;
+    int totalPages = ViewBag.TotalPages as int? ?? 1;
+    int index = 1;
 }
 
 <style>
@@ -18,12 +21,6 @@
         --danger-red: #dc3545;
         --shadow-light: rgba(0, 0, 0, 0.1);
         --shadow-medium: rgba(0, 0, 0, 0.15);
-    }
-
-    body {
-        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        min-height: 100vh;
     }
 
     .main-container {
@@ -258,35 +255,36 @@
         position: relative;
         overflow: hidden;
         cursor: pointer;
-    }
-
-    .btn-details {
-        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
-        color: var(--white);
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 0.3rem;
     }
 
-        .btn-details:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(159, 203, 192, 0.5);
-            color: var(--white);
-        }
-
-    .btn-edit {
+    .btn-details {
         background: linear-gradient(135deg, var(--warning-orange) 0%, #fd7e14 100%);
         color: var(--white);
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 0.3rem;
+    }
+
+        .btn-details:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.5);
+            color: var(--white);
+        }
+
+    .btn-edit {
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        color: var(--white);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
     }
 
         .btn-edit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.5);
+            box-shadow: 0 5px 15px rgba(159, 203, 192, 0.5);
             color: var(--white);
         }
 
@@ -295,7 +293,7 @@
         border: 1px solid var(--teal-green);
         color: var(--primary-black);
         border-radius: 15px;
-        padding: 1.5rem;
+        padding: 1rem;
         text-align: center;
         font-weight: 600;
         box-shadow: 0 5px 15px rgba(159, 203, 192, 0.2);
@@ -329,6 +327,46 @@
             padding: 0.4rem 0.8rem;
         }
     }
+
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.5rem;
+        padding: 1rem;
+    }
+
+    .pagination {
+        display: flex;
+        gap: 0.5rem;
+        margin: 0;
+    }
+
+    .page-item .page-link {
+        background: var(--white);
+        border: 2px solid var(--teal-green);
+        color: var(--teal-green);
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        min-width: 40px;
+        text-align: center;
+    }
+
+    .page-item.active .page-link {
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        color: var(--white);
+        border-color: var(--teal-green);
+        box-shadow: 0 4px 15px rgba(159, 203, 192, 0.4);
+    }
+
+    .page-item .page-link:hover {
+        background: var(--teal-green);
+        color: var(--white);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(159, 203, 192, 0.3);
+    }
 </style>
 
 <div class="main-container">
@@ -340,6 +378,24 @@
     </div>
 
     <div class="content-section">
+        @if (@TempData["Success"] != null)
+        {
+            <div id="alertSuccess" class="success-alert text-center mb-4">
+                <i class="fas fa-check-circle me-1"></i> 
+                @TempData["Success"]
+            </div>
+        }
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+        <div id="alertDanger" class="error-alert text-center mb-4">
+            <i class="fas fa-exclamation-triangle me-1"></i>
+            @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)))
+        </div>
+        }
+
         <div class="d-flex justify-content-between align-items-center mb-4">
             <a href="/Booking/AdminRoom/CreateRoom" class="add-room-btn">
                 <i class="fas fa-plus"></i>
@@ -383,7 +439,7 @@
                             {
                                 <tr>
                                     <td class="text-center">
-                                        <span class="room-id">@room.Id</span>
+                                        <span class="room-id">@index</span>
                                     </td>
                                     <td>
                                         <div class="room-name">@room.RoomName</div>
@@ -398,17 +454,18 @@
                                     </td>
                                     <td>
                                         <div class="action-buttons">
-                                            <a href="/Booking/AdminRoom/DetailsRoom/@room.Id" class="btn-action btn-details">
-                                                <i class="fas fa-eye"></i>
-                                                Chi tiết
-                                            </a>
                                             <a href="/Booking/AdminRoom/EditRoom/@room.Id" class="btn-action btn-edit">
-                                                <i class="fas fa-edit"></i>
+                                                <i class="fas fa-edit me-1"></i>
                                                 Sửa
+                                            </a>
+                                            <a href="/Booking/AdminRoom/DetailsRoom/@room.Id?index=@index" class="btn-action btn-details">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                Chi tiết
                                             </a>
                                         </div>
                                     </td>
                                 </tr>
+                                index++;
                             }
                         </tbody>
                     </table>
@@ -418,27 +475,40 @@
         else
         {
             <div class="alert alert-warning">
-                <i class="fas fa-exclamation-triangle me-2"></i>
+                <i class="fas fa-exclamation-triangle me-1"></i>
                 Không có phòng chiếu nào được tìm thấy.
+            </div>
+        }
+
+        @if (totalPages > 1)
+        {
+            <div class="pagination-container">
+                <nav aria-label="Phân trang">
+                    <ul class="pagination">
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                            <li class="page-item @(i == currentPage ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
             </div>
         }
     </div>
 </div>
 
 <script>
-    // Add loading state for buttons
-    document.querySelectorAll('.btn-action').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            if (this.classList.contains('btn-details') || this.classList.contains('btn-edit')) {
-                const icon = this.querySelector('i');
-                const text = this.querySelector('span') || this.lastChild;
-
-                icon.className = 'fas fa-spinner fa-spin';
-
+    document.addEventListener('DOMContentLoaded', function() {
+        const alertSuccess = document.getElementById('alertSuccess');
+        if (alertSuccess) {
+            setTimeout(() => {
+                alertSuccess.style.transition = 'opacity 0.5s ease-out';
+                alertSuccess.style.opacity = '0';
                 setTimeout(() => {
-                    icon.className = this.classList.contains('btn-details') ? 'fas fa-eye' : 'fas fa-edit';
-                }, 1000);
-            }
-        });
+                    alertSuccess.remove();
+                }, 500);
+            }, 5000);
+        }
     });
 </script>

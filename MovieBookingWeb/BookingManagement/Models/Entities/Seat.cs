@@ -13,6 +13,5 @@ namespace BookingManagement.Models.Entities
         public char SeatRow { get; set; }
         public char SeatColumn { get; set; }
         public bool SeatStatus { get; set; }
-
     }
 }

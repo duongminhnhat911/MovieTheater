@@ -10,16 +10,40 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
     public class AdminPromotionController : Controller
     {
         private readonly IPromotionApiService _promotionService;
+        private const int PageSize = 5;
 
         public AdminPromotionController(IPromotionApiService promotionService)
         {
             _promotionService = promotionService;
         }
 
-        public async Task<IActionResult> ListPromotions()
+        [HttpGet]
+        [Route("Booking/AdminPromotion/ListPromotions")]
+        public async Task<IActionResult> ListPromotions(int page = 1)
         {
-            var promotions = await _promotionService.GetAllPromotionsAsync();
-            return View(promotions);
+            try
+            {
+                var promotions = await _promotionService.GetAllPromotionsAsync();
+
+                int totalPromotions = promotions.Count;
+                int totalPages = (int)Math.Ceiling((double)totalPromotions / PageSize);
+
+                ViewBag.CurrentPage = page;
+                ViewBag.TotalPages = totalPages;
+
+                var pagedPromotions = promotions
+                    .OrderByDescending(p => p.StartDate)
+                    .Skip((page - 1) * PageSize)
+                    .Take(PageSize)
+                    .ToList();
+
+                return View(pagedPromotions);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Lỗi khi lấy danh sách khuyến mãi: {ex.Message}";
+                return View(new List<PromotionListViewModel>());
+            }
         }
 
         // GET: Booking/AdminPromotion/Edit/5
@@ -83,11 +107,11 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             var success = await _promotionService.DeletePromotionAsync(id);
             if (success)
             {
-                TempData["SuccessMessage"] = $"Đã xóa thành công khuyến mãi ID = {id}";
+                TempData["SuccessMessage"] = $"Xóa khuyến mãi thành công";
             }
             else
             {
-                TempData["ErrorMessage"] = $"❌ Xóa thất bại! Không tìm thấy khuyến mãi ID = {id}";
+                TempData["ErrorMessage"] = $"Xóa thất bại! Không tìm thấy khuyến mãi";
             }
 
             return RedirectToAction(nameof(ListPromotions));

@@ -105,7 +105,7 @@
 
     .login-subtitle {
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1.75rem;
         color: var(--primary-black);
     }
 
@@ -124,10 +124,32 @@
     }
 
         .register-link:hover {
-            color: var(--teal-green);
-            border-bottom-color: var(--teal-green);
+            color: var(--success-green);
+            border-bottom-color: var(--success-green);
             text-decoration: none;
         }
+
+    .alert-custom {
+        background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 15px;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        animation: slideInDown 0.5s ease-out;
+    }
+
+    .success-alert {
+        background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 15px;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        animation: slideInDown 0.5s ease-out;
+    }
 
     .form-label {
         color: var(--primary-black);
@@ -202,17 +224,6 @@
         transform: translateY(0);
     }
 
-    .alert-custom {
-        background: rgba(248, 113, 113, 0.1);
-        border: 1px solid rgba(248, 113, 113, 0.3);
-        color: #dc2626;
-        border-radius: 12px;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        font-size: 0.9rem;
-        animation: slideInDown 0.5s ease-out;
-    }
-
     @@keyframes slideInDown {
         from {
             transform: translateY(-20px);
@@ -227,7 +238,6 @@
 
     .text-danger {
         color: var(--danger-red);
-        margin-top: 0.25rem;
         display: block;
     }
 
@@ -247,7 +257,6 @@
         text-align: center;
     }
 
-    /* Input icons */
     .input-group {
         position: relative;
     }
@@ -335,15 +344,23 @@
                 </p>
             </div>
 
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert success-alert text-center mb-4" id="alertSuccess">
+                    <i class="fas fa-check-circle me-1"></i>
+                    @TempData["Success"]
+                </div>
+            }
+
             @if (!ViewData.ModelState.IsValid)
             {
-            <div class="alert-custom text-center">
-                <i class="fas fa-exclamation-triangle me-2"></i>
-                @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values
-                                .SelectMany(v => v.Errors)
-                                .Select(e => e.ErrorMessage)))
-            </div>
-                        }
+                <div id="alertDanger" class="alert-custom text-center mb-4">
+                    <i class="fas fa-exclamation-triangle me-1"></i>
+                    @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values
+                                    .SelectMany(v => v.Errors)
+                                    .Select(e => e.ErrorMessage)))
+                </div>
+            }
 
             <form method="post" asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" id="loginForm">
                 <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
@@ -373,7 +390,7 @@
 
                 <div class="d-grid">
                     <button type="submit" class="btn btn-login" id="loginBtn">
-                        <i class="fas fa-sign-in-alt me-2"></i>
+                        <i class="fas fa-sign-in-alt me-1"></i>
                         Đăng nhập
                     </button>
                 </div>
@@ -387,12 +404,6 @@
         const loginForm = document.getElementById('loginForm');
         const loginBtn = document.getElementById('loginBtn');
 
-        // Add loading state to button on form submit
-        // loginForm.addEventListener('submit', function() {
-        //     loginBtn.classList.add('loading');
-        //     loginBtn.innerHTML = '<span>Đang đăng nhập...</span>';
-        // });
-
         // Add focus effects to inputs
         const inputs = document.querySelectorAll('.form-control');
         inputs.forEach(input => {
@@ -404,17 +415,26 @@
                 this.parentElement.querySelector('.input-icon').style.color = 'var(--teal-green)';
             });
         });
+    });
 
-        // Auto-hide error alerts
-        const errorAlert = document.querySelector('.alert-custom');
-        if (errorAlert) {
+    document.addEventListener("DOMContentLoaded", function () {
+        function fadeOutAndRemove(element) {
             setTimeout(() => {
-                errorAlert.style.transition = "opacity 0.5s ease";
-                errorAlert.style.opacity = "0";
+                element.style.transition = "opacity 0.5s ease";
+                element.style.opacity = "0";
                 setTimeout(() => {
-                    errorAlert.remove();
+                    element.remove();
                 }, 500);
             }, 5000);
+        }
+
+        const successAlert = document.getElementById("alertSuccess");
+        const dangerAlert = document.getElementById("alertDanger");
+        if (successAlert) {
+            fadeOutAndRemove(successAlert);
+        }
+        if (dangerAlert) {
+            fadeOutAndRemove(dangerAlert);
         }
     });
 </script>

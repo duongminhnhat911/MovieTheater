@@ -55,11 +55,12 @@ namespace BookingManagement.Repositories
             if (room == null) return null;
 
             var seats = await _db.Seats
-            .Where(s => s.RoomId == roomId)
-            .OrderBy(s => s.SeatRow)   // Ưu tiên sắp xếp theo Row trước
-            .ThenBy(s => s.SeatColumn) // Sau đó là Column
-            .Select(s => $"{s.SeatRow}{s.SeatColumn}")
-            .ToListAsync();
+                .Where(s => s.RoomId == roomId)
+                .OrderBy(s => s.SeatRow)   // Ưu tiên sắp xếp theo Row trước
+                .ThenBy(s => s.SeatColumn) // Sau đó là Column
+                .Select(s => $"{s.SeatRow}{s.SeatColumn}")
+                .ToListAsync();
+
 
             return new RoomDetailsDto
             {

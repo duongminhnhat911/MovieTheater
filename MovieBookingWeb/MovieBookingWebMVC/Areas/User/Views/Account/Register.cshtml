@@ -4,48 +4,6 @@
 }
 
 <style>
-    .box-radio {
-        position: relative;
-        cursor: pointer;
-        border: 2px solid #ccc;
-        border-radius: 12px;
-        padding: 10px 15px; /* giống .form-control */
-        user-select: none;
-        transition: all 0.3s ease;
-        background-color: #f8f9fa;
-        font-weight: 500;
-        color: #333;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100px;
-        height: 42px; /* đồng bộ chiều cao */
-    }
-
-        .box-radio input[type="radio"] {
-            display: none;
-        }
-
-            .box-radio input[type="radio"]:checked + span {
-                color: #fff;
-                font-weight: 600;
-                z-index: 1;
-            }
-
-                .box-radio input[type="radio"]:checked + span::before {
-                    content: "";
-                    position: absolute;
-                    inset: 0;
-                    background-color: #0d6efd;
-                    border-radius: 8px;
-                    z-index: -1;
-                }
-
-        .box-radio:hover {
-            border-color: #0d6efd;
-            background-color: #e9f2ff;
-        }
-
     :root {
         --primary-black: #000000;
         --mint-light: #CCFFE4;
@@ -147,12 +105,10 @@
 
     .register-subtitle {
         text-align: center;
-        margin-bottom: 1rem;
         color: var(--primary-black);
     }
 
         .register-subtitle p {
-            margin: 0.5rem 0;
             font-size: 1rem;
             line-height: 1.5;
         }
@@ -166,8 +122,8 @@
     }
 
         .login-link:hover {
-            color: var(--teal-green);
-            border-bottom-color: var(--teal-green);
+            color: var(--success-green);
+            border-bottom-color: var(--success-green);
             text-decoration: none;
         }
 
@@ -208,6 +164,48 @@
         gap: 1rem;
         margin-top: 0.5rem;
     }
+
+    .box-radio {
+        position: relative;
+        cursor: pointer;
+        border: 2px solid #ccc;
+        border-radius: 12px;
+        padding: 10px 15px;
+        user-select: none;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+        font-weight: 500;
+        color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 42px;
+    }
+
+        .box-radio input[type="radio"] {
+            display: none;
+        }
+
+            .box-radio input[type="radio"]:checked + span {
+                color: #fff;
+                font-weight: 600;
+                z-index: 1;
+            }
+
+                .box-radio input[type="radio"]:checked + span::before {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background-color: #0d6efd;
+                    border-radius: 8px;
+                    z-index: -1;
+                }
+
+        .box-radio:hover {
+            border-color: #0d6efd;
+            background-color: #e9f2ff;
+        }
 
     .form-check {
         display: flex;
@@ -307,8 +305,6 @@
 
     .text-danger {
         color: var(--danger-red);
-        font-size: 0.875rem;
-        margin-top: 0.25rem;
         display: block;
     }
 
@@ -515,7 +511,7 @@
 
                 <div class="d-grid" style="margin-top: 0.5rem;">
                     <button type="submit" class="btn btn-register" id="registerBtn">
-                        <i class="fas fa-user-plus me-2"></i>
+                        <i class="fas fa-user-plus me-1"></i>
                         Tạo tài khoản
                     </button>
                 </div>
@@ -528,12 +524,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         const registerForm = document.getElementById('registerForm');
         const registerBtn = document.getElementById('registerBtn');
-
-        // Add loading state to button on form submit
-        // registerForm.addEventListener('submit', function() {
-        //     registerBtn.classList.add('loading');
-        //     registerBtn.innerHTML = '<span>Đang tạo tài khoản...</span>';
-        // });
 
         // Add focus effects to inputs
         const inputs = document.querySelectorAll('.form-control');
