@@ -197,12 +197,12 @@ namespace MovieBookingWebMVC.Areas.User.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError("", "Đổi mật khẩu thất bại. Mật khẩu hiện tại không đúng?");
+                ModelState.AddModelError("", "Đổi mật khẩu thất bại. Mật khẩu hiện tại không đúng.");
                 return View(model);
             }
 
             TempData["Success"] = "Đổi mật khẩu thành công!";
-            return RedirectToAction("Profile");
+            return RedirectToAction("ChangePassword");
         }
     }
 }

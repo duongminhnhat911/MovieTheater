@@ -271,25 +271,6 @@
             background-color: #28a745;
         }
 
-    .hero-rating {
-        display: flex;
-        align-items: center;
-        justify-content: left;
-        gap: 1rem;
-        margin-top: 1rem;
-    }
-
-    .rating-stars {
-        display: flex;
-        gap: 2px;
-        color: var(--primary-gold);
-    }
-
-    .rating-text {
-        color: var(--text-secondary);
-        font-size: 0.9rem;
-    }
-
     .carousel-nav {
         position: absolute;
         top: 50%;
@@ -532,20 +513,6 @@
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .movie-rating {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: rgba(0, 0, 0, 0.8);
-        padding: 8px 12px;
-        border-radius: 15px;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        color: var(--primary-gold);
-        font-weight: 600;
-    }
-
     .movie-info {
         display: flex;
         flex-direction: column;
@@ -653,7 +620,7 @@
 
     /* Coming Soon Section */
     .coming-soon-section {
-        background: var(--dark-card);
+        background: #1e1e1e;
         border-top: 1px solid rgba(220, 38, 38, 0.2);
         border-bottom: 1px solid rgba(220, 38, 38, 0.2);
     }
@@ -663,64 +630,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-        }
-
-    /* Newsletter Section */
-    .newsletter-section {
-        padding: 60px 0;
-        background: var(--gradient-primary);
-        text-align: center;
-    }
-
-    .newsletter-content h2 {
-        font-size: 2.5rem;
-        font-weight: 800;
-        margin-bottom: 1rem;
-        color: white;
-    }
-
-    .newsletter-content p {
-        font-size: 1.2rem;
-        margin-bottom: 1.5rem;
-        color: rgba(255, 255, 255, 0.9);
-    }
-
-    .newsletter-form {
-        display: flex;
-        max-width: 500px;
-        margin: 0 auto;
-        gap: 1rem;
-    }
-
-    .newsletter-input {
-        flex: 1;
-        padding: 15px 20px;
-        border: none;
-        border-radius: 25px;
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
-        font-size: 1rem;
-        backdrop-filter: blur(10px);
-    }
-
-        .newsletter-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-    .newsletter-btn {
-        padding: 15px 30px;
-        background: white;
-        color: var(--primary-red);
-        border: none;
-        border-radius: 25px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-        .newsletter-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
         }
 
     /* Modal */
@@ -837,16 +746,6 @@
                             <i class="fas fa-ticket-alt"></i> Đặt vé
                         </a>
                     </div>
-                    <div class="hero-rating">
-                        <div class="rating-stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
-                        <span class="rating-text">4.8/5 (2,456 đánh giá)</span>
-                    </div>
                 </div>
             </div>
         }
@@ -925,11 +824,6 @@
                                     }
                                 </div>
                             }
-
-                            <div class="movie-rating">
-                                <i class="fas fa-star"></i>
-                                <span>8.5</span>
-                            </div>
                         </div>
                     </a>
 
@@ -1002,11 +896,6 @@
                                 }
                             </div>
                         }
-
-                        <div class="movie-rating">
-                            <i class="fas fa-calendar"></i>
-                            <span>15/12</span>
-                        </div>
                     </div>
 
                     <div class="movie-info">
@@ -1031,32 +920,20 @@
                         </div>
 
                         <div class="movie-actions">
-                            <a href="@film.TrailerLink" class="btn-movie btn-watch" onclick="openTrailer(event, '@film.TrailerLink')">
+                            <a href="@film.TrailerLink" class="btn-movie btn-trailer" onclick="openTrailer(event, '@film.TrailerLink')">
                                 <i class="fas fa-play"></i> Trailer
                             </a>
-                            <a href="@film.BookingLink" class="btn-movie btn-booking">
-                                <i class="fas fa-bell"></i> Nhận thông báo
+                            <a asp-area="Booking"
+                               asp-controller="Booking"
+                               asp-action="Showtimes"
+                               asp-route-movieId="@film.Id"
+                               class="btn-movie btn-book">
+                                <i class="fas fa-ticket-alt"></i> Đặt vé
                             </a>
                         </div>
                     </div>
                 </div>
             }
-        </div>
-    </div>
-</section>
-
-<!-- Newsletter Section -->
-<section class="newsletter-section">
-    <div class="container">
-        <div class="newsletter-content">
-            <h2>Đăng ký nhận thông tin</h2>
-            <p>Nhận thông báo về phim mới, khuyến mãi đặc biệt và những ưu đãi hấp dẫn</p>
-            <form class="newsletter-form">
-                <input class="newsletter-input" placeholder="Nhập email của bạn">
-                <div class="newsletter-btn">
-                    <i class="fas fa-paper-plane"></i> Đăng ký
-                </div>
-            </form>
         </div>
     </div>
 </section>
