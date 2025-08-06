@@ -112,7 +112,7 @@ namespace MovieManagementWeb_API.Controllers
                 Description = filmDto.Description,
                 ProductionCompany = filmDto.ProductionCompany,
                 Format = filmDto.Format,
-                ReleaseDate = (filmDto.ReleaseDate ?? DateTime.UtcNow).ToUniversalTime(),
+                ReleaseDate = DateTime.SpecifyKind(filmDto.ReleaseDate?.Date ?? DateTime.Today, DateTimeKind.Utc),
                 MovieGenres = new List<MovieGenre>(),
                 ActorMovies = new List<ActorMovie>(),
                 CreatedByUsername = "admin",
@@ -203,7 +203,7 @@ namespace MovieManagementWeb_API.Controllers
             movie.Description = filmDto.Description;
             movie.ProductionCompany = filmDto.ProductionCompany;
             movie.Format = filmDto.Format;
-            movie.ReleaseDate = (filmDto.ReleaseDate ?? movie.ReleaseDate).ToUniversalTime();
+            movie.ReleaseDate = DateTime.SpecifyKind(filmDto.ReleaseDate?.Date ?? DateTime.Today, DateTimeKind.Utc);
             movie.EditedByUsername = filmDto.EditedByUsername;
             movie.Status = filmDto.Status ?? movie.Status;
 
