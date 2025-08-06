@@ -1,6 +1,5 @@
-﻿using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
-using System.Net.Http;
-using System.Net.Http.Json;
+﻿using MovieBookingWebMVC.Areas.Booking.Models.DTOs; 
+using System.Text.Json;
 
 namespace MovieBookingWebMVC.Areas.Booking.Services
 {
@@ -18,7 +17,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
             var client = _httpClientFactory.CreateClient("ApiClient_Booking");
             var movieClient = _httpClientFactory.CreateClient("ApiClient_Movie");
 
-            // ❌ Không truyền movieId
+            // Gọi tất cả lịch chiếu
             var response = await client.GetAsync($"/api/showtime");
             if (!response.IsSuccessStatusCode)
                 return new List<ShowtimeDTOUser>();
@@ -26,21 +25,22 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
             var rawList = await response.Content.ReadFromJsonAsync<List<ShowtimeRawDTO>>();
             if (rawList == null) return new List<ShowtimeDTOUser>();
 
-            // ✅ Lọc theo movieId sau khi đã lấy toàn bộ
+            // Lọc theo movieId
             var filteredRawList = rawList.Where(s => s.MovieId == movieId).ToList();
 
-            // Lấy thông tin tiêu đề phim
-            string? movieTitle = null;
-            var movieRes = await movieClient.GetAsync($"/api/movie/{movieId}");
+            // Gọi API lấy thông tin phim
+            MovieDTO? movie = null;
+            var movieRes = await movieClient.GetAsync($"/api/Movies/{movieId}");
             if (movieRes.IsSuccessStatusCode)
             {
-                var movie = await movieRes.Content.ReadFromJsonAsync<MovieDTO>();
-                movieTitle = movie?.Title;
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                movie = await movieRes.Content.ReadFromJsonAsync<MovieDTO>(options);
             }
 
-            return await MapShowtimesWithAvailableSeats(client, filteredRawList, movieTitle);
+            return await MapShowtimesWithAvailableSeats(client, filteredRawList, movie);
         }
-        private async Task<List<ShowtimeDTOUser>> MapShowtimesWithAvailableSeats(HttpClient client, List<ShowtimeRawDTO> rawList, string movieTitle = "")
+
+        private async Task<List<ShowtimeDTOUser>> MapShowtimesWithAvailableSeats(HttpClient client, List<ShowtimeRawDTO> rawList, MovieDTO? movie)
         {
             var result = new List<ShowtimeDTOUser>();
 
@@ -53,9 +53,16 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
                     ShowDate = DateOnly.Parse(raw.ShowDate),
                     FromTime = TimeSpan.Parse(raw.FromTime),
                     ToTime = TimeSpan.Parse(raw.ToTime),
-                    MovieTitle = movieTitle
+                    MovieTitle = movie?.Title ?? string.Empty,
+                    MoviePoster = movie?.Image ?? string.Empty,
+                    Subtitle = movie?.Subtitle ?? string.Empty,
+                    Director = movie?.Director ?? string.Empty,
+                    Duration = movie?.Duration,
+                    Genres = movie?.Genres ?? new List<string>(),
+                    Format = movie?.Format ?? new List<string>()
                 };
 
+                // Lấy thông tin ghế
                 var seatRes = await client.GetAsync($"/api/SeatShowtime/seats/showtime?showtimeId={raw.Id}");
                 if (seatRes.IsSuccessStatusCode)
                 {
@@ -71,6 +78,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
 
             return result;
         }
+
         public async Task<List<ShowtimeDTOUser>> GetAllShowtimesAsync()
         {
             var client = _httpClientFactory.CreateClient("ApiClient_Booking");
@@ -82,9 +90,10 @@ namespace MovieBookingWebMVC.Areas.Booking.Services
             var rawList = await response.Content.ReadFromJsonAsync<List<ShowtimeRawDTO>>();
             if (rawList == null) return new List<ShowtimeDTOUser>();
 
-            // Gán tên phim trống vì gọi tất cả lịch chiếu nhiều phim
-            return await MapShowtimesWithAvailableSeats(client, rawList, "");
+            return await MapShowtimesWithAvailableSeats(client, rawList, null);
         }
+
+        // Raw DTO từ API /api/showtime
         private class ShowtimeRawDTO
         {
             public int Id { get; set; }

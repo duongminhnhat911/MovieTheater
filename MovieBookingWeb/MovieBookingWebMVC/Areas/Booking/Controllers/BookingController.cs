@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
+using MovieBookingWebMVC.Areas.Booking.Models.ViewModel;
+using MovieBookingWebMVC.Areas.Booking.Models.ViewModels;
 using MovieBookingWebMVC.Areas.Booking.Services;
 using MovieBookingWebMVC.Areas.Movie.Services;
-using MovieBookingWebMVC.Areas.Booking.Models.DTOs;
-using MovieBookingWebMVC.Areas.Booking.Models.ViewModels;
 using Newtonsoft.Json;
 using System.Security.Claims;
-using MovieBookingWebMVC.Areas.Booking.Models.ViewModel;
+using System.Text.Json;
 
 namespace MovieBookingWebMVC.Areas.Booking.Controllers
 {
@@ -37,9 +38,30 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
 
         public async Task<IActionResult> Showtimes(int movieId)
         {
+            // Lấy thông tin phim
+            var movieClient = _httpClientFactory.CreateClient("ApiClient_Movie");
+            var movieRes = await movieClient.GetAsync($"/api/Movies/{movieId}");
+
+            MovieDTO movie = new();
+
+            if (movieRes.IsSuccessStatusCode)
+            {
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                movie = await movieRes.Content.ReadFromJsonAsync<MovieDTO>(options) ?? new();
+            }
+
+            // Lấy danh sách suất chiếu
             var showtimes = await _showtimeService.GetShowtimesByMovieIdAsync(movieId);
-            return View(showtimes);
+
+            var viewModel = new ShowtimePageViewModel
+            {
+                Movie = movie,
+                Showtimes = showtimes
+            };
+
+            return View(viewModel);
         }
+
 
         public async Task<IActionResult> MoviesByDate(DateTime? date)
         {

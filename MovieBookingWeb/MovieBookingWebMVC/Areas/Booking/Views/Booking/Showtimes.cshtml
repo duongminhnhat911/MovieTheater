@@ -1,29 +1,32 @@
-@model List<MovieBookingWebMVC.Areas.Booking.Models.DTOs.ShowtimeDTOUser>
+@model MovieBookingWebMVC.Areas.Booking.Models.ViewModel.ShowtimePageViewModel
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = $"Lịch chiếu";
+    ViewData["Title"] = "Lịch chiếu";
+
     var today = DateOnly.FromDateTime(DateTime.Today);
-    var availableDates = Model.Select(s => s.ShowDate).Distinct().OrderBy(d => d).ToList();
+    var availableDates = Model.Showtimes.Select(s => s.ShowDate).Distinct().OrderBy(d => d).ToList();
+
     var selectedDate = availableDates.Contains(today) ? today : (availableDates.FirstOrDefault() != default ? availableDates.FirstOrDefault() : today);
+
     var selectedDateStr = Context.Request.Query["date"];
     if (!string.IsNullOrEmpty(selectedDateStr) &&
         DateOnly.TryParseExact(selectedDateStr, "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out var parsedDate))
     {
         selectedDate = parsedDate;
     }
+
     var movieId = Context.Request.Query["movieId"].ToString();
-    var schedules = Model.Where(s => s.ShowDate == selectedDate).OrderBy(s => s.FromTime).ToList();
-    var selectedMovie = new MovieBookingWebMVC.Areas.Booking.Models.DTOs.MovieWithShowtimeDTO
-    {
-        MovieId = 1,
-        Title = "Lật Mặt 7: Một Điều Ước",
-        Subtitle = "Bản điện ảnh 2025",
-        Image = "/images/movies/latmat7.jpg",
-        Duration = 120,
-        Genres = new List<string> { "Hành động", "Tâm lý", "Hài" },
-        Format = new List<string> { "2D", "IMAX" },
-        Director = "Lý Hải",
-    };
+    var schedules = Model.Showtimes.Where(s => s.ShowDate == selectedDate).OrderBy(s => s.FromTime).ToList();
+
+    var movie = Model.Movie;
+    var title = movie?.Title ?? "Không rõ";
+    var subtitle = movie?.Subtitle ?? "";
+    var image = movie?.Image ?? "";
+    var director = movie?.Director ?? "";
+    var duration = movie?.Duration ?? 0;
+    var genres = movie?.Genres ?? new List<string>();
+    var formats = movie?.Format ?? new List<string>();
 }
 
 <style>
@@ -383,41 +386,43 @@
         <div class="showtime-header">
             <h2 class="showtime-title">@ViewData["Title"]</h2>
         </div>
+
         <div class="movie-card">
             <div class="movie-header">
-                <img src="@selectedMovie.Image" class="movie-poster" />
+                <img src="@image" class="movie-poster" />
                 <div class="movie-info">
-                    <h3 class="movie-title">@selectedMovie.Title</h3>
-                    <p class="movie-subtitle">@selectedMovie.Subtitle</p>
+                    <h3 class="movie-title">@title</h3>
+                    <p class="movie-subtitle">@subtitle</p>
                     <div class="movie-details">
                         <div class="movie-detail-item">
                             <span class="movie-detail-icon">🎬</span>
                             <span class="movie-detail-text">
-                                <span class="movie-detail-label">Đạo diễn:</span> @selectedMovie.Director
+                                <span class="movie-detail-label">Đạo diễn:</span> @director
                             </span>
                         </div>
                         <div class="movie-detail-item">
                             <span class="movie-detail-icon">🎭</span>
                             <span class="movie-detail-text">
-                                <span class="movie-detail-label">Thể loại:</span> @string.Join(", ", selectedMovie.Genres)
+                                <span class="movie-detail-label">Thể loại:</span> @string.Join(", ", genres)
                             </span>
                         </div>
                         <div class="movie-detail-item">
                             <span class="movie-detail-icon">📺</span>
                             <span class="movie-detail-text">
-                                <span class="movie-detail-label">Định dạng:</span> @string.Join(", ", selectedMovie.Format)
+                                <span class="movie-detail-label">Định dạng:</span> @string.Join(", ", formats)
                             </span>
                         </div>
                         <div class="movie-detail-item">
                             <span class="movie-detail-icon">⏱️</span>
                             <span class="movie-detail-text">
-                                <span class="movie-detail-label">Thời lượng:</span> @selectedMovie.Duration phút
+                                <span class="movie-detail-label">Thời lượng:</span> @duration phút
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="date-buttons">
             @foreach (var date in availableDates)
             {
@@ -436,7 +441,7 @@
                     {
                         <div class="schedule-item">
                             <div class="schedule-time">
-                                @s.FromTime.ToString(@"hh\:mm")
+                                @s.FromTime.ToString(@"hh\:mm") - @s.ToTime.ToString(@"hh\:mm")
                             </div>
                             <div class="schedule-info">
                                 Còn trống: @s.AvailableSeats ghế

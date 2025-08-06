@@ -18,5 +18,7 @@
         public List<string> Genres { get; set; } = new();
 
         public string RoomName { get; set; } = string.Empty;
+        public string Director { get; set; } = string.Empty;
+        public string Subtitle { get; set; } = string.Empty;
     }
 }
