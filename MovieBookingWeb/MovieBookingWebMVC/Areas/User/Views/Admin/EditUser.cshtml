@@ -1,7 +1,7 @@
-﻿@model MovieBookingWebMVC.Areas.User.Models.ViewModel.UpdateProfileViewModel
+﻿@model MovieBookingWebMVC.Areas.User.Models.DTOs.EditUserDto
+
 @{
-    ViewData["Title"] = "Thông tin tài khoản";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Chỉnh sửa thông tin người dùng";
 }
 
 <style>
@@ -457,7 +457,6 @@
         }
     }
 
-    /* Loading animation for button */
     .btn-update.loading {
         pointer-events: none;
         opacity: 0.8;
@@ -493,25 +492,8 @@
         <div class="header-section">
             <h1 class="profile-title">
                 <i class="fas fa-user-edit me-2"></i>
-                Thông tin tài khoản
+                Sửa thông tin tài khoản
             </h1>
-
-            <div class="avatar-section">
-                <div class="d-flex align-items-center justify-content-center flex-column flex-md-row">
-                    <img id="avatarPreview"
-                         src="/images/default-avatar.jpg"
-                         alt="Avatar"
-                         class="rounded-circle me-md-3 avatar-preview">
-
-                    <div class="avatar-info text-center text-md-start mt-3 mt-md-0">
-                        <h5>@Model.Username</h5>
-                        <p>@Model.FullName</p>
-                        <button type="button" class="btn btn-change-avatar">
-                            <i class="fa-solid fa-camera me-1"></i> Thay ảnh đại diện
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="content-section">
@@ -536,48 +518,37 @@
             <form method="post" enctype="multipart/form-data" novalidate id="profileForm">
                 <input type="hidden" asp-for="Id" />
 
+                <!-- Thông tin cá nhân -->
                 <div class="form-section">
                     <h3 class="section-title">Thông tin cá nhân</h3>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label">
-                                <i class="fas fa-id-card"></i>
-                                Họ và tên
-                            </label>
+                            <label class="form-label"><i class="fas fa-id-card"></i> Họ và tên</label>
                             <input asp-for="FullName" class="form-control" placeholder="Nhập họ và tên" />
                             <span asp-validation-for="FullName" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">
-                                <i class="fas fa-user"></i>
-                                Tên tài khoản
-                            </label>
+                            <label class="form-label"><i class="fas fa-user"></i> Tên tài khoản</label>
                             <input asp-for="Username" class="form-control" placeholder="Nhập tên tài khoản" />
                             <span asp-validation-for="Username" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">
-                                <i class="fas fa-calendar-alt"></i>
-                                Ngày sinh
-                            </label>
+                            <label class="form-label"><i class="fas fa-calendar-alt"></i> Ngày sinh</label>
                             <input asp-for="BirthDate" type="date" class="form-control" />
                             <span asp-validation-for="BirthDate" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">
-                                <i class="fas fa-venus-mars"></i>
-                                Giới tính
-                            </label>
-                            <div class="gender-section d-flex gap-3">
-                                <label class="box-radio flex-fill text-center">
+                            <label class="form-label"><i class="fas fa-venus-mars"></i> Giới tính</label>
+                            <div class="gender-section">
+                                <label class="box-radio">
                                     <input asp-for="Gender" type="radio" value="Nam" />
                                     <span>Nam</span>
                                 </label>
-                                <label class="box-radio flex-fill text-center">
+                                <label class="box-radio">
                                     <input asp-for="Gender" type="radio" value="Nữ" />
                                     <span>Nữ</span>
                                 </label>
-                                <label class="box-radio flex-fill text-center">
+                                <label class="box-radio">
                                     <input asp-for="Gender" type="radio" value="Khác" />
                                     <span>Khác</span>
                                 </label>
@@ -587,48 +558,59 @@
                     </div>
                 </div>
 
+                <!-- Thông tin liên hệ -->
                 <div class="form-section">
                     <h3 class="section-title">Thông tin liên hệ</h3>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label">
-                                <i class="fas fa-envelope"></i>
-                                Email
-                            </label>
+                            <label class="form-label"><i class="fas fa-envelope"></i> Email</label>
                             <input asp-for="Email" type="email" class="form-control" placeholder="Nhập email" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">
-                                <i class="fas fa-phone"></i>
-                                Số điện thoại
-                            </label>
+                            <label class="form-label"><i class="fas fa-phone"></i> Số điện thoại</label>
                             <input asp-for="PhoneNumber" class="form-control" placeholder="Nhập số điện thoại" />
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">
-                                <i class="fas fa-id-card-alt"></i>
-                                Số CCCD
-                            </label>
+                            <label class="form-label"><i class="fas fa-id-card-alt"></i> Số CCCD</label>
                             <input asp-for="IdCard" class="form-control" placeholder="Nhập số căn cước" />
                             <span asp-validation-for="IdCard" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">
-                                <i class="fas fa-map-marker-alt"></i>
-                                Địa chỉ
-                            </label>
+                            <label class="form-label"><i class="fas fa-map-marker-alt"></i> Địa chỉ</label>
                             <input asp-for="Address" class="form-control" placeholder="Nhập địa chỉ" />
                             <span asp-validation-for="Address" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
 
-                <div class="d-grid" style="margin-top: 0.5rem;">
+                <div class="form-section">
+                    <h3 class="section-title">Vai trò</h3>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="box-radio w-100">
+                                        <input asp-for="Role" type="radio" value="Admin" />
+                                        <span>Admin</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="box-radio w-100">
+                                        <input asp-for="Role" type="radio" value="User" />
+                                        <span>User</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <span asp-validation-for="Role" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid">
                     <button type="submit" class="btn btn-update" id="updateBtn">
-                        <i class="fas fa-save me-1"></i>
-                        Cập nhật thông tin
+                        <i class="fas fa-save me-1"></i> Cập nhật thông tin
                     </button>
                 </div>
             </form>
@@ -671,24 +653,6 @@
                     }
                 });
             });
-        });
-
-        // Avatar preview functionality
-        document.querySelector('.btn-change-avatar').addEventListener('click', function() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.onchange = function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        document.getElementById('avatarPreview').src = e.target.result;
-                    }
-                    reader.readAsDataURL(file);
-                }
-            }
-            input.click();
         });
 
         document.addEventListener("DOMContentLoaded", function () {

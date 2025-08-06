@@ -40,12 +40,6 @@
         --shadow-medium: rgba(0, 0, 0, 0.15);
     }
 
-    body {
-        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        min-height: 100vh;
-    }
-
     .main-container {
         background: var(--white);
         border-radius: 20px;
@@ -76,16 +70,13 @@
         }
 
     @@keyframes rotate {
-        0%
+        0% {
+            transform: rotate(0deg);
+        }
 
-    {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-
+        100% {
+            transform: rotate(360deg);
+        }
     }
 
     .header-title {
@@ -190,28 +181,26 @@
     }
 
     .error-alert {
-        background: rgba(248, 113, 113, 0.1);
-        border: 1px solid rgba(248, 113, 113, 0.3);
-        color: #dc2626;
-        border-radius: 12px;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        font-size: 0.9rem;
+        background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 15px;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        animation: slideInDown 0.5s ease-out;
     }
 
     @@keyframes slideInDown {
-        from
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
 
-    {
-        transform: translateY(-20px);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
 
     .form-section {
@@ -411,21 +400,18 @@
         }
 
     @@media (max-width: 768px) {
-        .main-container
+        .main-container {
+            margin: 1rem;
+            border-radius: 15px;
+        }
 
-    {
-        margin: 1rem;
-        border-radius: 15px;
-    }
+        .header-title {
+            font-size: 2rem;
+        }
 
-    .header-title {
-        font-size: 2rem;
-    }
-
-    .content-section {
-        padding: 1rem;
-    }
-
+        .content-section {
+            padding: 1rem;
+        }
     }
 </style>
 
@@ -441,14 +427,15 @@
         @if (@TempData["Success"] != null)
         {
             <div id="alertSuccess" class="success-alert text-center mb-4">
-                <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+                <i class="fas fa-check-circle me-1"></i>
+                @TempData["Success"]
             </div>
         }
 
         @if (!ViewData.ModelState.IsValid)
         {
-        <div id="alertDanger" class="error-alert text-center">
-            <i class="fas fa-exclamation-triangle me-2"></i>
+        <div id="alertDanger" class="error-alert text-center mb-4">
+            <i class="fas fa-exclamation-triangle me-1"></i>
             @Html.Raw(string.Join("<br/>", ViewData.ModelState.Values
                         .SelectMany(v => v.Errors)
                         .Select(e => e.ErrorMessage)))

@@ -64,8 +64,20 @@ namespace BookingManagement.Controllers
 
             return BadRequest("Không có quyền mở khóa hoặc trạng thái không hợp lệ.");
         }
-    }
+        [HttpGet("held-until")]
+        public async Task<IActionResult> GetHeldUntil([FromQuery] int showtimeId, [FromQuery] int seatId)
+        {
+            var seat = await _service.GetAsync(showtimeId, seatId);
+            if (seat == null || seat.Status != SeatStatus.Held)
+                return NotFound("Ghế không được giữ.");
 
+            return Ok(new
+            {
+                HeldUntil = seat.HeldUntil,
+                HeldByUserId = seat.HeldByUserId
+            });
+        }
+    }
     public class LockSeatShowtimeRequest
     {
         public int ShowtimeId { get; set; }

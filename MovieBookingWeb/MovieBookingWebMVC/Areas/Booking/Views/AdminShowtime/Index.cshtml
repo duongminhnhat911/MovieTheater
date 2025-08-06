@@ -63,7 +63,7 @@
     }
 
     .content-section {
-        padding: 2.5rem;
+        padding: 2rem;
         background: #CCFFE4;
         background-image: radial-gradient(circle at 20% 20%, rgba(159, 203, 192, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(245, 245, 245, 0.2) 0%, transparent 50%);
     }
@@ -130,7 +130,6 @@
         border-radius: 20px;
         padding: 2rem;
         box-shadow: var(--card-shadow);
-        margin-bottom: 2rem;
         overflow: hidden;
     }
 
@@ -143,6 +142,8 @@
         font-weight: 600;
         box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
         animation: slideInDown 0.5s ease-out;
+        margin-bottom: 20px;
+        text-align: center;
     }
 
     @@keyframes slideInDown {
@@ -172,7 +173,7 @@
         background: var(--primary-gradient) !important;
         border: none !important;
         border-radius: 10px !important;
-        padding: 0.5rem 1rem !important;
+        padding: 0.4rem 0.8rem !important;
         font-weight: 600 !important;
         transition: var(--transition) !important;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
@@ -217,15 +218,10 @@
         vertical-align: top;
     }
 
-        .fc-daygrid-day:hover {
-            background: #f9f9f9 !important;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
-        }
-
     .fc-day-today {
         background: linear-gradient(135deg, #e0e0e0 0%, #cfcfcf 100%);
-        border: 2px solid #999999 !important;
         transition: background 0.3s ease, border 0.3s ease;
+        border-radius: none;
     }
 
     .fc-daygrid-day-number {
@@ -466,7 +462,6 @@
     /* List View Container */
     .fc-list {
         border: none !important;
-        border-radius: 20px !important;
         overflow: hidden !important;
         box-shadow: var(--card-shadow) !important;
         background: white !important;
@@ -478,7 +473,7 @@
 
     /* Day Header Row */
     .fc-list-day-cushion {
-        background: var(--light-gradient) !important;
+        background: linear-gradient(135deg, #000000 0%, #434343 100%) !important;
         color: #333 !important;
         font-weight: 700 !important;
         font-size: 1.1rem !important;
@@ -494,6 +489,7 @@
     }
 
     .fc-list-day-text, .fc-list-day-side-text {
+        color: white !important;
         text-decoration: none !important;
     }
 
@@ -514,12 +510,6 @@
         border-bottom: 1px solid #f0f0f0 !important;
         padding: 0.5rem 1rem !important;
     }
-
-        .fc-list-event:hover {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%) !important;
-            transform: translateX(5px) !important;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
-        }
 
         .fc-list-event:last-child {
             border-bottom: none !important;
@@ -545,7 +535,7 @@
             top: 0;
             bottom: 0;
             width: 4px;
-            background: linear-gradient(135deg, #f9d423 0%, #ff4e50 100%);
+            background: linear-gradient(135deg, #dcdcdc 0%, #a9a9a9 100%);
             transition: all 0.3s ease;
         }
 
@@ -601,8 +591,13 @@
         padding: 3rem 2rem !important;
         color: #666 !important;
         font-size: 1.1rem !important;
-        background: white !important;
+        background: rgba(255, 255, 255, 0.8) !important;
         border-radius: 20px !important;
+        line-height: 1.6;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
 
         .fc-list-empty::before {
@@ -612,9 +607,12 @@
             font-size: 3rem;
             color: #ddd;
             display: block;
-            margin-bottom: 1rem;
-            margin-right: 10px;
+            line-height: 1;
         }
+
+    .fc-list-empty-cushion {
+        margin: 15px !important;
+    }
 
     /* List View Responsive */
     @@media (max-width: 768px) {
@@ -648,7 +646,7 @@
 
     .fc-list-event:hover .fc-list-event-time {
         background: rgba(102, 126, 234, 0.1) !important;
-        color: #333 !important;
+        color: white !important;
     }
 
     .fc-list-event:hover .fc-list-event-title a::before {
@@ -691,7 +689,7 @@
 <div class="main-container">
     <div class="header-section">
         <h1 class="header-title">
-            <i class="fas fa-calendar-alt me-2"></i> Quản lý suất chiếu
+            <i class="fas fa-clock me-2"></i> Danh sách suất chiếu
         </h1>
     </div>
 
@@ -715,7 +713,8 @@
 
         @if (TempData["Success"] != null)
         {
-            <div class="success-alert" id="alertSuccess">
+            <div class="alert success-alert text-center mb-4" id="alertSuccess">
+                <i class="fas fa-check-circle me-1"></i>
                 @TempData["Success"]
             </div>
         }
@@ -734,7 +733,7 @@
         {
             <div class="empty-state">
                 <i class="fas fa-calendar-times"></i>
-                <h3>Chưa có suất chiếu nào</h3>
+                <h4>Chưa có suất chiếu nào</h4>
                 <p>Hãy thêm suất chiếu đầu tiên để bắt đầu quản lý lịch chiếu phim.</p>
             </div>
         }
@@ -752,18 +751,18 @@
         // Convert server data to FullCalendar events
         const events = @Html.Raw(Json.Serialize(Model.Select(x => new
         {
-                id = x.Id,
-                title = x.MovieName,
-                start = x.ShowDate.ToString("yyyy-MM-dd") + "T" + x.FromTime.ToString("HH:mm:ss"),
-                end = x.ShowDate.ToString("yyyy-MM-dd") + "T" + x.ToTime.ToString("HH:mm:ss"),
-                room = x.Room,
-                movieName = x.MovieName,
-                showDate = x.ShowDate.ToString("dd/MM/yyyy"),
-                fromTime = x.FromTime.ToString("HH:mm"),
-                toTime = x.ToTime.ToString("HH:mm"),
-                backgroundColor = GetEventColor(x.MovieName.GetHashCode()),
-                borderColor = GetEventColor(x.MovieName.GetHashCode()),
-                classNames = new[] { "movie-event-" + ((Math.Abs(x.MovieName.GetHashCode()) % 5) + 1) }
+                    id = x.Id,
+                    title = x.MovieName,
+                    start = x.ShowDate.ToString("yyyy-MM-dd") + "T" + x.FromTime.ToString("HH:mm:ss"),
+                    end = x.ShowDate.ToString("yyyy-MM-dd") + "T" + x.ToTime.ToString("HH:mm:ss"),
+                    room = x.Room,
+                    movieName = x.MovieName,
+                    showDate = x.ShowDate.ToString("dd/MM/yyyy"),
+                    fromTime = x.FromTime.ToString("HH:mm"),
+                    toTime = x.ToTime.ToString("HH:mm"),
+                    backgroundColor = GetEventColor(x.MovieName.GetHashCode()),
+                    borderColor = GetEventColor(x.MovieName.GetHashCode()),
+                    classNames = new[] { "movie-event-" + ((Math.Abs(x.MovieName.GetHashCode()) % 5) + 1) }
         })));
 
         // Initialize FullCalendar
@@ -788,6 +787,11 @@
                 week: 'Tuần',
                 day: 'Ngày',
                 list: 'Danh sách'
+            },
+            noEventsContent: function() {
+                const p = document.createElement('p');
+                p.textContent = 'Không có suất chiếu';
+                return { domNodes: [p] };
             },
             dayHeaderFormat: { weekday: 'long' },
             eventClick: function(info) {
@@ -841,7 +845,7 @@
                     <i class="fas fa-door-open"></i>
                     <span><strong>Phòng chiếu:</strong> ${event.extendedProps.room}</span>
                 </div>
-    @*
+            @*
             <div class="action-buttons">
                 <a href="/Booking/AdminShowtime/Edit/${event.id}" class="btn-action btn-edit">
                     <i class="fas fa-edit"></i>
@@ -858,15 +862,16 @@
             eventDetailsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // Hide success alert after 5 seconds
+        // Hide success alert after 3 seconds
         const successAlert = document.getElementById('alertSuccess');
         if (successAlert) {
             setTimeout(() => {
-                successAlert.style.animation = 'slideOutUp 0.5s ease-out';
+                successAlert.style.transition = 'opacity 0.5s ease';
+                successAlert.style.opacity = "0";
                 setTimeout(() => {
                     successAlert.remove();
                 }, 500);
-            }, 5000);
+            }, 3000);
         }
 
         // Add slideOutUp animation

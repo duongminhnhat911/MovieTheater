@@ -79,7 +79,7 @@ namespace UserManagement.Repositories
                     FullName = u.FullName!,
                     Email = u.Email!,
                     Role = u.Role,
-                    IsLocked = u.IsLocked
+                    IsLocked = u.IsLocked,
                 })
                 .ToListAsync();
         }
@@ -93,9 +93,13 @@ namespace UserManagement.Repositories
                     Id = u.Id,
                     Username = u.Username!,
                     FullName = u.FullName!,
+                    BirthDate = u.BirthDate,
                     Email = u.Email!,
                     Role = u.Role,
-                    IsLocked = u.IsLocked
+                    Gender = u.Gender!,
+                    PhoneNumber = u.PhoneNumber!,
+                    IdCard = u.IdCard!,
+                    Address = u.Address!,
                 })
                 .FirstOrDefaultAsync();
         }
@@ -123,15 +127,13 @@ namespace UserManagement.Repositories
         public async Task<bool> ToggleUserLockAsync(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null) return false;
-
-            if (user.Role == "Admin")
-                return false;
+            if (user == null || user.Role == "Admin") return false;
 
             user.IsLocked = !user.IsLocked;
             await _context.SaveChangesAsync();
             return true;
         }
+
         public async Task<bool> UpdatePasswordAsync(User user, string newPassword)
         {
             user.Password = newPassword;

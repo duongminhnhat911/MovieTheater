@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Reflection;
 using MovieBookingWebMVC.Areas.Movie.Services;
 using MovieBookingWebMVC.Areas.User.Models.DTOs;
 
@@ -11,7 +11,6 @@ namespace MovieBookingWebMVC.Areas.User.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-
         private readonly IWebHostEnvironment _environment;
         private readonly IRoomService _roomService;
         private readonly IHttpClientFactory _httpClientFactory;
@@ -48,77 +47,164 @@ namespace MovieBookingWebMVC.Areas.User.Controllers
         }
 
         [HttpGet]
-            public async Task<IActionResult> ViewAccounts(int page = 1)
+        public async Task<IActionResult> ViewAccounts(int page = 1)
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient_User");
+            var cookie = _contextAccessor.HttpContext?.Request.Headers["Cookie"].ToString();
+            if (!string.IsNullOrEmpty(cookie))
+                client.DefaultRequestHeaders.Add("Cookie", cookie);
+
+            var response = await client.GetAsync("api/user");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("StatusCode: " + response.StatusCode);
+                TempData["Error"] = "Lỗi khi tải danh sách người dùng.";
+                return RedirectToAction("ViewMovie");
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var users = JsonConvert.DeserializeObject<List<GetListUserDto>>(json);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = 1;
+            return View(users);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> EditUser(int id)
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient_User");
+            var cookie = _contextAccessor.HttpContext?.Request.Headers["Cookie"].ToString();
+            if (!string.IsNullOrEmpty(cookie))
+                client.DefaultRequestHeaders.Add("Cookie", cookie);
+            var response = await client.GetAsync($"api/user/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["Error"] = "Không tìm thấy người dùng.";
+                return RedirectToAction("ViewAccounts");
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            // DEBUG: In ra JSON thô để xem API trả về gì
+            Console.WriteLine("=== RAW JSON FROM API ===");
+            Console.WriteLine(json);
+            Console.WriteLine("========================");
+
+            // Thử deserialize và xem kết quả
+            try
+            {
+                var user = JsonConvert.DeserializeObject<AdminUpdateUserDto>(json);
+                Console.WriteLine("=== DESERIALIZED DATA ===");
+                Console.WriteLine($"BirthDate: '{user?.BirthDate}' (is null: {user?.BirthDate == null})");
+                Console.WriteLine($"Gender: '{user?.Gender}' (is null/empty: {string.IsNullOrEmpty(user?.Gender)})");
+                Console.WriteLine($"IdCard: '{user?.IdCard}' (is null/empty: {string.IsNullOrEmpty(user?.IdCard)})");
+                Console.WriteLine($"PhoneNumber: '{user?.PhoneNumber}' (is null/empty: {string.IsNullOrEmpty(user?.PhoneNumber)})");
+                Console.WriteLine($"Address: '{user?.Address}' (is null/empty: {string.IsNullOrEmpty(user?.Address)})");
+                Console.WriteLine("=========================");
+
+                var editModel = new EditUserDto
+                {
+                    Id = user.Id,
+                    Username = user.Username ?? string.Empty,
+                    FullName = user.FullName ?? string.Empty,
+                    BirthDate = user.BirthDate,
+                    Gender = user.Gender ?? string.Empty,
+                    IdCard = user.IdCard ?? string.Empty,
+                    PhoneNumber = user.PhoneNumber ?? string.Empty,
+                    Address = user.Address ?? string.Empty,
+                    Email = user.Email ?? string.Empty,
+                    Role = user.Role ?? string.Empty
+                };
+                return View(editModel);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DESERIALIZATION ERROR: {ex.Message}");
+                TempData["Error"] = "Lỗi khi xử lý dữ liệu người dùng.";
+                return RedirectToAction("ViewAccounts");
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUser(EditUserDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
             {
                 var client = _httpClientFactory.CreateClient("ApiClient_User");
                 var cookie = _contextAccessor.HttpContext?.Request.Headers["Cookie"].ToString();
                 if (!string.IsNullOrEmpty(cookie))
                     client.DefaultRequestHeaders.Add("Cookie", cookie);
 
-                var response = await client.GetAsync("api/user");
-
-                if (!response.IsSuccessStatusCode)
+                // Convert EditUserDto sang AdminUpdateUserDto nếu API yêu cầu
+                var updateDto = new AdminUpdateUserDto
                 {
-                    Console.WriteLine("StatusCode: " + response.StatusCode);
-                    TempData["Error"] = "Lỗi khi tải danh sách người dùng.";
-                    return RedirectToAction("ViewMovie");
-                }
+                    Id = model.Id,
+                    Username = model.Username,
+                    FullName = model.FullName,
+                    BirthDate = model.BirthDate,
+                    Gender = model.Gender,
+                    IdCard = model.IdCard,
+                    PhoneNumber = model.PhoneNumber,
+                    Address = model.Address,
+                    Email = model.Email,
+                    Role = model.Role
+                };
 
-                var json = await response.Content.ReadAsStringAsync();
-                var users = JsonConvert.DeserializeObject<List<GetListUserDto>>(json);
+                var response = await client.PutAsJsonAsync($"api/user/{model.Id}", updateDto);
 
-                ViewBag.CurrentPage = page;
-                ViewBag.TotalPages = 1;
-                return View(users);
-            }
-
-            [Authorize(Roles = "Admin")]
-            [HttpGet]
-            public async Task<IActionResult> EditAccount(int id)
-            {
-                var client = _httpClientFactory.CreateClient("ApiClient_User");
-                var response = await client.GetAsync($"api/user/{id}");
-
-                if (!response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
-                    TempData["Error"] = "Không tìm thấy người dùng.";
-                    return RedirectToAction("ViewAccounts");
+                    TempData["Success"] = "Cập nhật thông tin người dùng thành công!";
+                    return RedirectToAction("EditUser", new { id = model.Id });
                 }
-
-                var json = await response.Content.ReadAsStringAsync();
-                var user = JsonConvert.DeserializeObject<AdminUpdateUserDto>(json);
-                return View(user);
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError("", $"Cập nhật thất bại: {errorContent}");
+                    return View(model);
+                }
             }
-
-            [Authorize(Roles = "Admin")]
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public async Task<IActionResult> EditAccount(AdminUpdateUserDto dto)
+            catch (Exception ex)
             {
-                if (!ModelState.IsValid) return View(dto);
-
-                var client = _httpClientFactory.CreateClient("ApiClient_User");
-                var response = await client.PutAsJsonAsync($"api/user/{dto.Id}", dto);
-
-                TempData["Success"] = response.IsSuccessStatusCode
-                    ? "Cập nhật người dùng thành công!"
-                    : "Cập nhật thất bại.";
-                return RedirectToAction("ViewAccounts");
+                ModelState.AddModelError("", "Có lỗi xảy ra: " + ex.Message);
+                return View(model);
             }
+        }
 
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public async Task<IActionResult> DeleteAccount(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAccount(int id)
+        {
+            try
             {
                 var client = _httpClientFactory.CreateClient("ApiClient_User");
+                var cookie = _contextAccessor.HttpContext?.Request.Headers["Cookie"].ToString();
+                if (!string.IsNullOrEmpty(cookie))
+                    client.DefaultRequestHeaders.Add("Cookie", cookie);
 
                 var response = await client.DeleteAsync($"api/user/{id}");
 
                 TempData["Success"] = response.IsSuccessStatusCode
-                    ? "Đã thay đổi trạng thái khoá tài khoản."
-                    : "Không thể thay đổi trạng thái khoá tài khoản.";
-
-                return RedirectToAction("ViewAccounts");
+                    ? "Đã thay đổi trạng thái khóa tài khoản."
+                    : "Không thể thay đổi trạng thái khóa tài khoản.";
             }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Có lỗi xảy ra: " + ex.Message;
+            }
+
+            return RedirectToAction("ViewAccounts");
         }
     }
+}

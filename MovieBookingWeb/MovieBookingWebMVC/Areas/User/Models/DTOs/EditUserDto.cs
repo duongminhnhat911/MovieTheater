@@ -1,6 +1,6 @@
-﻿namespace UserManagement.Models.DTOs
+﻿namespace MovieBookingWebMVC.Areas.User.Models.DTOs
 {
-    public class GetListUserDto
+    public class EditUserDto
     {
         public int Id { get; set; }
         public string Username { get; set; } = string.Empty;
@@ -12,6 +12,5 @@
         public string PhoneNumber { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
-        public bool IsLocked { get; set; } = false;
     }
 }

@@ -1,9 +1,6 @@
 ﻿using BookingManagement.Models.DTOs;
-using BookingManagement.Models.Entities;
 using BookingManagement.Service;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookingManagement.Controllers
 {
@@ -22,8 +19,15 @@ namespace BookingManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOrderDetail([FromBody] CreateOrderDetailDto dto)
         {
-            var detail = await _service.CreateAsync(dto);
-            return Ok(new { detail.Id });
+            try
+            {
+                var detail = await _service.CreateAsync(dto);
+                return Ok(new { detail.Id });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -56,13 +60,12 @@ namespace BookingManagement.Controllers
             if (!success) return NotFound();
             return Ok("Đã xóa chi tiết đơn hàng.");
         }
+
         [HttpGet("full/{orderId}")]
         public async Task<IActionResult> GetFullOrderDetail(int orderId)
         {
             var result = await _service.GetFullOrderDetailAsync(orderId);
-            if (result == null)
-                return NotFound("Không tìm thấy đơn hàng.");
-
+            if (result == null) return NotFound("Không tìm thấy đơn hàng.");
             return Ok(result);
         }
     }

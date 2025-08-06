@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using BookingManagement.Models.Entities;
 using BookingManagement.Service;
 
@@ -21,7 +19,9 @@ namespace BookingManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTransaction([FromBody] Transaction dto)
         {
+            if (dto == null) return BadRequest("Thông tin giao dịch không hợp lệ.");
             var result = await _service.CreateTransactionAsync(dto);
+            if (result == null) return BadRequest("Tạo giao dịch thất bại.");
             return Ok(result);
         }
 
@@ -44,6 +44,8 @@ namespace BookingManagement.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTransaction(int id, [FromBody] Transaction updated)
         {
+            if (updated == null) return BadRequest("Thông tin giao dịch không hợp lệ.");
+            if (id != updated.Id) return BadRequest("ID giao dịch không khớp.");
             var result = await _service.UpdateTransactionAsync(id, updated);
             if (result == null) return NotFound();
             return Ok(result);

@@ -1,686 +1,915 @@
 ﻿@model MovieBookingWebMVC.Areas.Booking.Models.ViewModels.SeatBookingViewModel
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+
 @{
     ViewData["Title"] = "Chọn ghế";
+    Layout = "~/Views/Shared/_Layout.cshtml";
     var movie = Model.Movie;
     var userId = ViewBag.UserId ?? 0;
 }
 
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
-    <style>
-        :root {
-            --primary-black: #000000;
-            --mint-light: #CCFFE4;
-            --teal-primary: #9FCBC0;
-            --gray-light: #F5F5F5;
-            --accent-gold: #ffd700;
-            --success-green: #28a745;
-            --danger-red: #dc3545;
-            --held: #facc15;
+<style>
+    :root {
+        --primary-black: #000000;
+        --mint-light: #CCFFE4;
+        --teal-primary: #9FCBC0;
+        --gray-light: #F5F5F5;
+        --accent-gold: #ffd700;
+        --success-green: #28a745;
+        --danger-red: #dc3545;
+        --held: #facc15;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+
+    .dropdown-toggle::after {
+        display: none;
+    }
+
+    .booking-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin: 2rem auto;
+        max-width: 1200px;
+        border: 2px solid var(--teal-primary);
+    }
+
+    .booking-header {
+        background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
+        color: white;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .booking-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(204, 255, 228, 0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
         }
 
-        .dropdown-toggle::after {
-            display: none;
+    .movie-poster {
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+        border: 3px solid var(--teal-primary);
+    }
+
+        .movie-poster:hover {
+            transform: scale(1.05);
+            border-color: var(--mint-light);
         }
 
-        body {
-            background: linear-gradient(135deg, var(--mint-light) 0%, var(--gray-light) 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
+    .movie-details {
+        position: relative;
+        z-index: 2;
+    }
+
+    .movie-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        margin-bottom: 0.5rem;
+        color: white;
+    }
+
+    .movie-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 1.5rem;
+        color: var(--mint-light);
+    }
+
+    .info-card {
+        background: linear-gradient(135deg, var(--mint-light) 0%, rgba(255, 255, 255, 0.9) 100%);
+        border-radius: 12px;
+        padding: 1rem;
+        backdrop-filter: blur(10px);
+        border: 2px solid var(--teal-primary);
+        color: var(--primary-black);
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+    }
+
+        .info-item i {
+            color: var(--teal-primary);
+            margin-right: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .info-item strong {
             color: var(--primary-black);
         }
 
-        .booking-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            margin: 2rem auto;
-            max-width: 1200px;
-            border: 2px solid var(--teal-primary);
+    .booking-content {
+        padding: 2rem;
+        background: linear-gradient(135deg, var(--mint-light) 0%, white 100%);
+    }
+
+    .cinema-screen {
+        background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
+        color: white;
+        text-align: center;
+        padding: 1rem;
+        border-radius: 15px;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid var(--teal-primary);
+    }
+
+        .cinema-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(204, 255, 228, 0.1) 100%);
         }
 
-        .booking-header {
-            background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
-            color: white;
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
+    .screen-text {
+        font-size: 1.5rem;
+        font-weight: 600;
+        position: relative;
+        z-index: 2;
+    }
 
-            .booking-header::before {
-                content: '';
-                position: absolute;
-                top: -50%;
-                right: -50%;
-                width: 200%;
-                height: 200%;
-                background: radial-gradient(circle, rgba(204, 255, 228, 0.1) 0%, transparent 70%);
-                animation: shimmer 3s ease-in-out infinite;
-            }
+    .seat-section {
+        margin: 2rem 0;
+    }
 
-        @@keyframes shimmer {
-            0%, 100% {
-                transform: rotate(0deg);
-            }
+    .seat-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        background: rgba(204, 255, 228, 0.3);
+        border-radius: 10px;
+        border: 1px solid var(--teal-primary);
+    }
 
-            50% {
-                transform: rotate(180deg);
-            }
-        }
+    .row-label {
+        font-weight: 600;
+        color: var(--primary-black);
+        width: 80px;
+        text-align: center;
+        font-size: 1.1rem;
+    }
 
-        .movie-poster {
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease;
-            border: 3px solid var(--teal-primary);
-        }
+    .seat-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+        flex: 1;
+    }
 
-            .movie-poster:hover {
-                transform: scale(1.05);
-                border-color: var(--mint-light);
-            }
+    .seat-item {
+        position: relative;
+        margin: 0.2rem;
+    }
 
-        .movie-details {
-            position: relative;
-            z-index: 2;
-        }
+    .seat-checkbox {
+        display: none;
+    }
 
-        .movie-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            margin-bottom: 0.5rem;
-            color: white;
-        }
+    .seat-label {
+        display: block;
+        width: 45px;
+        height: 45px;
+        border-radius: 10px;
+        background: linear-gradient(145deg, var(--gray-light), #e8e8e8);
+        border: 2px solid var(--teal-primary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--primary-black);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
 
-        .movie-subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-bottom: 1.5rem;
-            color: var(--mint-light);
-        }
-
-        .info-card {
-            background: linear-gradient(135deg, var(--mint-light) 0%, rgba(255, 255, 255, 0.9) 100%);
-            border-radius: 12px;
-            padding: 1rem;
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--teal-primary);
-            color: var(--primary-black);
-        }
-
-        .info-item {
-            display: flex;
-            align-items: center;
-        }
-
-            .info-item i {
-                color: var(--teal-primary);
-                margin-right: 0.8rem;
-                font-size: 1.2rem;
-            }
-
-            .info-item strong {
-                color: var(--primary-black);
-            }
-
-        .booking-content {
-            padding: 2rem;
-            background: linear-gradient(135deg, var(--mint-light) 0%, white 100%);
-        }
-
-        .cinema-screen {
-            background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
-            color: white;
-            text-align: center;
-            padding: 1rem;
-            margin: 2rem 0;
-            border-radius: 15px;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid var(--teal-primary);
-        }
-
-            .cinema-screen::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: linear-gradient(180deg, transparent 0%, rgba(204, 255, 228, 0.1) 100%);
-            }
-
-        .screen-text {
-            font-size: 1.5rem;
-            font-weight: 600;
-            position: relative;
-            z-index: 2;
-        }
-
-        .seat-section {
-            margin: 2rem 0;
-        }
-
-        .seat-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-            padding: 0.5rem;
-            background: rgba(204, 255, 228, 0.3);
-            border-radius: 10px;
-            border: 1px solid var(--teal-primary);
-        }
-
-        .row-label {
-            font-weight: 600;
-            color: var(--primary-black);
-            width: 80px;
-            text-align: center;
-            font-size: 1.1rem;
-        }
-
-        .seat-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            justify-content: center;
-            flex: 1;
-        }
-
-        .seat-item {
-            position: relative;
-            margin: 0.2rem;
-        }
-
-        .seat-checkbox {
-            display: none;
-        }
-
-        .seat-label {
-            display: block;
-            width: 45px;
-            height: 45px;
-            border-radius: 10px;
-            background: linear-gradient(145deg, var(--gray-light), #e8e8e8);
-            border: 2px solid var(--teal-primary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--primary-black);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        }
-
-            .seat-label:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(159, 203, 192, 0.4);
-                background: linear-gradient(145deg, var(--mint-light), #b3f0d1);
-                border-color: var(--primary-black);
-            }
-
-        .seat-checkbox:checked + .seat-label {
-            background: linear-gradient(145deg, var(--teal-primary), #7db8ab);
+        .seat-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(159, 203, 192, 0.4);
+            background: linear-gradient(145deg, var(--mint-light), #b3f0d1);
             border-color: var(--primary-black);
-            color: white;
-            transform: scale(1.1);
         }
 
-        .seat-checkbox:disabled + .seat-label {
-            background: linear-gradient(145deg, #ff6b6b, #ff5252);
-            border-color: var(--danger-red);
-            color: white;
-            cursor: not-allowed;
-            opacity: 0.8;
+    .seat-checkbox:checked + .seat-label {
+        background: linear-gradient(145deg, var(--teal-primary), #7db8ab);
+        border-color: var(--primary-black);
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .seat-checkbox:disabled + .seat-label {
+        background: linear-gradient(145deg, #ff6b6b, #ff5252);
+        border-color: var(--danger-red);
+        color: white;
+        cursor: not-allowed;
+        opacity: 0.8;
+    }
+
+        .seat-checkbox:disabled + .seat-label::after {
+            content: '✕';
+            position: absolute;
+            font-size: 1.2rem;
+            font-weight: bold;
         }
 
-            .seat-checkbox:disabled + .seat-label::after {
-                content: '✕';
-                position: absolute;
-                font-size: 1.2rem;
-                font-weight: bold;
-            }
+    .seat-legend {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin: 2rem 0;
+        padding: 1rem;
+        background: var(--mint-light);
+        border-radius: 15px;
+        border: 2px solid var(--teal-primary);
+    }
 
-        .seat-legend {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 2rem 0;
-            padding: 1rem;
-            background: var(--mint-light);
-            border-radius: 15px;
-            border: 2px solid var(--teal-primary);
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary-black);
+        font-weight: 500;
+    }
+
+    .legend-seat {
+        width: 25px;
+        height: 25px;
+        border-radius: 5px;
+        border: 2px solid;
+    }
+
+    .legend-available {
+        background: linear-gradient(145deg, var(--gray-light), #e8e8e8);
+        border-color: var(--teal-primary);
+    }
+
+    .legend-selected {
+        background: linear-gradient(145deg, var(--teal-primary), #7db8ab);
+        border-color: var(--primary-black);
+    }
+
+    .legend-occupied {
+        background: linear-gradient(145deg, #ff6b6b, #ff5252);
+        border-color: var(--danger-red);
+    }
+
+    .booking-actions {
+        text-align: center;
+        padding: 2rem;
+        background: linear-gradient(135deg, var(--mint-light) 0%, var(--gray-light) 100%);
+        border-radius: 0 0 20px 20px;
+        border-top: 2px solid var(--teal-primary);
+    }
+
+    .promo-section {
+        background: linear-gradient(135deg, #444444 0%, #666666 100%);
+        border-radius: 20px;
+        padding: 1rem;
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .promo-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
         }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--primary-black);
-            font-weight: 500;
+    .promo-input-wrapper {
+        position: relative;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .promo-input {
+        border: 20px white !important;
+        padding: 10px 20px !important;
+        font-size: 1rem !important;
+        border-radius: 15px 0 0 15px !important;
+        font-weight: 500 !important;
+    }
+
+        .promo-input::placeholder {
+            color: #999;
+            font-style: italic;
         }
 
-        .legend-seat {
-            width: 25px;
-            height: 25px;
-            border-radius: 5px;
-            border: 2px solid;
-        }
+    .apply-btn {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        border: none;
+        padding: 1rem 1.5rem;
+        color: white;
+        font-weight: 600;
+        transition: background 0.5s ease, color 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
 
-        .legend-available {
+        .apply-btn:hover {
             background: linear-gradient(145deg, var(--gray-light), #e8e8e8);
+            color: black;
+            transition: all 0.5s ease;
+        }
+
+    .promo-message {
+        background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 15px;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        transition: opacity 0.4s ease,
+    }
+
+        .promo-message i {
+            margin-left: 0.5rem;
+            animation: bounce 1s infinite;
+        }
+
+    .promo-error-message {
+        background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 15px;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        animation: slideInDown 0.5s ease-out;
+    }
+
+    .fade {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+        .fade.show {
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+    .input-group {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    @@media (max-width: 768px) {
+        .promo-section {
+            padding: 1.5rem;
+            border-radius: 15px;
+        }
+
+        .promo-label {
+            font-size: 1rem;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .apply-btn {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .input-group {
+            flex-direction: column;
+        }
+
+        .promo-input {
+            border-radius: 12px !important;
+            margin-bottom: 0.5rem;
+        }
+
+        .apply-btn {
+            border-radius: 12px !important;
+        }
+    }
+
+    .apply-btn.loading {
+        pointer-events: none;
+        opacity: 0.8;
+    }
+
+        .apply-btn.loading i {
+            animation: spin 1s linear infinite;
+        }
+
+    .btn-book {
+        background: linear-gradient(135deg, var(--teal-primary) 0%, #7db8ab 100%);
+        border: 2px solid var(--primary-black);
+        color: var(--primary-black);
+        padding: 0.75rem 1.5rem;
+        border-radius: 25px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(159, 203, 192, 0.3);
+    }
+
+        .btn-book:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(159, 203, 192, 0.5);
+            background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
+            color: white;
             border-color: var(--teal-primary);
         }
 
-        .legend-selected {
-            background: linear-gradient(145deg, var(--teal-primary), #7db8ab);
-            border-color: var(--primary-black);
+    .no-seats-message {
+        text-align: center;
+        padding: 3rem;
+        color: var(--primary-black);
+        font-size: 1.2rem;
+        background: var(--mint-light);
+        border-radius: 15px;
+        border: 2px solid var(--teal-primary);
+    }
+
+        .no-seats-message i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+            color: var(--teal-primary);
         }
 
-        .legend-occupied {
-            background: linear-gradient(145deg, #ff6b6b, #ff5252);
-            border-color: var(--danger-red);
+    @@media (max-width: 768px) {
+        .movie-title {
+            font-size: 2rem;
         }
 
-        .booking-actions {
-            text-align: center;
-            padding: 2rem;
-            background: linear-gradient(135deg, var(--mint-light) 0%, var(--gray-light) 100%);
-            border-radius: 0 0 20px 20px;
-            border-top: 2px solid var(--teal-primary);
+        .booking-header {
+            padding: 1.5rem;
         }
 
-        .btn-book {
-            background: linear-gradient(135deg, var(--teal-primary) 0%, #7db8ab 100%);
-            border: 2px solid var(--primary-black);
-            color: var(--primary-black);
-            padding: 1rem 3rem;
-            border-radius: 25px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(159, 203, 192, 0.3);
+        .booking-content {
+            padding: 1rem;
         }
 
-            .btn-book:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 12px 30px rgba(159, 203, 192, 0.5);
-                background: linear-gradient(135deg, var(--primary-black) 0%, #333333 100%);
-                color: white;
-                border-color: var(--teal-primary);
-            }
-
-        .no-seats-message {
-            text-align: center;
-            padding: 3rem;
-            color: var(--primary-black);
-            font-size: 1.2rem;
-            background: var(--mint-light);
-            border-radius: 15px;
-            border: 2px solid var(--teal-primary);
+        .seat-label {
+            width: 35px;
+            height: 35px;
+            font-size: 0.8rem;
         }
 
-            .no-seats-message i {
-                font-size: 3rem;
-                margin-bottom: 1rem;
-                display: block;
-                color: var(--teal-primary);
-            }
-
-        @@media (max-width: 768px) {
-            .movie-title {
-                font-size: 2rem;
-            }
-
-            .booking-header {
-                padding: 1.5rem;
-            }
-
-            .booking-content {
-                padding: 1rem;
-            }
-
-            .seat-label {
-                width: 35px;
-                height: 35px;
-                font-size: 0.8rem;
-            }
-
-            .seat-legend {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .booking-container {
-                margin: 1rem;
-            }
+        .seat-legend {
+            flex-direction: column;
+            gap: 1rem;
         }
 
-        .seat-checkbox:disabled.held + .seat-label {
-            background: var(--held);
-            border-color: #eab308;
-            color: #000;
-            opacity: 0.8;
-            cursor: not-allowed;
+        .booking-container {
+            margin: 1rem;
         }
+    }
 
-        .seat-checkbox:disabled.booked + .seat-label,
-        .seat-checkbox.booked + .seat-label {
-            background: var(--danger-red);
-            border-color: var(--danger-red);
-            color: white;
-            cursor: not-allowed;
-            opacity: 0.9;
-        }
+    .seat-checkbox:disabled.held + .seat-label {
+        background: var(--held);
+        border-color: #eab308;
+        color: #000;
+        opacity: 0.8;
+        cursor: not-allowed;
+    }
 
-        .countdown-timer {
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: var(--danger-red);
-            text-align: center;
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="booking-container">
-        <div class="booking-header">
-            <div class="row align-items-center">
-                <div class="col-md-3">
-                    <img src="@movie.Image" alt="@movie.Title" class="movie-poster img-fluid" />
-                </div>
-                <div class="col-md-9 movie-details">
-                    <h1 class="movie-title">@movie.Title</h1>
-                    <p class="movie-subtitle">@movie.Subtitle</p>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="info-card">
-                                <div class="info-item mb-3">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <div>
-                                        <strong>Ngày chiếu:</strong><br>
-                                        @Model.ShowDate.ToString("dddd, dd/MM/yyyy")
-                                    </div>
+    .seat-checkbox:disabled.booked + .seat-label,
+    .seat-checkbox.booked + .seat-label {
+        background: var(--danger-red);
+        border-color: var(--danger-red);
+        color: white;
+        cursor: not-allowed;
+        opacity: 0.9;
+    }
+
+    .countdown-timer {
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: var(--danger-red);
+        text-align: center;
+        display: none;
+    }
+</style>
+
+<div class="booking-container">
+    <div class="booking-header">
+        <div class="row align-items-center">
+            <div class="col-md-3">
+                <img src="@movie.Image" alt="@movie.Title" class="movie-poster img-fluid" />
+            </div>
+            <div class="col-md-9 movie-details">
+                <h1 class="movie-title">@movie.Title</h1>
+                <p class="movie-subtitle">@movie.Subtitle</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="info-card">
+                            <div class="info-item mb-3">
+                                <i class="fas fa-calendar-alt"></i>
+                                <div>
+                                    <strong>Ngày chiếu:</strong><br>
+                                    @Model.ShowDate.ToString("dddd, dd/MM/yyyy")
                                 </div>
-                                <div class="info-item">
-                                    <i class="fas fa-clock"></i>
-                                    <div>
-                                        <strong>Giờ chiếu:</strong><br>
-                                        @Model.FromTime
-                                    </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <strong>Giờ chiếu:</strong><br>
+                                    @Model.FromTime
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="info-card">
-                                <div class="info-item mb-3">
-                                    <i class="fas fa-tv"></i>
-                                    <div>
-                                        <strong>Phòng:</strong><br>
-                                        @Model.RoomName
-                                    </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-card">
+                            <div class="info-item mb-3">
+                                <i class="fas fa-tv"></i>
+                                <div>
+                                    <strong>Phòng:</strong><br>
+                                    @Model.RoomName
                                 </div>
-                                <div class="info-item">
-                                    <i class="fas fa-coins"></i>
-                                    <div>
-                                        <strong>Giá vé:</strong><br>
-                                        80.000 VND
-                                    </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-coins"></i>
+                                <div>
+                                    <strong>Giá vé:</strong><br>
+                                    80.000 VND
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="booking-content">
-            <div class="cinema-screen">
-                <div class="screen-text">
-                    <i class="fas fa-film"></i> MÀN HÌNH CHIẾU
-                </div>
-            </div>
-
-            <div class="seat-legend">
-                <div class="legend-item">
-                    <div class="legend-seat legend-available"></div>
-                    <span>Có thể chọn</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-seat legend-selected"></div>
-                    <span>Đã chọn</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-seat legend-occupied"></div>
-                    <span>Đã có người</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-seat" style="background: var(--held); border-color: #eab308;"></div>
-                    <span>Đang giữ</span>
-                </div>
-            </div>
-
-            <div class="countdown-timer" id="countdown">Thời gian giữ ghế: 03:00</div>
-
-            <form id="seatForm" asp-action="SelectSeat" asp-controller="Booking" asp-area="Booking" method="post">
-                <input type="hidden" name="showtimeId" value="@Model.ShowtimeId" />
-
-                <div class="seat-section">
-                    @if (Model.Seats.Any(s => s.Status == "Available"))
-                    {
-                        @foreach (var row in Model.Seats.GroupBy(s => s.Row))
-                        {
-                            <div class="seat-row">
-                                <div class="row-label">Hàng @row.Key</div>
-                                <div class="seat-container">
-                                    @foreach (var seat in row.OrderBy(s => s.Column))
-                                    {
-                                        var isHeld = seat.Status == "Held";
-                                        var isOccupied = seat.Status == "Occupied";
-                                        var isDisabled = isHeld || isOccupied;
-                                        <div class="seat-item">
-                                            <input type="checkbox"
-                                                   class="seat-checkbox @(isHeld ? "held" : "") @(isDisabled ? "js-disabled" : "")"
-                                                   name="seatIds"
-                                                   value="@seat.SeatId"
-                                                   id="seat-@seat.SeatId"
-                                                   data-status="@seat.Status" />
-                                            <label class="seat-label" for="seat-@seat.SeatId">
-                                                @seat.Column
-                                            </label>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <div class="no-seats-message">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <p>Hiện tại không còn ghế nào trống cho suất chiếu này.</p>
-                        </div>
-                    }
-                </div>
-
-                @if (Model.Seats.Any(s => s.Status == "Available"))
-                {
-                    <div class="booking-actions">
-                        <div class="form-group mb-3">
-                            <label for="promotionCode" class="form-label mb-3 text-bold">Mã khuyến mãi</label>
-                            <input type="text" class="form-control" id="promotionCode" name="promotionCode" placeholder="Nhập mã khuyến mãi (nếu có)">
-                        </div>
-                        <button type="submit" class="btn btn-book mt-3">
-                            <i class="fas fa-ticket-alt me-2"></i>
-                            Đặt vé ngay
-                        </button>
-                    </div>
-                }
-            </form>
         </div>
     </div>
 
+    <div class="booking-content">
+        <div class="cinema-screen">
+            <div class="screen-text">
+                <i class="fas fa-film"></i> MÀN HÌNH CHIẾU
+            </div>
+        </div>
+
+        <div class="seat-legend">
+            <div class="legend-item">
+                <div class="legend-seat legend-available"></div>
+                <span>Có thể chọn</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-seat legend-selected"></div>
+                <span>Đã chọn</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-seat legend-occupied"></div>
+                <span>Đã đặt</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-seat" style="background: var(--held); border-color: #eab308;"></div>
+                <span>Đang giữ</span>
+            </div>
+        </div>
+
+        @* <div class="countdown-timer" id="countdown">Thời gian giữ ghế: 03:00</div> *@
+
+        <form id="seatForm" asp-action="SelectSeat" asp-controller="Booking" asp-area="Booking" method="post">
+            <input type="hidden" name="showtimeId" value="@Model.ShowtimeId" />
+
+            <div class="seat-section">
+                @if (Model.Seats.Any(s => s.Status == "Available"))
+                {
+                    @foreach (var row in Model.Seats.GroupBy(s => s.Row))
+                    {
+                        <div class="seat-row">
+                            <div class="row-label">Hàng @row.Key</div>
+                            <div class="seat-container">
+                                @foreach (var seat in row.OrderBy(s => s.Column))
+                                {
+                                    var isHeld = seat.Status == "Held";
+                                    var isOccupied = seat.Status == "Occupied";
+                                    var isDisabled = isHeld || isOccupied;
+                                    <div class="seat-item">
+                                        <input type="checkbox"
+                                               class="seat-checkbox @(isHeld ? "held" : "") @(isDisabled ? "js-disabled" : "")"
+                                               name="seatIds"
+                                               value="@seat.SeatId"
+                                               id="seat-@seat.SeatId"
+                                               data-status="@seat.Status" />
+                                        <label class="seat-label" for="seat-@seat.SeatId">
+                                            @seat.Column
+                                            <span class="seat-timer" id="timer-@seat.SeatId" style="display: none; font-size: 0.6rem; position: absolute; bottom: 2px;"></span>
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="no-seats-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Hiện tại không còn ghế nào trống cho suất chiếu này.</p>
+                    </div>
+                }
+            </div>
+
+            @if (Model.Seats.Any(s => s.Status == "Available"))
+            {
+                <div class="booking-actions">
+                    <div class="container">
+                        <div class="form-group mb-3">
+                            <div class="promo-section">
+                                <div class="row align-items-center g-2">
+                                    <label for="promotionCode3" class="col-3 text-white d-flex align-items-center justify-content-center mb-2 mb-md-0">
+                                        <i class="fas fa-gift" style="margin-right: 10px;"></i>
+                                        <span class="promo-text fw-bold">Nhập mã khuyến mãi</span>
+                                    </label>
+                                    <div class="col-9">
+                                        <div class="promo-input-wrapper">
+                                            <div class="input-group promo-code-group">
+                                                <input type="text" class="form-control promo-input" id="promotionCode" name="promotionCode" placeholder="Nhập mã khuyến mãi của bạn...">
+                                                <button class="btn apply-btn" type="button" id="applyPromotion">
+                                                    <i class="fas fa-magic me-2"></i>Kiểm tra
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="promoMessage" class="promo-message text-white mt-2 d-none fade">
+                                    <i class="fas fa-check-circle me-2"></i>Mã khuyến mãi hợp lệ!
+                                </div>
+                                <div id="promoError" class="promo-error-message text-white mt-2 d-none fade">
+                                    <i class="fas fa-times-circle me-2"></i>Mã khuyến mãi không hợp lệ!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-book mt-3">
+                        <i class="fas fa-ticket-alt me-2"></i>
+                        Đặt vé
+                    </button>
+                </div>
+            }
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     <script>
         const userId = @userId;
         const showtimeId = @Model.ShowtimeId;
         const connection = new signalR.HubConnectionBuilder().withUrl("https://bookingmanagement-api.azurewebsites.net/seatHub").build();
+        const seatCountdowns = new Map();
 
-        // Nhận sự kiện khi có người giữ ghế
+        function startSeatCountdown(seatId, heldUntil) {
+            const timerElement = document.getElementById(`timer-${seatId}`);
+            if (!timerElement) return;
+
+            const expireTime = new Date(heldUntil);
+
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((expireTime - now) / 1000);
+                if (diff <= 0) {
+                    clearInterval(seatCountdowns.get(seatId));
+                    seatCountdowns.delete(seatId);
+                    timerElement.style.display = 'none';
+                    timerElement.textContent = '';
+
+                    const cb = document.getElementById(`seat-${seatId}`);
+                    if (cb && cb.checked) {
+                        cb.checked = false;
+                        fetch("https://bookingmanagement-api.azurewebsites.net/api/realtime/seatshowtime/unlock", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ showtimeId, seatId, userId })
+                        });
+
+                        let heldSeats = JSON.parse(localStorage.getItem("heldSeats") || "[]");
+                        heldSeats = heldSeats.filter(id => id !== seatId);
+                        localStorage.setItem("heldSeats", JSON.stringify(heldSeats));
+                    }
+                    return;
+                }
+
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                timerElement.style.display = 'block';
+            }
+
+            if (seatCountdowns.has(seatId)) {
+                clearInterval(seatCountdowns.get(seatId));
+                seatCountdowns.delete(seatId);
+            }
+
+            updateTimer();
+            const intervalId = setInterval(updateTimer, 1000);
+            seatCountdowns.set(seatId, intervalId);
+        }
+
+        function stopSeatCountdown(seatId) {
+            const timer = document.getElementById(`timer-${seatId}`);
+            if (seatCountdowns.has(seatId)) {
+                clearInterval(seatCountdowns.get(seatId));
+                seatCountdowns.delete(seatId);
+            }
+            if (timer) {
+                timer.textContent = '';
+                timer.style.display = 'none';
+            }
+        }
+
+        async function refreshHeldSeats() {
+            const heldSeats = JSON.parse(localStorage.getItem("heldSeats") || "[]");
+            for (let seatId of heldSeats) {
+                const heldRes = await fetch(`https://bookingmanagement-api.azurewebsites.net/api/realtime/seatshowtime/held-until?showtimeId=${showtimeId}&seatId=${seatId}`);
+                if (heldRes.ok) {
+                    const data = await heldRes.json();
+                    if (data.heldByUserId === userId) {
+                        const cb = document.getElementById(`seat-${seatId}`);
+                        if (cb) {
+                            cb.disabled = false;
+                            cb.checked = true;
+                            cb.classList.add("held");
+                            startSeatCountdown(seatId, data.heldUntil);
+                        }
+                    }
+                }
+            }
+        }
+
+        document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "visible") {
+                refreshHeldSeats();
+            }
+        });
+
         connection.on("SeatLocked", (seatId, uid) => {
-            console.log(`[📥 SeatLocked] Nhận được ghế ${seatId} từ user ${uid}, user hiện tại là ${userId}`);
             const input = document.getElementById(`seat-${seatId}`);
             if (input) {
                 input.classList.remove("booked");
                 input.classList.add("held");
-
-                if (uid === userId) {
-                    console.log(`👉 Đây là user hiện tại. Ghế ${seatId} sẽ không bị disable`);
-                    input.disabled = false;
-                } else {
-                    console.log(`🚫 Không phải user hiện tại. Ghế ${seatId} sẽ bị disable`);
+                if (uid !== userId) {
                     input.disabled = true;
                     input.checked = false;
+                    stopSeatCountdown(seatId);
                 }
-            } else {
-                console.warn(`⚠️ Không tìm thấy input ghế với id seat-${seatId}`);
             }
         });
 
         connection.on("SeatUnlocked", (seatId) => {
-            console.log(`[📥 SeatUnlocked] Ghế ${seatId} được mở khóa`);
             const input = document.getElementById(`seat-${seatId}`);
             if (input) {
                 input.classList.remove("held", "booked");
                 input.disabled = false;
                 input.checked = false;
-            } else {
-                console.warn(`⚠️ Không tìm thấy input ghế với id seat-${seatId} khi unlock`);
             }
+            stopSeatCountdown(seatId);
 
-            if (document.querySelectorAll("input[name='seatIds']:checked").length === 0) {
-                console.log("⏹ Dừng countdown do không còn ghế nào được chọn");
-                clearInterval(interval);
-                countdownStarted = false;
-                countdown = 180;
-                document.getElementById('countdown').style.display = 'none';
-            }
+            let heldSeats = JSON.parse(localStorage.getItem("heldSeats") || "[]");
+            heldSeats = heldSeats.filter(id => id !== seatId);
+            localStorage.setItem("heldSeats", JSON.stringify(heldSeats));
         });
 
         connection.start().then(() => {
-            console.log(`✅ SignalR kết nối thành công. Tham gia group showtime-${showtimeId}`);
             connection.invoke("JoinShowtimeGroup", showtimeId);
-        }).catch(err => console.error("❌ Lỗi khi kết nối SignalR:", err));
+            refreshHeldSeats();
+            const heldSeats = JSON.parse(localStorage.getItem("heldSeats") || "[]");
+            document.querySelectorAll(".seat-checkbox").forEach(cb => {
+                const seatStatus = cb.getAttribute("data-status");
+                const seatId = parseInt(cb.value);
 
-        // Countdown
-        let countdownStarted = false;
-        let countdown = 180;
-        let interval;
-        const countdownElement = document.getElementById('countdown');
-
-        function startCountdown() {
-            if (countdownStarted) return;
-            countdownStarted = true;
-            console.log("🕒 Bắt đầu countdown giữ ghế");
-            countdownElement.style.display = 'block';
-            interval = setInterval(async () => {
-                countdown--;
-                const minutes = Math.floor(countdown / 60);
-                const seconds = countdown % 60;
-                countdownElement.textContent = `Thời gian giữ ghế: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                if (countdown <= 0) {
-                    console.log("⏰ Countdown hết giờ, mở tất cả các ghế đang giữ");
-                    clearInterval(interval);
-                    countdownStarted = false;
-                    countdown = 180;
-                    countdownElement.style.display = 'none';
-                    alert('Thời gian giữ ghế đã hết. Hệ thống sẽ bỏ giữ các ghế đã chọn.');
-                    const checkedSeats = Array.from(document.querySelectorAll("input[name='seatIds']:checked"));
-                    for (let cb of checkedSeats) {
-                        const seatId = parseInt(cb.value);
-                        console.log(`🔓 Gửi yêu cầu unlock ghế ${seatId}`);
-                        await fetch("https://bookingmanagement-api.azurewebsites.net/api/realtime/seatshowtime/unlock", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ showtimeId, seatId, userId })
-                        });
-                        cb.checked = false;
-                    }
-                }
-            }, 1000);
-        }
-
-        // Setup ban đầu cho trạng thái ghế
-        document.querySelectorAll(".seat-checkbox").forEach(cb => {
-            const seatStatus = cb.getAttribute("data-status");
-            console.log(`🔍 Init ghế ${cb.id} trạng thái ${seatStatus}`);
-            if (seatStatus === "Booked" || seatStatus === "Held") {
-                cb.disabled = true;
                 if (seatStatus === "Booked") {
+                    cb.disabled = true;
                     cb.classList.add("booked");
-                } else {
-                    cb.classList.add("held");
-                }
-            }
-        });
+                } else if (seatStatus === "Held") {
+                    if (heldSeats.includes(seatId)) {
+                        cb.disabled = false;
+                        cb.classList.add("held");
 
-        // Sự kiện khi user chọn ghế
-        document.querySelectorAll(".seat-checkbox:not(:disabled)").forEach(cb => {
-            cb.addEventListener("change", async function () {
-                const seatId = parseInt(this.value);
-                if (this.checked) {
-                    console.log(`🖱 Chọn ghế ${seatId}, gửi yêu cầu lock`);
-                    const response = await fetch("https://bookingmanagement-api.azurewebsites.net/api/realtime/seatshowtime/lock", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ showtimeId, seatId, userId })
-                    });
-                    if (!response.ok) {
-                        console.warn(`❌ Lock thất bại cho ghế ${seatId}`);
-                        this.checked = false;
-                        alert("Không thể giữ ghế. Ghế có thể đã bị người khác chọn.");
+                        fetch(`https://bookingmanagement-api.azurewebsites.net/api/realtime/seatshowtime/held-until?showtimeId=${showtimeId}&seatId=${seatId}`)
+                            .then(res => res.ok ? res.json() : null)
+                            .then(data => {
+                                if (data && data.heldByUserId === userId) {
+                                    startSeatCountdown(seatId, data.heldUntil);
+                                }
+                            });
                     } else {
-                        startCountdown();
-                    }
-                } else {
-                    console.log(`🔄 Bỏ chọn ghế ${seatId}, gửi unlock`);
-                    await fetch("https://bookingmanagement-api.azurewebsites.net/api/realtime/seatshowtime/unlock", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ showtimeId, seatId, userId })
+                        cb.disabled = true;
+                        cb.classList.add("held");
+                      }
+                }
+                if (!cb.disabled) {
+                    cb.addEventListener("change", async function () {
+                        if (this.checked) {
+                            const res = await fetch("https://bookingmanagement-api.azurewebsites.net/api/realtime/seatshowtime/lock", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ showtimeId, seatId, userId })
+                            });
+
+                            if (!res.ok) {
+                                this.checked = false;
+                                alert("Không thể giữ ghế. Có thể đã bị người khác chọn.");
+                                return;
+                            }
+
+                            const heldRes = await fetch(`https://bookingmanagement-api.azurewebsites.net/api/realtime/seatshowtime/held-until?showtimeId=${showtimeId}&seatId=${seatId}`);
+                            if (heldRes.ok) {
+                                const data = await heldRes.json();
+                                if (data.heldByUserId === userId) {
+                                    startSeatCountdown(seatId, data.heldUntil);
+                                    let heldSeats = JSON.parse(localStorage.getItem("heldSeats") || "[]");
+                                    if (!heldSeats.includes(seatId)) {
+                                        heldSeats.push(seatId);
+                                        localStorage.setItem("heldSeats", JSON.stringify(heldSeats));
+                                    }
+                                }
+                            }
+                        } else {
+                           await fetch("https://bookingmanagement-api.azurewebsites.net/api/realtime/seatshowtime/unlock", {
+                               method: "POST",
+                               headers: { "Content-Type": "application/json" },
+                               body: JSON.stringify({ showtimeId, seatId, userId })
+                           });
+                           stopSeatCountdown(seatId);
+
+                           let heldSeats = JSON.parse(localStorage.getItem("heldSeats") || "[]");
+                           heldSeats = heldSeats.filter(id => id !== seatId);
+                           localStorage.setItem("heldSeats", JSON.stringify(heldSeats));
+                        }
                     });
                 }
             });
-        });
+        }).catch(err => console.error(err));
 
-        // Validate submit
-        document.getElementById("seatForm").addEventListener("submit", function (e) {
-            const checkedSeats = Array.from(document.querySelectorAll("input[name='seatIds']:checked"));
-            console.log(`📨 Submit form với ${checkedSeats.length} ghế`);
-            if (checkedSeats.length === 0) {
-                e.preventDefault();
-                alert("Vui lòng chọn ít nhất một ghế để tiếp tục.");
-            } else if (checkedSeats.length > 10) {
-                e.preventDefault();
-                alert("Chỉ được chọn tối đa 10 ghế.");
-            }
+        document.addEventListener("DOMContentLoaded", function () {
+            let validCodes = [];
+            let codesLoaded = false;
+
+            const apiBase = 'https://bookingmanagement-api.azurewebsites.net';
+
+            fetch(`${apiBase}/api/promotion/active-codes`)
+                .then(response => response.json())
+                .then(data => {
+                    validCodes = data.map(code => code.toUpperCase());
+                    codesLoaded = true;
+                    console.log("✅ Mã hợp lệ đã tải:", validCodes);
+                })
+                .catch(error => {
+                    console.error('❌ Lỗi khi tải mã khuyến mãi:', error);
+                });
+
+            document.getElementById("applyPromotion").addEventListener("click", function () {
+                const promoCode = document.getElementById("promotionCode").value.trim().toUpperCase();
+                const promoMessage = document.getElementById("promoMessage");
+                const promoError = document.getElementById("promoError");
+
+                const isValid = validCodes.includes(promoCode);
+                const target = isValid ? promoMessage : promoError;
+
+                [promoMessage, promoError].forEach(el => {
+                    el.classList.remove("show");
+                    setTimeout(() => el.classList.add("d-none"), 5000);
+                });
+
+                target.classList.remove("d-none");
+
+                requestAnimationFrame(() => {
+                    target.classList.add("show");
+                    setTimeout(() => {
+                        target.classList.remove("show");
+                        setTimeout(() => target.classList.add("d-none"), 400);
+                    }, 3000);
+                });
+            });
         });
     </script>
-</body>
-</html>
+}

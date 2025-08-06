@@ -1,23 +1,11 @@
 ﻿@model List<MovieBookingWebMVC.Areas.Booking.Models.ViewModel.PromotionListViewModel>
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div id="alertSuccess" class="alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-4" role="alert" style="z-index: 1050; min-width: 250px;">
-        @TempData["SuccessMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
-@if (TempData["ErrorMessage"] != null)
-{
-    <div id="alertError" class="alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 m-4" role="alert" style="z-index: 1050; min-width: 250px;">
-        @TempData["ErrorMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Danh sách khuyến mãi";
+    int currentPage = ViewBag.CurrentPage as int? ?? 1;
+    int totalPages = ViewBag.TotalPages as int? ?? 1;
+    int index = 1;
 }
 
 <style>
@@ -219,7 +207,7 @@
     }
 
     .promotion-code {
-        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        background: linear-gradient(135deg, var(--warning-orange) 0%, #fd7e14 100%);
         color: var(--white);
         padding: 0.3rem 0.8rem;
         border-radius: 15px;
@@ -255,9 +243,9 @@
     }
 
     .date-info {
-        font-size: 0.9rem;
+        font-family: 'Courier New', monospace;
         color: var(--primary-black);
-        font-weight: 500;
+        font-weight: 600;
         display: block;
         margin: 0.1rem 0;
     }
@@ -302,17 +290,17 @@
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 0.3rem;
+        justify-content: center;
     }
 
     .btn-edit {
-        background: linear-gradient(135deg, var(--warning-orange) 0%, #fd7e14 100%);
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
         color: var(--white);
     }
 
         .btn-edit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.5);
+            box-shadow: 0 5px 15px rgba(159, 203, 192, 0.5);
             color: var(--white);
         }
 
@@ -332,7 +320,7 @@
         border: 1px solid var(--teal-green);
         color: var(--primary-black);
         border-radius: 15px;
-        padding: 1.5rem;
+        padding: 1rem;
         text-align: center;
         font-weight: 600;
         box-shadow: 0 5px 15px rgba(159, 203, 192, 0.2);
@@ -366,17 +354,73 @@
             padding: 0.4rem 0.8rem;
         }
     }
+
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.5rem;
+        padding: 1rem;
+    }
+
+    .pagination {
+        display: flex;
+        gap: 0.5rem;
+        margin: 0;
+    }
+
+    .page-item .page-link {
+        background: var(--white);
+        border: 2px solid var(--teal-green);
+        color: var(--teal-green);
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        min-width: 40px;
+        text-align: center;
+    }
+
+    .page-item.active .page-link {
+        background: linear-gradient(135deg, var(--teal-green) 0%, #7fb3d3 100%);
+        color: var(--white);
+        border-color: var(--teal-green);
+        box-shadow: 0 4px 15px rgba(159, 203, 192, 0.4);
+    }
+
+    .page-item .page-link:hover {
+        background: var(--teal-green);
+        color: var(--white);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(159, 203, 192, 0.3);
+    }
 </style>
 
 <div class="main-container">
     <div class="header-section">
         <h1 class="header-title">
-            <i class="fas fa-tags me-2"></i>
+            <i class="fas fa-gift me-2"></i>
             Danh sách khuyến mãi
         </h1>
     </div>
 
     <div class="content-section">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert success-alert text-center mb-4" id="alertSuccess">
+                <i class="fas fa-check-circle me-1"></i>
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert-danger-custom justify-content-center">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
         <div class="d-flex justify-content-between align-items-center mb-4">
             <a asp-area="Booking" asp-controller="AdminPromotion" asp-action="Create" class="add-promotion-btn">
                 <i class="fas fa-plus"></i>
@@ -410,14 +454,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @{
-                                int i = 1;
-                            }
                             @foreach (var promo in Model)
                             {
                                 <tr>
                                     <td class="text-center">
-                                        <span class="promotion-id">@i</span>
+                                        <span class="promotion-id">@index</span>
                                     </td>
                                     <td>
                                         <span class="promotion-code">@promo.PromotionCode</span>
@@ -435,7 +476,6 @@
                                             <span class="discount-info">-</span>
                                         }
                                     </td>
-
                                     <td class="text-center">
                                         <span class="discount-info">@promo.DiscountAmount.Value.ToString("N0")</span>
                                     </td>
@@ -459,20 +499,18 @@
                                     <td>
                                         <div class="action-buttons">
                                             <a class="btn-action btn-edit" href="/Booking/AdminPromotion/Edit/@promo.Id">
-                                                <i class="fas fa-edit"></i>
-                                                Sửa
+                                                <i class="fas fa-edit" style="margin-top: -3px; margin-right: 4px;"></i> Sửa
                                             </a>
-                                            <form asp-area="Booking" asp-controller="AdminPromotion" asp-action="Delete" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa khuyến mãi này?');" style="display:inline;">
+                                            <form asp-area="Booking" asp-controller="AdminPromotion" asp-action="Delete" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa khuyến mãi này?');">
                                                 <input type="hidden" name="id" value="@promo.Id" />
                                                 <button type="submit" class="btn-action btn-delete">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                    Xóa
+                                                    <i class="fas fa-trash-alt" style="margin-top: -3px; margin-right: 5px;"></i> Xóa
                                                 </button>
                                             </form>
                                         </div>
                                     </td>
                                 </tr>
-                                i++;
+                                index++;
                             }
                         </tbody>
                     </table>
@@ -482,27 +520,38 @@
         else
         {
             <div class="alert alert-warning">
-                <i class="fas fa-exclamation-triangle me-2"></i>
+                <i class="fas fa-exclamation-triangle me-1"></i>
                 Không có khuyến mãi nào.
+            </div>
+        }
+
+        @if (totalPages > 1)
+        {
+            <div class="pagination-container">
+                <ul class="pagination">
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link" asp-action="ListPromotions" asp-route-page="@i">@i</a>
+                        </li>
+                    }
+                </ul>
             </div>
         }
     </div>
 </div>
 
 <script>
-    // Add loading state for buttons
-    document.querySelectorAll('.btn-action').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            if (this.classList.contains('btn-edit')) {
-                const icon = this.querySelector('i');
-                const originalClass = icon.className;
-
-                icon.className = 'fas fa-spinner fa-spin';
-
+    document.addEventListener('DOMContentLoaded', function() {
+        const alertSuccess = document.getElementById('alertSuccess');
+        if (alertSuccess) {
+            setTimeout(() => {
+                alertSuccess.style.transition = 'opacity 0.5s ease-out';
+                alertSuccess.style.opacity = '0';
                 setTimeout(() => {
-                    icon.className = originalClass;
-                }, 1000);
-            }
-        });
+                    alertSuccess.remove();
+                }, 500);
+            }, 5000);
+        }
     });
 </script>

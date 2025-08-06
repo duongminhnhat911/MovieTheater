@@ -261,6 +261,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
             }
 
             _logger.LogInformation("Redirecting to VnPay URL for OrderId: {OrderId}", orderId);
+            TempData["ReturnUrl"] = Url.Action("ConfirmOrder", "Booking", new { orderId });
             return Redirect(paymentUrl);
         }
 
@@ -373,6 +374,12 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
 
                     return RedirectToAction("Booked", new { orderId });
                 }
+                if (!callbackResponse.IsSuccessStatusCode)
+                {
+                    TempData["ErrorMessage"] = "Thanh toán không thành công.";
+                    return RedirectToAction("ConfirmOrder", new { orderId }); // ✅ redirect lại ConfirmOrder
+                }
+
                 else
                 {
                     _logger.LogWarning("❌ Callback failed: {StatusCode}", callbackResponse.StatusCode);
@@ -409,7 +416,7 @@ namespace MovieBookingWebMVC.Areas.Booking.Controllers
                 ShowtimeId = showtimeId,
                 UserId = userId,
                 SeatIds = seatIds,
-                PromotionCode = promotionCode // ✅ Truyền mã khuyến mãi nếu có
+                PromotionCode = promotionCode // Truyền mã khuyến mãi nếu có
             };
 
             var client = _httpClientFactory.CreateClient("ApiClient_Booking");

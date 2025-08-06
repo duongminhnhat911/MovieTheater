@@ -3,6 +3,7 @@
     ViewData["Title"] = "Trang quản trị";
     int currentPage = ViewBag.CurrentPage as int? ?? 1;
     int totalPages = ViewBag.TotalPages as int? ?? 1;
+    int index = 1;
 }
 
 <style>
@@ -17,12 +18,6 @@
         --danger-red: #dc3545;
         --shadow-light: rgba(0, 0, 0, 0.1);
         --shadow-medium: rgba(0, 0, 0, 0.15);
-    }
-
-    body {
-        background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        min-height: 100vh;
     }
 
     .main-container {
@@ -241,7 +236,6 @@
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 0.3rem;
     }
 
         .btn-edit:hover {
@@ -260,10 +254,20 @@
             box-shadow: 0 5px 15px rgba(220, 53, 69, 0.5);
         }
 
+    .btn-detail {
+        background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        color: var(--white);
+    }
+
+        .btn-detail:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.5);
+        }
+
     .pagination-container {
         display: flex;
         justify-content: center;
-        margin-top: 2rem;
+        margin-top: 1.5rem;
         padding: 1rem;
     }
 
@@ -339,15 +343,6 @@
         color: var(--primary-black);
     }
 
-    .created-by, .edited-by {
-        background: rgba(159, 203, 192, 0.2);
-        padding: 0.3rem 0.8rem;
-        border-radius: 10px;
-        font-size: 0.85rem;
-        color: var(--primary-black);
-        display: inline-block;
-    }
-
     @@media (max-width: 768px) {
         .main-container {
             margin: 1rem;
@@ -376,13 +371,251 @@
             padding: 0.4rem 0.8rem;
         }
     }
+
+    .modal-content {
+        background: var(--dark-card);
+        border: 1px solid rgba(220, 38, 38, 0.3);
+        border-radius: 20px;
+        padding: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(220, 38, 38, 0.2);
+        padding: 0.5rem 1rem;
+    }
+
+    .modal-title {
+        font-size: 21.5px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .modal-body {
+        padding: 0.5rem !important;
+        background: var(--mint-light);
+        background-image: radial-gradient(circle at 20% 20%, rgba(159, 203, 192, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(245, 245, 245, 0.2) 0%, transparent 50%);
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 1.5rem;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    /* Header Section */
+    .movie-header {
+        background: linear-gradient(to bottom, black 0%, #222 50%, #444 100%);
+        color: white;
+        padding: 30px 40px;
+        text-align: center;
+    }
+
+        .movie-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: -0.025em;
+            margin-top: 0;
+        }
+
+        .movie-header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+    /* Main Content Grid */
+    .movie-content {
+        display: grid;
+        grid-template-columns: 400px 1fr;
+        gap: 40px;
+        background: #CCFFE4;
+        background-image: radial-gradient(circle at 20% 20%, rgba(159, 203, 192, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(245, 245, 245, 0.2) 0%, transparent 50%);
+    }
+
+    /* Poster Section */
+    .poster-section {
+        position: relative;
+    }
+
+    .poster-wrapper {
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+    }
+
+        .poster-wrapper:hover {
+            transform: translateY(-5px);
+        }
+
+        .poster-wrapper img {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+            display: block;
+        }
+
+    /* Format Tags */
+    .format-tags {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        z-index: 10;
+    }
+
+    .format-tag {
+        background: linear-gradient(135deg, #ff6b35, #ff8c42);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .booking-button {
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+
+    .btn-movie {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        justify-content: center;
+        min-width: 120px;
+    }
+
+    .film-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #1e3c72;
+        margin-bottom: 30px;
+        margin-top: 0;
+        line-height: 1.2;
+        letter-spacing: -0.025em;
+    }
+
+    .detail-section, .description-section {
+        width: 100%;
+        background: white;
+        border-radius: 15px;
+        padding: 10px 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        border: 1px solid #f0f0f0;
+    }
+
+        .description-section h3 {
+            color: #1e3c72;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            letter-spacing: -0.02em;
+        }
+
+            .description-section h3 i {
+                color: #667eea;
+            }
+
+        .detail-section h3 {
+            color: #1e3c72;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            letter-spacing: -0.02em;
+        }
+
+            .detail-section h3 i {
+                color: #667eea;
+            }
+
+    .detail-list {
+        list-style: none;
+        padding: 0px;
+        margin-bottom: 0.5rem;
+    }
+
+        .detail-list li {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.3s ease;
+        }
+
+            .detail-list li:last-child {
+                border-bottom: none;
+            }
+
+            .detail-list li strong {
+                color: #1e3c72;
+                font-weight: 600;
+                width: 140px;
+                flex-shrink: 0;
+                letter-spacing: -0.01em;
+            }
+
+            .detail-list li span {
+                color: #555;
+                font-size: 1rem;
+                font-weight: 400;
+            }
+
+    .description-text {
+        color: #444;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        text-align: justify;
+        background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+        border-radius: 12px;
+        margin-bottom: 15px;
+        border-left: 4px solid #667eea;
+        font-weight: 400;
+        letter-spacing: -0.005em;
+        padding: 15px;
+    }
 </style>
 
 <div class="main-container">
     <div class="header-section">
         <h1 class="header-title">
             <i class="fas fa-film me-2"></i>
-            Quản lý phim
+            Danh sách phim
         </h1>
     </div>
 
@@ -390,7 +623,7 @@
         @if (TempData["Success"] != null)
         {
             <div class="alert success-alert text-center mb-4" id="alertSuccess">
-                <i class="fas fa-check-circle me-2"></i>
+                <i class="fas fa-check-circle me-1"></i>
                 @TempData["Success"]
             </div>
         }
@@ -426,13 +659,10 @@
                             <th style="width: 12%;">
                                 Khởi chiếu
                             </th>
-                            <th style="width: 16%;">
+                            <th style="width: 13%;">
                                 Trạng thái
                             </th>
-                            <th style="width: 7%;">
-                                Sửa bởi
-                            </th>
-                            <th style="width: 18%;">
+                            <th style="width: 28%;">
                                 Tác vụ
                             </th>
                         </tr>
@@ -442,7 +672,7 @@
                         {
                             <tr>
                                 <td class="text-center">
-                                    <span class="movie-id">@film.Id</span>
+                                    <span class="movie-id">@index</span>
                                 </td>
                                 <td>
                                     <div class="movie-title">@film.Title</div>
@@ -477,27 +707,29 @@
                                     }
                                     <span class="status-badge @statusClass">@statusDisplay</span>
                                 </td>
-                                <td class="text-center">
-                                    <span class="edited-by">@film.EditedByUsername</span>
-                                </td>
                                 <td>
                                     <div class="action-buttons">
                                         <a asp-area="Movie" asp-controller="Movie" asp-action="EditMovie"
                                            asp-route-id="@film.Id" class="btn-action btn-edit">
-                                            <i class="fas fa-edit"></i>
+                                            <i class="fas fa-edit me-2"></i>
                                             Sửa
                                         </a>
+                                        <button class="btn-action btn-detail" data-id="@film.Id">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Chi tiết
+                                        </button>
                                         <form asp-area="Movie" asp-controller="Movie" asp-action="DeleteMovie"
                                               asp-route-id="@film.Id" method="post" style="display:inline;"
                                               onsubmit="return confirm('Bạn có chắc chắn muốn xóa phim này không?');">
                                             <button type="submit" class="btn-action btn-delete">
-                                                <i class="fas fa-trash-alt"></i>
+                                                <i class="fas fa-trash-alt me-1"></i>
                                                 Xóa
                                             </button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
+                            index++;
                         }
                     </tbody>
                 </table>
@@ -519,6 +751,26 @@
                 </nav>
             </div>
         }
+    </div>
+</div>
+
+<!-- Modal hiển thị chi tiết phim -->
+<div class="modal fade" id="movieDetailModal" tabindex="-1" role="dialog" aria-labelledby="movieModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="movieModalLabel">Chi tiết phim</h5>
+                <button type="button" class="modal-close" data-bs-dismiss="modal" aria-label="Đóng">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="movie-detail-content">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-3">Đang tải dữ liệu...</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -545,6 +797,97 @@
                 button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xóa...';
                 button.disabled = true;
             }
+        });
+    });
+
+    $(document).ready(function () {
+        $('.btn-detail').click(function () {
+            const movieId = $(this).data('id');
+            $('#movie-detail-content').html(`
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-3">Đang tải dữ liệu...</p>
+                </div>
+            `);
+            $('#movieDetailModal').modal('show');
+
+            $.ajax({
+                url: `/Movie/Movie/GetMovieDetail/${movieId}`,
+                method: 'GET',
+                success: function (data) {
+                    let statusClass = "";
+                    let statusDisplay = "";
+
+                    switch (data.status) {
+                        case "Active":
+                            statusClass = "status-active";
+                            statusDisplay = "Đang chiếu";
+                            break;
+                        case "SoldOut":
+                            statusClass = "status-soldout";
+                            statusDisplay = "Hết vé";
+                            break;
+                        case "Deleted":
+                            statusClass = "status-deleted";
+                            statusDisplay = "Đã xóa";
+                            break;
+                        default:
+                            statusClass = "status-active";
+                            statusDisplay = "Không xác định";
+                            break;
+                    }
+
+                    const formats = (data.format || []).map(f => `<span class="format-tag">${f}</span>`).join(" ");
+                    const genres = data.genres?.join(", ") ?? "";
+                    const actors = data.actors?.join(", ") ?? "";
+
+                    const html = `
+                        <div class="movie-container" style="width: 100%;">
+                            <div class="row g-4 p-4">
+                                <div class="movie-content">
+                                    <!-- Poster Section -->
+                                    <div class="poster-section">
+                                        <div class="poster-wrapper">
+                                            <img src="${data.image}" alt="${data.title}" />
+                                            <div class="format-tags">
+                                                ${formats}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Info Section -->
+                                    <div>
+                                        <h2 class="film-title">${data.title}</h2>
+
+                                        <div class="detail-section">
+                                            <h3><i class="fas fa-info-circle me-2"></i>Thông tin phim</h3>
+                                            <ul class="detail-list">
+                                                <li><strong>Thể loại:</strong><span>${genres}</span></li>
+                                                <li><strong>Thời lượng:</strong><span>${data.duration ?? 'N/A'} phút</span></li>
+                                                <li><strong>Phụ đề:</strong><span>${data.subtitle}</span></li>
+                                                <li><strong>Nhà sản xuất:</strong><span>${data.productionCompany}</span></li>
+                                                <li><strong>Đạo diễn:</strong><span>${data.director}</span></li>
+                                                <li><strong>Diễn viên:</strong><span>${actors}</span></li>
+                                                <li><strong>Ngày khởi chiếu:</strong><span>${data.releaseDate ? new Date(data.releaseDate).toLocaleDateString('vi-VN') : 'N/A'}</span></li>
+                                                <li>
+                                                      <strong>Trạng thái:</strong>
+                                                      <span class="status-badge ${statusClass}" style="color: white; font-weight: 600; font-size: 0.85rem;">${statusDisplay}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="description-section">
+                                            <h3><i class="fas fa-book-open me-2"></i>Nội dung phim</h3>
+                                            <div class="description-text">${data.description}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    $('#movie-detail-content').html(html);
+                }
+            });
         });
     });
 </script>
