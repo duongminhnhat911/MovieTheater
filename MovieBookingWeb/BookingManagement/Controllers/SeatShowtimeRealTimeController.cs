@@ -80,6 +80,7 @@ namespace BookingManagement.Controllers
         }
     }
 
+
     public class LockSeatShowtimeRequest
     {
         public int ShowtimeId { get; set; }
