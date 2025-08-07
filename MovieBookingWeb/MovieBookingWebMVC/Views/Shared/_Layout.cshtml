@@ -496,15 +496,6 @@
                     </div>
 
                     <div class="d-flex align-items-center">
-                        <form class="d-flex me-3" role="search">
-                            <div class="position-relative">
-                                <input class="form-control form-control-sm me-2" type="search" aria-label="Search">
-                            </div>
-                            <button class="btn btn-outline-light btn-sm" type="submit" style="margin-left: 10px;">
-                                <i class="fas fa-search me-1"></i>Tìm
-                            </button>
-                        </form>
-
                         @if (User?.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <div class="dropdown" style="position: relative;">
@@ -663,84 +654,14 @@
     {
         <footer class="footer">
             <div class="container-fluid" style="width: 1200px;">
-                <div class="row">
-                    <div class="col-md-3 mb-4">
-                        <h5 class="text-uppercase">
-                            <i class="fas fa-film me-2"></i>Movie Booking Web
-                        </h5>
-                        <ul class="list-unstyled">
-                            <li><a class="footer-link"><span>Về chúng tôi</span> <i class="fas fa-external-link-alt"></i></a></li>
-                            <li><a class="footer-link"><span>Liên hệ</span> <i class="fas fa-external-link-alt"></i></a></li>
-                            <li><a class="footer-link"><span>Cơ hội nghề nghiệp</span> <i class="fas fa-external-link-alt"></i></a></li>
-                            <li><a class="footer-link"><span>Tin tức</span> <i class="fas fa-external-link-alt"></i></a></li>
-                        </ul>
-                    </div>
-
-                    <div class="col-md-3 mb-4">
-                        <h5 class="text-uppercase">
-                            <i class="fas fa-concierge-bell me-2"></i>Dịch vụ
-                        </h5>
-                        <ul class="list-unstyled">
-                            <li><a class="footer-link"><span>Phim đang chiếu</span> <i class="fas fa-external-link-alt"></i></a></li>
-                            <li><a class="footer-link"><span>Lịch chiếu</span> <i class="fas fa-external-link-alt"></i></a></li>
-                            <li><a class="footer-link"><span>Đặt vé online</span> <i class="fas fa-external-link-alt"></i></a></li>
-                            <li><a class="footer-link"><span>Khuyến mãi</span> <i class="fas fa-external-link-alt"></i></a></li>
-                            <li><a class="footer-link"><span>Thành viên VIP</span> <i class="fas fa-external-link-alt"></i></a></li>
-                        </ul>
-                    </div>
-
-                    <div class="col-md-3 mb-4">
-                        <h5 class="text-uppercase">
-                            <i class="fas fa-shield-alt me-2"></i>Chính sách
-                        </h5>
-                        <ul class="list-unstyled">
-                            <li><a class="footer-link"><span>Điều khoản chung</span> <i class="fas fa-external-link-alt"></i></a></li>
-                            <li><a class="footer-link"><span>Điều khoản giao dịch</span> <i class="fas fa-external-link-alt"></i></a></li>
-                            <li><a class="footer-link"><span>Chính sách thanh toán</span> <i class="fas fa-external-link-alt"></i></a></li>
-                            <li><a class="footer-link"><span>Bảo mật thông tin</span> <i class="fas fa-external-link-alt"></i></a></li>
-                            <li><a class="footer-link"><span>Câu hỏi thường gặp</span> <i class="fas fa-external-link-alt"></i></a></li>
-                        </ul>
-                    </div>
-
-                    <div class="col-md-3 mb-4">
-                        <h5 style="line-height: 2; margin-top: -0.5rem;" class="text-uppercase">
-                            <i class="fas fa-share-alt me-2"></i>Kết nối với chúng tôi
-                        </h5>
-                        <ul style="margin-top: -0.75rem;" class="list-inline">
-                            <li class="list-inline-item">
-                                <a href="https://facebook.com" target="_blank" title="Facebook">
-                                    <i class="fab fa-facebook"></i>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="https://twitter.com" target="_blank" title="Twitter">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="https://instagram.com" target="_blank" title="Instagram">
-                                    <i class="fab fa-instagram"></i>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="https://youtube.com" target="_blank" title="YouTube">
-                                    <i class="fab fa-youtube"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <hr class="my-4" />
-
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                        <p class="mb-0" style="color: white">
+                        <p class="mb-2" style="color: white">
                             &copy; 2025 MovieBookingWeb. Tất cả quyền được bảo lưu.
                         </p>
                     </div>
                     <div class="col-md-6 text-md-end">
-                        <div class="d-flex justify-content-md-end align-items-center">
+                        <div class="d-flex justify-content-md-end align-items-center mb-2">
                             <span class="me-1" style="color: white">Được phát triển bởi</span>
                             <span style="color: var(--primary-red); font-weight: 600;">MovieBookingWeb Team</span>
                         </div>

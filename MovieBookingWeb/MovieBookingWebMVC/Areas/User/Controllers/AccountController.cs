@@ -64,30 +64,31 @@ namespace MovieBookingWebMVC.Areas.User.Controllers
             }
 
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim("Username", user.Username),
-                new Claim(ClaimTypes.Role, user.Role),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            };
+    {
+        new Claim(ClaimTypes.Name, user.Username),
+        new Claim("Username", user.Username),
+        new Claim(ClaimTypes.Role, user.Role),
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+    };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
+            if (user.Role == "Admin")
+            {
+                return RedirectToAction("ViewMovie", "Movie", new { area = "Movie" });
+            }
+
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             {
                 return Redirect(returnUrl);
             }
 
-            return user.Role switch
-            {
-                "Admin" => RedirectToAction("ViewMovie", "Movie", new { area = "Movie" }),
-                "Employee" => RedirectToAction("Dashboard", "Employee"),
-                _ => RedirectToAction("Index", "Home", new { area = "" })
-            };
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
+
 
         public IActionResult Register() => View();
 
@@ -196,12 +197,12 @@ namespace MovieBookingWebMVC.Areas.User.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError("", "Đổi mật khẩu thất bại. Mật khẩu hiện tại không đúng?");
+                ModelState.AddModelError("", "Đổi mật khẩu thất bại. Mật khẩu hiện tại không đúng.");
                 return View(model);
             }
 
             TempData["Success"] = "Đổi mật khẩu thành công!";
-            return RedirectToAction("Profile");
+            return RedirectToAction("ChangePassword");
         }
     }
 }
