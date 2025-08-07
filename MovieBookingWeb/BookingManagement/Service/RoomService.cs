@@ -28,7 +28,7 @@ namespace BookingManagement.Service
             for (int i = 0; i < dto.Rows; i++)
             {
                 char rowChar = (char)('A' + i);
-                for (int j = 1; j < dto.Columns; j++) // j chạy từ 0 đến 9
+                for (int j = 0; j < dto.Columns; j++) // j chạy từ 0 đến 9
                 {
                     char columnChar = (char)('0' + j); // '0' → '9'
                     await _repo.AddSeatAsync(new Seat
